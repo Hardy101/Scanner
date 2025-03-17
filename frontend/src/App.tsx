@@ -4,7 +4,7 @@ import Home from "./pages/home";
 
 function App() {
   return (
-    <main className="pt-26">
+    <main className="pt-26 bg-[#E5E4E2]">
       <Navbar />
       <Home />
     </main>

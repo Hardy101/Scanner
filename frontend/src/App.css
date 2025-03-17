@@ -19,3 +19,13 @@
   font-family: poppins-medium;
   src: url(assets/fonts/Poppins-Medium.ttf);
 }
+
+/* Vanilla */
+.gradient-1 {
+  background: rgb(128, 93, 147);
+  background: linear-gradient(
+    50deg,
+    rgba(128, 93, 147, 1) 0%,
+    rgba(178, 128, 205, 1) 100%
+  );
+}
