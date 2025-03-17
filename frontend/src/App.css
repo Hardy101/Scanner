@@ -2,4 +2,20 @@
 
 @theme {
   --color-purple: "#805D93";
+  --font-poppins: poppins;
+  --font-poppins-medium: poppins-medium;
+  --font-poppins-bold: poppins-bold;
+}
+
+@font-face {
+  font-family: poppins;
+  src: url(assets/fonts/Poppins-Regular.ttf);
+}
+@font-face {
+  font-family: poppins-bold;
+  src: url(assets/fonts/Poppins-Bold.ttf);
+}
+@font-face {
+  font-family: poppins-medium;
+  src: url(assets/fonts/Poppins-Medium.ttf);
 }
