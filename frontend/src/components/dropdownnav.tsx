@@ -48,7 +48,7 @@ const DropdownNav: React.FC = () => {
   return (
     <div
       ref={dropdownref}
-      className="w-5/6 absolute top-15 left-10 bg-[#225050] rounded-xl px-4 pt-10 pb-2 z-2 opacity-0"
+      className="w-5/6 absolute top-15 left-9 md:left-10 bg-[#225050] rounded-xl px-4 pt-10 pb-2 z-2 opacity-0"
     >
       <button
         onClick={() => setIsDropdownActive(false)}
