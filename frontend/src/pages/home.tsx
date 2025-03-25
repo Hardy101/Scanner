@@ -63,11 +63,13 @@ const Home: React.FC = () => {
 
         <div id="events" className="mt-8 text-black">
           <div className="relative bg-white rounded-xl p-4">
-            <button
-              id="linkout"
-              className="absolute -bottom-2 -right-2 flex bg-secondary-2 border-2 border-primary p-1 rounded-full text-white text-3xl"
-            >
-              <i className="lni lni-arrow-angular-top-right"></i>
+            <button id="linkout" className="absolute -bottom-2 -right-2">
+              <Link
+                to={"/event"}
+                className="flex bg-secondary-2 border-2 border-primary p-1 rounded-full text-white text-3xl"
+              >
+                <i className="lni lni-arrow-angular-top-right"></i>
+              </Link>
             </button>
             <button className="absolute right-2 top-2 grid bg-red-2 px-4 py-2 rounded-full text-white text-xs">
               <span className="text-xl font-bold">15</span>
