@@ -10,39 +10,45 @@ const DropdownNav: React.FC = () => {
   const { isDropdownActive, setIsDropdownActive } = useDropdownState();
 
   useEffect(() => {
-    if (dropdownref) {
-      if (isDropdownActive) {
-        gsap.fromTo(
-          dropdownref.current,
-          { opacity: 0, y: 20, scale: 0.95, rotateX: -10 },
-          {
-            opacity: 1,
-            y: 0,
-            scale: 1,
-            rotateX: 0,
-            duration: 0.5,
-            ease: "power2.out",
-            pointerEvents: "auto",
-          }
-        );
-      } else {
-        gsap.to(dropdownref.current, {
-          opacity: 0,
-          y: 20,
-          scale: 0.95,
-          rotateX: -10,
-          pointerEvents: "none",
-          duration: 0.3,
-          ease: "power2.in",
-        });
+    if (!dropdownref.current) return;
+    
+    const ctx = gsap.context(() => {
+      if (dropdownref) {
+        if (isDropdownActive) {
+          gsap.fromTo(
+            dropdownref.current,
+            { opacity: 0, y: 20, scale: 0.95, rotateX: -10 },
+            {
+              opacity: 1,
+              y: 0,
+              scale: 1,
+              rotateX: 0,
+              duration: 0.5,
+              ease: "power2.out",
+              pointerEvents: "auto",
+            }
+          );
+        } else {
+          gsap.to(dropdownref.current, {
+            opacity: 0,
+            y: 20,
+            scale: 0.95,
+            rotateX: -10,
+            pointerEvents: "none",
+            duration: 0.3,
+            ease: "power2.in",
+          });
+        }
       }
-    }
+    }, dropdownref);
+
+    return () => ctx.revert();
   }, [isDropdownActive]);
 
   return (
     <div
       ref={dropdownref}
-      className="w-5/6 absolute top-15 left-10 bg-[#225050] rounded-xl px-4 pt-10 pb-2 z-2"
+      className="w-5/6 absolute top-15 left-10 bg-[#225050] rounded-xl px-4 pt-10 pb-2 z-2 opacity-0"
     >
       <button
         onClick={() => setIsDropdownActive(false)}
@@ -50,7 +56,7 @@ const DropdownNav: React.FC = () => {
       >
         <i className="lni lni-xmark"></i>
       </button>
-      <ul className="text-sm text-secondary ">
+      <ul className="text-secondary leading-7">
         <li className="hover:text-white">
           <span>Profile</span>
         </li>
@@ -60,7 +66,9 @@ const DropdownNav: React.FC = () => {
       </ul>
       <div>
         <Hr />
-        <button>Add Event</button>
+        <button className="w-full bg-shadow border border-shadow-2 rounded-full py-2 text-xs mt-4 font-poppins-bold">
+          Add Event
+        </button>
       </div>
     </div>
   );
