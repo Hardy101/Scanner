@@ -31,7 +31,7 @@ const Register = () => {
     navigate("/home");
   };
   const formFieldClasses =
-    "bg-white text-primary font-poppins-medium placeholder:text-primary text-sm px-4 py-2 rounded-full";
+    "bg-transparent text-secondary font-poppins placeholder:text-secondary border border-shadow text-xs px-4 py-2 rounded-md";
 
   const formFields = [
     {

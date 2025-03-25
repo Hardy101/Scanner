@@ -1,10 +1,13 @@
 import NavButton from "../components/navbutton";
+import DropdownNav from "../components/dropdownnav";
 import Hr from "../components/hr";
 
 const Home: React.FC = () => {
   return (
-    <div className="min-h-screen bg-primary text-white p-4 md:p-8">
-      <div className="nav flex items-center justify-between">
+    <div className="relative min-h-screen bg-primary text-white p-4 md:p-8">
+      <div className="absolute bg-primary w-full h-full top-0 z-1"></div>
+      <DropdownNav />
+      <div className="nav flex items-center justify-between text-sm">
         <p className="grid text-left">
           <span>Sunday, </span>
           <span>15th October 2025</span>
@@ -30,7 +33,7 @@ const Home: React.FC = () => {
               <span className="text-xl font-bold">15</span>
               <span>Mar</span>
             </button>
-            <span className="border-l-4 border-black text-lg bg-secondary pl-4 pr-4 py-1 text-black">
+            <span className="border-l-4 border-black text-lg bg-secondary pl-3 pr-4 py-1 text-black">
               Birthday Party
             </span>
             <ul className="text-xs text-gray-1 mt-5">
