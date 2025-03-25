@@ -5,6 +5,7 @@ import Hr from "../components/hr";
 import { useDropdownState } from "../store/useDropdownStore";
 
 const Home: React.FC = () => {
+  
   const { isDropdownActive, setIsDropdownActive } = useDropdownState();
 
   return (
