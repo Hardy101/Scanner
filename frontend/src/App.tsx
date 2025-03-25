@@ -1,12 +1,19 @@
+import { BrowserRouter, Routes, Route } from "react-router";
+
 import "./App.css";
-import Navbar from "./components/navbar";
-import Home from "./pages/home";
+import SplashScreen from "./pages/splashscreen";
 
 function App() {
   return (
-    <main className="pt-26 bg-[#E5E4E2]">
-      <Navbar />
-      <Home />
+    <main className="bg-secondary-2 md:p-8">
+      <div className="min-h-screen border border-secondary rounded-2xl mx-auto md:w-2/5 overflow-clip">
+        <BrowserRouter>
+          <Routes>
+            <Route path={""} element={<SplashScreen />} />
+          </Routes>
+        </BrowserRouter>
+        <SplashScreen />
+      </div>
     </main>
   );
 }

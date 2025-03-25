@@ -1,7 +1,11 @@
 @import "tailwindcss";
 
 @theme {
-  --color-purple-1: #805d93;
+  --color-primary: #143f40;
+  --color-secondary: #d9e8f5;
+  --color-secondary-2: #417576;
+  --color-red: #b84042;
+  --color-shadow: #486c6f;
   --font-poppins: poppins;
   --font-poppins-medium: poppins-medium;
   --font-poppins-bold: poppins-bold;
@@ -21,11 +25,9 @@
 }
 
 /* Vanilla */
-.gradient-1 {
-  background: rgb(128, 93, 147);
-  background: linear-gradient(
-    50deg,
-    rgba(128, 93, 147, 1) 0%,
-    rgba(178, 128, 205, 1) 100%
-  );
+* button {
+  cursor: pointer;
+}
+.box-shadow-1 {
+  box-shadow: 0 0.275em 0 #417576;
 }
