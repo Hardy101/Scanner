@@ -4,6 +4,7 @@ import "./App.css";
 import SplashScreen from "./pages/splashscreen";
 import Register from "./pages/register";
 import Home from "./pages/home";
+import EventDetails from "./pages/eventdetails";
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
             <Route path="" element={<SplashScreen />} />
             <Route path="/register" element={<Register />} />
             <Route path="/home" element={<Home />} />
+            <Route path="/event" element={<EventDetails />} />
           </Routes>
         </BrowserRouter>
       </section>
