@@ -2,17 +2,28 @@ import NavButton from "../components/navbutton";
 import DropdownNav from "../components/dropdownnav";
 import Hr from "../components/hr";
 
+import { useDropdownState } from "../store/useDropdownStore";
+
 const Home: React.FC = () => {
+  const { isDropdownActive, setIsDropdownActive } = useDropdownState();
+
   return (
     <div className="relative min-h-screen bg-primary text-white p-4 md:p-8">
-      <div className="absolute bg-primary w-full h-full top-0 z-1"></div>
+      {isDropdownActive && (
+        <div className="absolute bg-primary w-full h-full top-0 z-1"></div>
+      )}
+
       <DropdownNav />
       <div className="nav flex items-center justify-between text-sm">
         <p className="grid text-left">
           <span>Sunday, </span>
           <span>15th October 2025</span>
         </p>
-        <NavButton classNames="" text="Menu" />
+        <NavButton
+          text="Menu"
+          onClick={() => setIsDropdownActive(true)}
+          classNames=""
+        />
       </div>
       <Hr />
       <div className="body mt-10 ">
