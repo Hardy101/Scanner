@@ -28,7 +28,7 @@ const Register = () => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    navigate("/");
+    navigate("/home");
   };
   const formFieldClasses =
     "bg-white text-primary font-poppins-medium placeholder:text-primary text-sm px-4 py-2 rounded-full";

@@ -1,11 +1,14 @@
+import NavButton from "../components/navbutton";
+
 const Home: React.FC = () => {
   return (
-    <section id="hero">
-      <div className="md:w-3/5 px-4 mx-auto text-purple-1 md:px-0">
-        <h2 className="font-poppins-bold text-2xl">Features</h2>
+    <div>
+      <div className="nav">
+        <span>Sunday, 15th October 2025</span>
+        <NavButton classNames="" text="Menu" />
       </div>
-    </section>
+    </div>
   );
 };
 
-export default Home
+export default Home;

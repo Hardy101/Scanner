@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route } from "react-router";
 import "./App.css";
 import SplashScreen from "./pages/splashscreen";
 import Register from "./pages/register";
+import Home from "./pages/home";
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
           <Routes>
             <Route path="" element={<SplashScreen />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/home" element={<Home />} />
           </Routes>
         </BrowserRouter>
       </section>
