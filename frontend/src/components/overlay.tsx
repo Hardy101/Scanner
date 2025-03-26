@@ -1,13 +1,13 @@
 import { useRef, useEffect } from "react";
 import { useDropdownState } from "../store/useDropdownStore";
-import { useModalStore } from "../store/useModalStore";
+import { useModalState } from "../store/useModalStore";
 
 import gsap from "gsap";
 
 const Overlay = () => {
   const overlayRef = useRef<HTMLDivElement | null>(null);
   const { isDropdownActive } = useDropdownState();
-  const { isModalActive } = useModalStore();
+  const { isModalActive } = useModalState();
 
   useEffect(() => {
     const ctx = gsap.context(() => {

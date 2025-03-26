@@ -1,6 +1,6 @@
 import { ReactNode, useEffect, useRef } from "react";
 import gsap from "gsap";
-import { useModalStore } from "../store/useModalStore";
+import { useModalState } from "../store/useModalStore";
 
 interface ModalProps {
   children: ReactNode;
@@ -8,7 +8,7 @@ interface ModalProps {
 }
 
 const Modal: React.FC<ModalProps> = ({ children, classNames, ...props }) => {
-  const { isModalActive } = useModalStore();
+  const { isModalActive } = useModalState();
 
   const modalRef = useRef<HTMLDivElement | null>(null);
 

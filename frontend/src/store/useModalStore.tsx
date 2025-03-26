@@ -5,7 +5,7 @@ type ModalState = {
   setIsModalActive: (open: boolean) => void;
 };
 
-export const useModalStore = create<ModalState>((set) => ({
+export const useModalState = create<ModalState>((set) => ({
   isModalActive: false,
   setIsModalActive: (open) => set({ isModalActive: open }),
 }));

@@ -4,12 +4,12 @@ import NavButton from "../components/navbutton";
 import Hr from "../components/hr";
 import { icons } from "../constants/media";
 import Modal from "../components/modal";
-import { useModalStore } from "../store/useModalStore";
+import { useModalState } from "../store/useModalStore";
 import Overlay from "../components/overlay";
 import { useState } from "react";
 
 const EventDetails: React.FC = () => {
-  const { setIsModalActive } = useModalStore();
+  const { setIsModalActive } = useModalState();
   const [activeStep, setActiveStep] = useState("guestList");
 
   const navigate = useNavigate();
