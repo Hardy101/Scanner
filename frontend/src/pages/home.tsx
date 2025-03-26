@@ -6,43 +6,18 @@ import DropdownNav from "../components/dropdownnav";
 import Hr from "../components/hr";
 
 import { useDropdownState } from "../store/useDropdownStore";
-import { useEffect, useRef } from "react";
+import Overlay from "../components/overlay";
 
 const Home: React.FC = () => {
   const { isDropdownActive, setIsDropdownActive } = useDropdownState();
-  const overlayRef = useRef<HTMLDivElement | null>(null);
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      if (isDropdownActive) {
-        gsap.fromTo(
-          overlayRef.current,
-          { opacity: 0 },
-          { opacity: 1, duration: 0.5, ease: "power2.out" }
-        );
-      } else {
-        gsap.to(overlayRef.current, {
-          opacity: 0,
-          pointerEvent: "none",
-          duration: 0.5,
-          ease: "power2.in",
-        });
-      }
-    }, overlayRef);
-
-    return () => {
-      ctx.revert();
-    };
-  }, [isDropdownActive]);
 
   return (
     <div className="relative min-h-screen bg-primary text-white p-4 md:p-8">
-      <div
-        ref={overlayRef}
-        className="absolute bg-primary w-full h-full top-0 z-1"
-        style={{ pointerEvents: "none" }}
-      ></div>
-
+      {/* Floating Elements */}
+      <Overlay />
       <DropdownNav />
+      {/* End of floating Elements */}
+
       <div className="nav flex items-center justify-between text-sm">
         <p className="grid text-left">
           <span>Sunday, </span>

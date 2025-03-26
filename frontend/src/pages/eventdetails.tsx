@@ -3,14 +3,98 @@ import { useNavigate } from "react-router";
 import NavButton from "../components/navbutton";
 import Hr from "../components/hr";
 import { icons } from "../constants/media";
+import Modal from "../components/modal";
+import { useModalStore } from "../store/useModalStore";
+import Overlay from "../components/overlay";
+import { useState } from "react";
 
 const EventDetails: React.FC = () => {
+  const { setIsModalActive } = useModalStore();
+  const [isGuestAddActive, setIsGuestActive] = useState(false);
+
   const navigate = useNavigate();
   return (
     <div className="relative min-h-screen bg-primary text-white p-4 md:p-8">
+      {/* Floating Elements */}
+      <Modal>
+        <div className="text-black">
+          <button
+            onClick={() => setIsModalActive(false)}
+            className="absolute top-4 right-4 flex bg-primary text-secondary rounded-md p-1 text-xl transition-all ease-in-out hover:bg-shadow"
+          >
+            <i className="lni lni-xmark"></i>
+          </button>
+          <h3 className="font-poppins-bold text-lg">Guest List</h3>
+          <ul className="grid gap-2 divide-y divide-secondary-2 mt-6 text-sm">
+            <li className="flex gap-2 pb-2">
+              <span className="p-2 bg-primary text-white rounded-full my-auto">
+                DA
+              </span>
+
+              <span className="grid">
+                David Aguero
+                <span>VIP</span>
+              </span>
+            </li>
+            <li className="flex gap-2">
+              <span className="p-2 bg-primary text-white rounded-full my-auto">
+                DA
+              </span>
+
+              <span className="grid">
+                David Aguero
+                <span>VIP</span>
+              </span>
+            </li>
+          </ul>
+          <button
+            onClick={() => setIsGuestActive(true)}
+            className="block box-shadow-1 bg-primary text-white font-poppins-bold px-4 py-2 rounded-md text-sm mt-8 mx-auto"
+          >
+            Add Guest
+          </button>
+        </div>
+      </Modal>
+      <Modal classNames={`z-5 text-black ${isGuestAddActive ? "" : "hidden"}`}>
+        <div>
+          <h3 className="font-poppins-bold text-lg">Add Guest</h3>
+          <div className="form-control mt-2">
+            <label className="text-sm">Name of Guest</label>
+            <input
+              type="text"
+              placeholder="Enter Name"
+              className="w-full bg-secondary px-2 py-1 text-sm rounded-sm "
+            />
+          </div>
+          <div className="form-control mt-2">
+            <label className="text-sm">Tag</label>
+            <input
+              type="text"
+              placeholder="Enter Tag"
+              className="w-full bg-secondary px-2 py-1 text-sm rounded-sm "
+            />
+          </div>
+          <div className="form-control mt-8 flex gap-4">
+            <button
+              className="w-full box-shadow-1 bg-primary text-white font-poppins-bold px-6 py-2 rounded-full text-sm mx-auto"
+            >
+              Add Guest
+            </button>
+            <button
+              onClick={() => setIsGuestActive(false)}
+              className="box-shadow-1 bg-white text-primary border-2 border-primary font-poppins-bold px-6 py-2 rounded-full text-sm mx-auto"
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      </Modal>
       <button className="absolute right-4 bottom-4 bg-white p-2 rounded-full box-shadow-1">
-        <img src={icons.edit} alt="Edit icon" className="w-6"/>
+        <img src={icons.edit} alt="Edit icon" className="w-6" />
       </button>
+
+      <Overlay />
+      {/* End of Floating Elements */}
       <div className="nav flex items-center justify-between text-sm">
         <p className="grid text-left">
           <span>Event Details</span>
@@ -48,6 +132,7 @@ const EventDetails: React.FC = () => {
             </li>
           </ul>
           <NavButton
+            onClick={() => setIsModalActive(true)}
             classNames="block mt-4 py-2 mx-auto"
             text="See all guests"
           />
