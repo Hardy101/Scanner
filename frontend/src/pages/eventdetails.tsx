@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router";
+import { useRef, useState } from "react";
 
 import NavButton from "../components/navbutton";
 import Hr from "../components/hr";
@@ -6,13 +7,25 @@ import { icons } from "../constants/media";
 import Modal from "../components/modal";
 import { useModalState } from "../store/useModalStore";
 import Overlay from "../components/overlay";
-import { useState } from "react";
 
 const EventDetails: React.FC = () => {
+  const textRef = useRef<HTMLSpanElement | null>(null);
+  const navigate = useNavigate();
+
   const { setIsModalActive } = useModalState();
   const [activeStep, setActiveStep] = useState("guestList");
+  const [copied, setCopied] = useState(false);
 
-  const navigate = useNavigate();
+  const handleCopy = () => {
+    if (textRef.current) {
+      const textToCopy = textRef.current.innerText;
+      navigator.clipboard.writeText(textToCopy).then(() => {
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+      });
+    }
+  };
+
   return (
     <div className="relative min-h-screen bg-primary text-white p-4 md:p-8">
       {/* Floating Elements */}
@@ -79,7 +92,7 @@ const EventDetails: React.FC = () => {
             </div>
             <div className="form-control mt-8 flex gap-4">
               <button
-                onClick={() => setActiveStep("guestList")}
+                onClick={() => setActiveStep("success")}
                 className="w-full box-shadow-1 bg-primary text-white font-poppins-bold px-6 py-2 rounded-full text-sm mx-auto"
               >
                 Add Guest
@@ -93,10 +106,42 @@ const EventDetails: React.FC = () => {
             </div>
           </div>
         )}
-        {activeStep == 'success' && (
-          <div>
-            <span>Profile Created Successfully</span>
-            <span>Scarlett Johanson</span>
+        {activeStep == "success" && (
+          <div className="grid text-center text-primary">
+            <span className="text-xl font-poppins-medium">
+              Profile Created Successfully
+            </span>
+            <span className="mt-8">Scarlett Johanson</span>
+            <img
+              src={icons.qrcode}
+              alt="QR code of profile created successfully"
+              className="w-1/2 mx-auto"
+              style={{
+                pointerEvents: "none",
+              }}
+            />
+            <p className="inline-flex items-center gap-2 mx-auto">
+              <span ref={textRef} className="text-gray-1 underline">
+                @qrscanneer/scarlettjohanson
+              </span>
+              <button
+                onClick={() => handleCopy()}
+                className="bg-primary text-white rounded-md px-2 py-1 text-sm"
+              >
+                {copied ? "copied!" : "copy"}
+              </button>
+            </p>
+            <div className="form-control mt-8 flex gap-4">
+              <button className="w-full box-shadow-1 bg-primary text-white font-poppins-bold px-6 py-2 rounded-full text-sm mx-auto">
+                Add More Guests
+              </button>
+              <button
+                onClick={() => setActiveStep("guestList")}
+                className="box-shadow-1 bg-white text-primary border-2 border-primary font-poppins-bold px-6 py-2 rounded-full text-sm mx-auto"
+              >
+                Cancel
+              </button>
+            </div>
           </div>
         )}
       </Modal>

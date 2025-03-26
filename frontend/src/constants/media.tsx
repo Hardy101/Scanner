@@ -4,7 +4,8 @@ import person from "../assets/person.png";
 import upload from "../assets/upload icon.png";
 import scan from "../assets/scan.png";
 import edit from "../assets/edit.png";
- 
+import qrcode from "../assets/qrcode.png";
+
 export const icons = {
   logo,
   home,
@@ -12,4 +13,5 @@ export const icons = {
   upload,
   scan,
   edit,
+  qrcode,
 };
