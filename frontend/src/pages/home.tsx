@@ -1,4 +1,4 @@
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 
 import NavButton from "../components/navbutton";
 import DropdownNav from "../components/dropdownnav";
@@ -8,6 +8,7 @@ import { useDropdownState } from "../store/useDropdownStore";
 import Overlay from "../components/overlay";
 
 const Home: React.FC = () => {
+  const navigate = useNavigate();
   const { setIsDropdownActive } = useDropdownState();
 
   return (
@@ -15,7 +16,10 @@ const Home: React.FC = () => {
       {/* Floating Elements */}
       <Overlay />
       <DropdownNav />
-      <button className="absolute flex right-4 bottom-4 bg-white p-2 rounded-full box-shadow-1 text-primary text-2xl">
+      <button
+        onClick={() => navigate("/scan")}
+        className="absolute flex right-4 bottom-4 bg-white p-2 rounded-full box-shadow-1 text-primary text-2xl"
+      >
         <i className="lni lni-camera-1"></i>
       </button>
       {/* End of floating Elements */}
@@ -25,10 +29,7 @@ const Home: React.FC = () => {
           <span>Sunday, </span>
           <span>15th October 2025</span>
         </p>
-        <NavButton
-          text="Menu"
-          onClick={() => setIsDropdownActive(true)}
-        />
+        <NavButton text="Menu" onClick={() => setIsDropdownActive(true)} />
       </div>
       <Hr />
       <div className="body mt-10 ">

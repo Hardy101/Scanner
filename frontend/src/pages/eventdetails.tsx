@@ -158,7 +158,7 @@ const EventDetails: React.FC = () => {
       </div>
       <Hr />
 
-      <div className="body mt-10 ">
+      <div className="body mt-10">
         <span className="border-l-4 text-lg pl-3 pr-4 py-1 text-white">
           Birthday Party
         </span>

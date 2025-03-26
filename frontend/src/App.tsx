@@ -5,6 +5,7 @@ import SplashScreen from "./pages/splashscreen";
 import Register from "./pages/register";
 import Home from "./pages/home";
 import EventDetails from "./pages/eventdetails";
+import Scan from "./pages/scan";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
             <Route path="/register" element={<Register />} />
             <Route path="/home" element={<Home />} />
             <Route path="/event" element={<EventDetails />} />
+            <Route path="/scan" element={<Scan />} />
           </Routes>
         </BrowserRouter>
       </section>
