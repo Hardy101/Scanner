@@ -29,7 +29,6 @@ const EventDetails: React.FC = () => {
   return (
     <div className="relative min-h-screen bg-primary text-white p-4 md:p-8">
       {/* Floating Elements */}
-
       {/* Guest List */}
       <Modal>
         {activeStep == "guestList" && (
