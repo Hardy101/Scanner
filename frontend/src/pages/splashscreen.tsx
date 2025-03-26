@@ -16,11 +16,11 @@ const SplashScreen = () => {
       <div className="flex flex-col gap-4 mt-32">
         <Link
           to={"/register"}
-          className="w-4/5 bg-white text-center text-primary text-sm box-shadow-1 font-bold rounded-full px-6 py-2 mx-auto"
+          className="w-4/5 bg-white text-center text-primary text-sm box-shadow-1 font-bold rounded-full px-6 py-4 mx-auto"
         >
           <span>Register</span>
         </Link>
-        <button className="w-4/5 bg-primary text-white text-sm border border-shadow box-shadow-1 font-bold rounded-full px-6 py-2 mx-auto">
+        <button className="w-4/5 bg-primary text-white text-sm border border-shadow box-shadow-1 font-bold rounded-full px-6 py-4 mx-auto">
           <span>Login</span>
         </button>
       </div>

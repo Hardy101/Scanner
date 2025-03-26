@@ -31,7 +31,7 @@ const Register = () => {
     navigate("/home");
   };
   const formFieldClasses =
-    "bg-transparent text-secondary font-poppins placeholder:text-secondary border border-shadow text-xs px-4 py-2 rounded-md";
+    "bg-transparent text-secondary font-poppins placeholder:text-secondary border border-shadow text-xs px-4 py-3 rounded-md";
 
   const formFields = [
     {
@@ -90,7 +90,7 @@ const Register = () => {
         ))}
 
       
-        <button className="bg-white text-center text-primary text-sm box-shadow-1 font-poppins-bold rounded-full px-6 py-2 mt-4">
+        <button className="bg-white text-center text-primary text-sm box-shadow-1 font-poppins-bold rounded-full px-6 py-4 mt-4">
           <span>Register</span>
         </button>
       </form>
