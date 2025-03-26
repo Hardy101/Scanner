@@ -1,4 +1,3 @@
-import gsap from "gsap";
 import { Link } from "react-router";
 
 import NavButton from "../components/navbutton";
@@ -9,7 +8,7 @@ import { useDropdownState } from "../store/useDropdownStore";
 import Overlay from "../components/overlay";
 
 const Home: React.FC = () => {
-  const { isDropdownActive, setIsDropdownActive } = useDropdownState();
+  const { setIsDropdownActive } = useDropdownState();
 
   return (
     <div className="relative min-h-screen bg-primary text-white p-4 md:p-8">
