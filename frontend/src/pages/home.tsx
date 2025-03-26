@@ -28,7 +28,6 @@ const Home: React.FC = () => {
         <NavButton
           text="Menu"
           onClick={() => setIsDropdownActive(true)}
-          classNames=""
         />
       </div>
       <Hr />
