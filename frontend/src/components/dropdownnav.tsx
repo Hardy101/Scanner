@@ -13,6 +13,7 @@ const DropdownNav: React.FC = () => {
     if (!dropdownref.current) return;
     
     const ctx = gsap.context(() => {
+      // Dropdown animation
       if (dropdownref) {
         if (isDropdownActive) {
           gsap.fromTo(
