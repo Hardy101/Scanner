@@ -15,6 +15,9 @@ const Home: React.FC = () => {
       {/* Floating Elements */}
       <Overlay />
       <DropdownNav />
+      <button className="absolute flex right-4 bottom-4 bg-white p-2 rounded-full box-shadow-1 text-primary text-2xl">
+        <i className="lni lni-camera-1"></i>
+      </button>
       {/* End of floating Elements */}
 
       <div className="nav flex items-center justify-between text-sm">
