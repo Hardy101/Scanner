@@ -3,8 +3,13 @@ import { useNavigate } from "react-router";
 import NavButton from "../components/navbutton";
 import Hr from "../components/hr";
 import { profile } from "../constants/media";
+import { useState } from "react";
 
 const Profile: React.FC = () => {
+  const [isFormActive, setIsFormActive] = useState(false);
+  const handleActive = () => {
+    setIsFormActive(false);
+  };
   const navigate = useNavigate();
   return (
     <div className="relative min-h-screen bg-primary text-white p-4 md:p-8">
@@ -25,7 +30,10 @@ const Profile: React.FC = () => {
             />
             <p className="grow grid gap-4">
               <span>@carminephalange</span>
-              <button className="bg-transparent border border-secondary-2 rounded-full font-poppins-medium py-1 px-6 text-sm box-shadow-1">
+              <button
+                onClick={() => setIsFormActive(true)}
+                className="bg-transparent border border-secondary-2 rounded-full font-poppins-medium py-1 px-6 text-sm box-shadow-1"
+              >
                 Edit Profile
               </button>
             </p>
@@ -48,21 +56,48 @@ const Profile: React.FC = () => {
               <li className="flex justify-between items-center gap-2">
                 <i className="lni lni-hand-taking-dollar" />
                 <span>Basic Plan</span>
-                <NavButton text="Upgrade plan" classNames="text-right ml-auto" />
+                <NavButton
+                  text="Upgrade plan"
+                  classNames="text-right ml-auto"
+                />
               </li>
             </ul>
           </div>
         </div>
       </div>
 
-      <p className="absolute w-full left-0 bottom-0 flex justify-between gap-4 p-4 text-sm">
-        <button className="bg-red py-1 px-4 rounded-md text-white font-poppins-bold">
-          Delete Account
-        </button>
-        <button className="flex-grow bg-white py-1 rounded-md text-primary font-poppins-bold">
-          Sign out
-        </button>
-      </p>
+      {/* Actions to be displayed depending on form active state */}
+      {isFormActive ? (
+        <p
+          id="formActions"
+          className="absolute w-full left-0 bottom-0 flex justify-between gap-4 p-4 text-sm"
+        >
+          <button
+            onClick={handleActive}
+            className="bg-red py-1 px-4 rounded-md text-white font-poppins-bold"
+          >
+            Cancel
+          </button>
+          <button
+            onClick={handleActive}
+            className="flex-grow bg-white py-1 rounded-md text-primary font-poppins-bold"
+          >
+            Save
+          </button>
+        </p>
+      ) : (
+        <p
+          id="acctActions"
+          className="absolute w-full left-0 bottom-0 flex justify-between gap-4 p-4 text-sm"
+        >
+          <button className="bg-red py-1 px-4 rounded-md text-white font-poppins-bold">
+            Delete Account
+          </button>
+          <button className="flex-grow bg-white py-1 rounded-md text-primary font-poppins-bold">
+            Sign out
+          </button>
+        </p>
+      )}
     </div>
   );
 };
