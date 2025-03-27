@@ -182,13 +182,20 @@ const EventDetails: React.FC = () => {
           <h3 className="font-poppins-bold">Guests</h3>
           <p className="text-sm text-secondary mt-2">50 Guests</p>
 
-          <ul id="guests" className="mt-8 text-sm flex">
-            <li>
-              <button className="flex flex-col text-left bg-secondary-3 border border-shadow rounded-xl p-2">
-                <span>David Aguero</span>
-                <span className="text-secondary-2">VIP</span>
-              </button>
-            </li>
+          <ul id="guests" className="mt-8 text-sm grid grid-cols-3 gap-4">
+            {guestList.map(({ id, name, tags }) => (
+              <li
+                key={id}
+                className="flex flex-col text-left bg-secondary-3 border border-shadow rounded-xl p-2"
+              >
+                <span>{name}</span>
+                <ul className="flex gap-1 text-secondary font-poppins-medium text-xs">
+                  {tags.map((tag, idx) => (
+                    <li>{tag}</li>
+                  ))}
+                </ul>
+              </li>
+            ))}
           </ul>
           <NavButton
             onClick={() => setIsModalActive(true)}
