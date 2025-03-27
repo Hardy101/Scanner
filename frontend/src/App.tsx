@@ -6,6 +6,7 @@ import Register from "./pages/register";
 import Home from "./pages/home";
 import EventDetails from "./pages/eventdetails";
 import Scan from "./pages/scan";
+import 
 
 function App() {
   return (

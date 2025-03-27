@@ -110,7 +110,7 @@ const EventDetails: React.FC = () => {
             <span className="text-xl font-poppins-medium">
               Profile Created Successfully
             </span>
-            <span className="mt-8">Scarlett Johanson</span>
+            <span className="mt-8 block">Scarlett Johanson</span>
             <img
               src={icons.qrcode}
               alt="QR code of profile created successfully"
@@ -119,7 +119,7 @@ const EventDetails: React.FC = () => {
                 pointerEvents: "none",
               }}
             />
-            <p className="inline-flex items-center gap-2 mx-auto">
+            <p className="inline-flex items-center flex-wrap gap-2 mx-auto">
               <span ref={textRef} className="text-gray-1 underline">
                 @qrscanneer/scarlettjohanson
               </span>
@@ -131,7 +131,10 @@ const EventDetails: React.FC = () => {
               </button>
             </p>
             <div className="form-control mt-8 flex gap-4">
-              <button className="w-full box-shadow-1 bg-primary text-white font-poppins-bold px-6 py-2 rounded-full text-sm mx-auto">
+              <button
+                onClick={() => setActiveStep("addGuest")}
+                className="w-full box-shadow-1 bg-primary text-white font-poppins-bold px-6 py-2 rounded-full text-sm mx-auto"
+              >
                 Add More Guests
               </button>
               <button
