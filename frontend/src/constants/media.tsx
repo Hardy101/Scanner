@@ -5,6 +5,7 @@ import upload from "../assets/upload icon.png";
 import scan from "../assets/scan.png";
 import edit from "../assets/edit.png";
 import qrcode from "../assets/qrcode.png";
+import profile from "../assets/profile-img.png";
 
 export const icons = {
   logo,
@@ -15,3 +16,5 @@ export const icons = {
   edit,
   qrcode,
 };
+
+export { profile };

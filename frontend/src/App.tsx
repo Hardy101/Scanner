@@ -6,7 +6,7 @@ import Register from "./pages/register";
 import Home from "./pages/home";
 import EventDetails from "./pages/eventdetails";
 import Scan from "./pages/scan";
-import 
+import Profile from "./pages/profile";
 
 function App() {
   return (
@@ -19,6 +19,7 @@ function App() {
             <Route path="/home" element={<Home />} />
             <Route path="/event" element={<EventDetails />} />
             <Route path="/scan" element={<Scan />} />
+            <Route path="/profile" element={<Profile />} />
           </Routes>
         </BrowserRouter>
       </section>

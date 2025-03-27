@@ -4,6 +4,7 @@ import gsap from "gsap";
 import Hr from "./hr";
 
 import { useDropdownState } from "../store/useDropdownStore";
+import { Link } from "react-router";
 
 const DropdownNav: React.FC = () => {
   const dropdownref = useRef<HTMLDivElement | null>(null);
@@ -11,7 +12,7 @@ const DropdownNav: React.FC = () => {
 
   useEffect(() => {
     if (!dropdownref.current) return;
-    
+
     const ctx = gsap.context(() => {
       // Dropdown animation
       if (dropdownref) {
@@ -59,7 +60,9 @@ const DropdownNav: React.FC = () => {
       </button>
       <ul className="text-secondary leading-7">
         <li className="hover:text-white">
-          <span>Profile</span>
+          <Link to={"/profile"}>
+            <span>Profile</span>
+          </Link>
         </li>
         <li className="hover:text-white">
           <span>Analytics</span>
