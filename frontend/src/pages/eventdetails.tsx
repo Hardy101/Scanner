@@ -8,6 +8,12 @@ import Modal from "../components/modal";
 import { useModalState } from "../store/useModalStore";
 import Overlay from "../components/overlay";
 
+const guestList = [
+  { id: 0, initials: "DA", name: "David Aguero", tags: ["vip", "family"] },
+  { id: 1, initials: "BL", name: "Brock Lesnar", tags: ["wrestler"] },
+  { id: 2, initials: "RG", name: "Ross Geller", tags: ["killer"] },
+];
+
 const EventDetails: React.FC = () => {
   const textRef = useRef<HTMLSpanElement | null>(null);
   const navigate = useNavigate();
@@ -40,31 +46,26 @@ const EventDetails: React.FC = () => {
               <i className="lni lni-xmark"></i>
             </button>
             <h3 className="font-poppins-bold text-lg">Guest List</h3>
-            <ul className="grid gap-2 divide-y divide-secondary-2 mt-6 text-sm">
-              <li className="flex gap-2 pb-2">
-                <span className="p-2 bg-primary text-white rounded-full my-auto">
-                  DA
-                </span>
-
-                <span className="grid">
-                  David Aguero
-                  <span>VIP</span>
-                </span>
-              </li>
-              <li className="flex gap-2">
-                <span className="p-2 bg-primary text-white rounded-full my-auto">
-                  DA
-                </span>
-
-                <span className="grid">
-                  David Aguero
-                  <span>VIP</span>
-                </span>
-              </li>
+            <ul className="grid gap-2 divide-y divide-secondary-2 mt-6 text-xs">
+              {guestList.map(({ id, initials, name, tags }) => (
+                <li key={id} className="flex items-center gap-2 pb-2">
+                  <span className="p-2 bg-primary text-white rounded-full my-auto">
+                    {initials}
+                  </span>
+                  <div className="flex flex-col">
+                    <span>{name}</span>
+                    <ul className="flex gap-1 font-poppins-bold text-primary">
+                      {tags.map((tag, idx) => (
+                        <li key={idx}>{tag}</li>
+                      ))}
+                    </ul>
+                  </div>
+                </li>
+              ))}
             </ul>
             <button
               onClick={() => setActiveStep("addGuest")}
-              className="block box-shadow-1 bg-primary text-white font-poppins-bold px-4 py-2 rounded-md text-sm mt-8 mx-auto"
+              className="block box-shadow-1 bg-primary text-white font-poppins-bold px-4 py-2 rounded-md text-sm mt-8 ml-auto"
             >
               Add Guest
             </button>
@@ -78,7 +79,7 @@ const EventDetails: React.FC = () => {
               <input
                 type="text"
                 placeholder="Enter Name"
-                className="w-full bg-secondary text-primary placeholder:text-primary px-2 py-2 text-sm rounded-sm"
+                className="w-full bg-secondary text-primary placeholder:text-primary px-2 py-2 text-xs rounded-sm"
               />
             </div>
             <div className="form-control grid gap-2 mt-2">
@@ -86,7 +87,7 @@ const EventDetails: React.FC = () => {
               <input
                 type="text"
                 placeholder="Enter Tag"
-                className="w-full bg-secondary text-primary placeholder:text-primary px-2 py-2 text-sm rounded-sm"
+                className="w-full bg-secondary text-primary placeholder:text-primary px-2 py-2 text-xs rounded-sm"
               />
             </div>
             <div className="form-control mt-8 flex gap-4">
