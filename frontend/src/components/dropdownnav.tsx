@@ -73,7 +73,9 @@ const DropdownNav: React.FC = () => {
       <div>
         <Hr />
         <button
-          onClick={() => setIsModalActive(true)}
+          onClick={() => {
+            setIsModalActive(true), setIsDropdownActive(false);
+          }}
           className="w-full bg-shadow border border-shadow-2 rounded-full py-2 text-xs mt-4 font-poppins-bold"
         >
           Add Event

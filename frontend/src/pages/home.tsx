@@ -8,12 +8,27 @@ import { useDropdownState } from "../store/useDropdownStore";
 import { useModalState } from "../store/useModalStore";
 import Overlay from "../components/overlay";
 import Modal from "../components/modal";
+import { useState } from "react";
+
+interface formData {
+  eventName: string;
+  eventDate: string;
+  guests: number;
+}
 
 const Home: React.FC = () => {
   const navigate = useNavigate();
   const { setIsDropdownActive } = useDropdownState();
   const { setIsModalActive } = useModalState();
-
+  const [formData, setFormData] = useState<formData>({
+    eventName: "",
+    eventDate: "",
+    guests: 0,
+  });
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
   return (
     <div className="relative min-h-screen bg-primary text-white p-4 md:p-8">
       {/* Floating Elements */}
@@ -28,20 +43,27 @@ const Home: React.FC = () => {
       <Modal>
         <button
           onClick={() => {
-            setIsModalActive(false), setIsDropdownActive(false);
+            setIsModalActive(false),
+              setFormData({ eventName: "", eventDate: "", guests: 0 });
           }}
           className="absolute flex bg-primary text-secondary rounded-md p-1 text-xl right-4 top-4 hover:bg-secondary-2"
         >
           <i className="lni lni-xmark"></i>
         </button>
         <div className="text-black text-xs">
-          <h3 className="font-poppins-bold text-lg text-primary">Create Event</h3>
+          <h3 className="font-poppins-bold text-lg text-primary">
+            Create Event
+          </h3>
           <div className="form-control grid gap-2 mt-6">
             <label className="font-poppins-bold text-primary">
               Name of Event
             </label>
             <input
               type="text"
+              name="eventName"
+              id="eventName"
+              value={formData.eventName}
+              onChange={handleChange}
               placeholder="Enter Name"
               className="w-full bg-secondary text-primary placeholder:text-primary px-2 py-2 text-xs rounded-sm"
             />
@@ -52,6 +74,10 @@ const Home: React.FC = () => {
             </label>
             <input
               type="date"
+              name="eventDate"
+              id="eventDate"
+              onChange={handleChange}
+              value={formData.eventDate}
               placeholder="Select Date"
               className="w-full bg-secondary text-primary placeholder:text-primary px-2 py-2 text-xs rounded-sm"
             />
@@ -62,6 +88,10 @@ const Home: React.FC = () => {
             </label>
             <input
               type="number"
+              name="guests"
+              id="guests"
+              onChange={handleChange}
+              value={formData.guests}
               placeholder="Select number of guests"
               className="w-full bg-secondary text-primary placeholder:text-primary px-2 py-2 text-xs rounded-sm"
             />
