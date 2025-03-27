@@ -5,11 +5,14 @@ import DropdownNav from "../components/dropdownnav";
 import Hr from "../components/hr";
 
 import { useDropdownState } from "../store/useDropdownStore";
+import { useModalState } from "../store/useModalStore";
 import Overlay from "../components/overlay";
+import Modal from "../components/modal";
 
 const Home: React.FC = () => {
   const navigate = useNavigate();
   const { setIsDropdownActive } = useDropdownState();
+  const { setIsModalActive } = useModalState();
 
   return (
     <div className="relative min-h-screen bg-primary text-white p-4 md:p-8">
@@ -22,6 +25,54 @@ const Home: React.FC = () => {
       >
         <i className="lni lni-camera-1"></i>
       </button>
+      <Modal>
+        <button
+          onClick={() => {
+            setIsModalActive(false), setIsDropdownActive(false);
+          }}
+          className="absolute flex bg-primary text-secondary rounded-md p-1 text-xl right-4 top-4 hover:bg-secondary-2"
+        >
+          <i className="lni lni-xmark"></i>
+        </button>
+        <div className="text-black text-xs">
+          <h3 className="font-poppins-bold text-lg text-primary">Create Event</h3>
+          <div className="form-control grid gap-2 mt-6">
+            <label className="font-poppins-bold text-primary">
+              Name of Event
+            </label>
+            <input
+              type="text"
+              placeholder="Enter Name"
+              className="w-full bg-secondary text-primary placeholder:text-primary px-2 py-2 text-xs rounded-sm"
+            />
+          </div>
+          <div className="form-control grid gap-2 mt-4">
+            <label className="font-poppins-bold text-primary">
+              Date of Event
+            </label>
+            <input
+              type="date"
+              placeholder="Select Date"
+              className="w-full bg-secondary text-primary placeholder:text-primary px-2 py-2 text-xs rounded-sm"
+            />
+          </div>
+          <div className="form-control grid gap-2 mt-4">
+            <label className="font-poppins-bold text-primary">
+              Expected Guests
+            </label>
+            <input
+              type="number"
+              placeholder="Select number of guests"
+              className="w-full bg-secondary text-primary placeholder:text-primary px-2 py-2 text-xs rounded-sm"
+            />
+          </div>
+          <div className="form-control mt-8 flex gap-4">
+            <button className="w-full box-shadow-1 bg-primary text-white font-poppins-bold px-6 py-2 rounded-full text-sm mx-auto">
+              Create Event
+            </button>
+          </div>
+        </div>
+      </Modal>
       {/* End of floating Elements */}
 
       <div className="nav flex items-center justify-between text-sm">

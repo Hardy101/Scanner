@@ -4,11 +4,13 @@ import gsap from "gsap";
 import Hr from "./hr";
 
 import { useDropdownState } from "../store/useDropdownStore";
+import { useModalState } from "../store/useModalStore";
 import { Link } from "react-router";
 
 const DropdownNav: React.FC = () => {
   const dropdownref = useRef<HTMLDivElement | null>(null);
   const { isDropdownActive, setIsDropdownActive } = useDropdownState();
+  const { setIsModalActive } = useModalState();
 
   useEffect(() => {
     if (!dropdownref.current) return;
@@ -70,7 +72,10 @@ const DropdownNav: React.FC = () => {
       </ul>
       <div>
         <Hr />
-        <button className="w-full bg-shadow border border-shadow-2 rounded-full py-2 text-xs mt-4 font-poppins-bold">
+        <button
+          onClick={() => setIsModalActive(true)}
+          className="w-full bg-shadow border border-shadow-2 rounded-full py-2 text-xs mt-4 font-poppins-bold"
+        >
           Add Event
         </button>
       </div>
