@@ -1,11 +1,12 @@
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
+import { Link } from "react-router";
 
 import Hr from "./hr";
 
 import { useDropdownState } from "../store/useDropdownStore";
 import { useModalState } from "../store/useModalStore";
-import { Link } from "react-router";
+import InstallButton from "./installButton";
 
 const DropdownNav: React.FC = () => {
   const dropdownref = useRef<HTMLDivElement | null>(null);
@@ -70,13 +71,14 @@ const DropdownNav: React.FC = () => {
           <span>Analytics</span>
         </li>
       </ul>
-      <div>
-        <Hr />
+      <Hr />
+      <div className="actions flex items-center justify-between gap-6 text-xs mt-4">
+        <InstallButton />
         <button
           onClick={() => {
             setIsModalActive(true), setIsDropdownActive(false);
           }}
-          className="w-full bg-shadow border border-shadow-2 rounded-full py-2 text-xs mt-4 font-poppins-bold"
+          className="grow bg-shadow border border-shadow-2 rounded-full py-2 px-4 font-poppins-bold"
         >
           Add Event
         </button>
