@@ -106,7 +106,7 @@ const EventDetails: React.FC = () => {
           </div>
         )}
         {activeStep == "success" && (
-          <div className="grid text-center text-primary">
+          <div className="text-center text-primary">
             <span className="text-xl font-poppins-medium">
               Profile Created Successfully
             </span>
