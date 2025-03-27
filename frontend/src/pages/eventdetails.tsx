@@ -191,7 +191,7 @@ const EventDetails: React.FC = () => {
                 <span>{name}</span>
                 <ul className="flex gap-1 text-secondary font-poppins-medium text-xs">
                   {tags.map((tag, idx) => (
-                    <li>{tag}</li>
+                    <li key={idx}>{tag}</li>
                   ))}
                 </ul>
               </li>
