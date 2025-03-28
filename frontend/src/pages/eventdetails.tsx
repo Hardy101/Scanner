@@ -2,6 +2,7 @@ import { useNavigate } from "react-router";
 import { useRef, useState } from "react";
 
 import NavButton from "../components/navbutton";
+import ActionButton from "../components/actionbutton";
 import Hr from "../components/hr";
 import { icons } from "../constants/media";
 import Modal from "../components/modal";
@@ -63,12 +64,11 @@ const EventDetails: React.FC = () => {
                 </li>
               ))}
             </ul>
-            <button
+            <ActionButton
               onClick={() => setActiveStep("addGuest")}
-              className="block box-shadow-1 bg-primary text-white font-poppins-bold px-4 py-2 rounded-md text-sm mt-8 ml-auto"
-            >
-              Add Guest
-            </button>
+              text="Add Guest"
+              classNames="bg-primary text-white rounded-md"
+            />
           </div>
         )}
         {activeStep == "addGuest" && (
@@ -91,18 +91,16 @@ const EventDetails: React.FC = () => {
               />
             </div>
             <div className="form-control mt-8 flex gap-4">
-              <button
+              <ActionButton
                 onClick={() => setActiveStep("success")}
-                className="w-full box-shadow-1 bg-primary text-white font-poppins-bold px-6 py-2 rounded-full text-sm mx-auto"
-              >
-                Add Guest
-              </button>
-              <button
-                onClick={() => setActiveStep("guestList")}
-                className="box-shadow-1 bg-white text-primary border-2 border-primary font-poppins-bold px-6 py-2 rounded-full text-sm mx-auto"
-              >
-                Cancel
-              </button>
+                text="Add Guest"
+                classNames="w-full bg-primary text-white rounded-full"
+              />
+              <ActionButton
+                onClick={() => setActiveStep("success")}
+                text="Cancel"
+                classNames="bg-white text-primary border-2 border-primary rounded-full"
+              />
             </div>
           </div>
         )}
@@ -132,28 +130,28 @@ const EventDetails: React.FC = () => {
               </button>
             </p>
             <div className="form-control mt-8 flex gap-4">
-              <button
+              <ActionButton
                 onClick={() => setActiveStep("addGuest")}
-                className="w-full box-shadow-1 bg-primary text-white font-poppins-bold px-6 py-2 rounded-full text-sm mx-auto"
-              >
-                Add More Guests
-              </button>
-              <button
+                text="Add More Guests"
+                classNames="w-full bg-primary text-white rounded-full"
+              />
+              <ActionButton
                 onClick={() => setActiveStep("guestList")}
-                className="box-shadow-1 bg-white text-primary border-2 border-primary font-poppins-bold px-6 py-2 rounded-full text-sm mx-auto"
-              >
-                Cancel
-              </button>
+                text="Cancel"
+                classNames="bg-white text-primary border-2 border-primary rounded-full"
+              />
             </div>
           </div>
         )}
       </Modal>
+      {/* Edit Events Button */}
       <button className="absolute right-4 bottom-4 bg-white p-2 rounded-full box-shadow-1">
         <img src={icons.edit} alt="Edit icon" className="w-6" />
       </button>
 
       <Overlay />
       {/* End of Floating Elements */}
+
       <div className="nav flex items-center justify-between text-sm">
         <p className="grid text-left">
           <span>Event Details</span>

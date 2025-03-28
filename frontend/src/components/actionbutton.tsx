@@ -13,7 +13,7 @@ const ActionButton: React.FC<ButtonProps> = ({
   return (
     <button
       {...props}
-      className={`${classNames} block box-shadow-1 font-poppins-bold px-4 py-2 rounded-md text-sm mt-8 ml-auto`}
+      className={`${classNames} block box-shadow-1 font-poppins-bold px-4 py-2 text-sm mt-8 ml-auto`}
     >
       {text}
     </button>
