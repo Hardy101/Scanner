@@ -11,8 +11,8 @@ import Login from "./pages/login";
 
 function App() {
   return (
-    <main className="bg-secondary-2 md:p-8">
-      <section className="min-h-screen mx-auto md:w-2/5 overflow-clip font-poppins">
+    <main>
+      <section className="min-h-screen overflow-clip font-poppins">
         <BrowserRouter>
           <Routes>
             <Route path="" element={<SplashScreen />} />

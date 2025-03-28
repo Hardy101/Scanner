@@ -53,35 +53,37 @@ const DropdownNav: React.FC = () => {
   return (
     <div
       ref={dropdownref}
-      className="w-5/6 absolute top-15 left-9 md:left-10 bg-[#225050] rounded-xl px-4 pt-10 pb-2 z-4 opacity-0"
+      className="w-full absolute flex top-15 left-0 z-4 opacity-0"
     >
-      <button
-        onClick={() => setIsDropdownActive(false)}
-        className="absolute flex bg-shadow text-secondary rounded-md p-1 text-xl right-4 top-4"
-      >
-        <i className="lni lni-xmark"></i>
-      </button>
-      <ul className="text-secondary leading-7">
-        <li className="hover:text-white">
-          <Link to={"/profile"}>
-            <span>Profile</span>
-          </Link>
-        </li>
-        <li className="hover:text-white">
-          <span>Analytics</span>
-        </li>
-      </ul>
-      <Hr />
-      <div className="actions flex items-center justify-between gap-6 text-xs mt-4">
-        <InstallButton />
+      <div className="relative w-5/6 bg-[#225050] rounded-xl px-4 pt-10 pb-2 mx-auto">
         <button
-          onClick={() => {
-            setIsModalActive(true), setIsDropdownActive(false);
-          }}
-          className="grow bg-shadow border border-shadow-2 rounded-full py-2 px-4 font-poppins-bold"
+          onClick={() => setIsDropdownActive(false)}
+          className="absolute flex bg-shadow text-secondary rounded-md p-1 text-xl right-4 top-4"
         >
-          Add Event
+          <i className="lni lni-xmark"></i>
         </button>
+        <ul className="text-secondary leading-7">
+          <li className="hover:text-white">
+            <Link to={"/profile"}>
+              <span>Profile</span>
+            </Link>
+          </li>
+          <li className="hover:text-white">
+            <span>Analytics</span>
+          </li>
+        </ul>
+        <Hr />
+        <div className="actions flex items-center justify-between gap-6 text-xs mt-4">
+          <InstallButton />
+          <button
+            onClick={() => {
+              setIsModalActive(true), setIsDropdownActive(false);
+            }}
+            className="grow bg-shadow border border-shadow-2 rounded-full py-2 px-4 font-poppins-bold"
+          >
+            Add Event
+          </button>
+        </div>
       </div>
     </div>
   );

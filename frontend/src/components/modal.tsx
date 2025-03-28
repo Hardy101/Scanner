@@ -55,7 +55,7 @@ const Modal: React.FC<ModalProps> = ({ children, classNames, ...props }) => {
     <div
       ref={modalRef}
       {...props}
-      className={`${classNames} absolute top-15 left-10 w-5/6 bg-white rounded-xl p-4 opacity-0 z-4`}
+      className={`${classNames} absolute w-5/6 top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2  bg-white rounded-xl p-4 opacity-0 z-4`}
     >
       {children}
     </div>

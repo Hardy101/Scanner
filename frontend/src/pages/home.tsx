@@ -123,7 +123,7 @@ const Home: React.FC = () => {
           Welcome back, hope your doing well today?
         </p>
 
-        <div id="events" className="mt-8 text-black grid gap-8">
+        <div id="events" className="mt-8 text-black grid md:grid-cols-3 gap-8">
           <div className="relative bg-white rounded-xl p-4">
             <button id="linkout" className="absolute -bottom-2 -right-2">
               <Link

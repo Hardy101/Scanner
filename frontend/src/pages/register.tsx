@@ -105,7 +105,7 @@ const Register = () => {
       </p>
       <form
         onSubmit={handleSubmit}
-        className="flex flex-col gap-4 w-4/5 md:w-3/5 mt-8 mx-auto"
+        className="flex flex-col gap-4 w-4/5 md:w-3/5 mx-auto"
       >
         <p className="grid text-red-500 text-left text-sm">
           {errors.name && <span>{errors.name}</span>}

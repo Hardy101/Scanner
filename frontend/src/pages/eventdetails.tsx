@@ -26,7 +26,7 @@ const EventDetails: React.FC = () => {
   const [copied, setCopied] = useState(false);
   const [formData, setFormData] = useState<formData>({
     eventName: "Birthday Party",
-    eventDate: "12/12/1212",
+    eventDate: "2025-03-29",
     eventVenue: "15 Caramet Hall off Jump off bridge",
     guests: 50,
   });
