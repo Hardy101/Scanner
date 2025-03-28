@@ -1,8 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router";
 
-import { icons } from "../constants/media";
-
 interface FormData {
   email: string;
   password: string;
