@@ -25,8 +25,8 @@ This is the frontend for the Event Invitee Management tool, built using **React 
 ### 1️⃣ Clone the Repository
 
 ```bash
-git clone <your-repo-url>
-cd event-invitee-frontend
+git clone <[Scanner Repo](https://github.com/Hardy101/Scanner.git)>
+cd frontend
 ```
 
 ### 2️⃣ Install Dependencies
