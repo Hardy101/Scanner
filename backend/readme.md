@@ -19,28 +19,31 @@ This is the backend service for the Guest Management QR Code Scanner App. The ba
 ## Installation
 
 1. Clone the repository:
-    ```bash
-    git clone <repository-url>
-    cd backend
-    ```
+
+   ```bash
+   git clone <[Scanner Repo](https://github.com/Hardy101/Scanner.git)>
+   cd backend
+   ```
 
 2. Create a virtual environment and activate it:
-    ```bash
-    python -m venv venv
-    source venv/bin/activate  # On Windows: venv\Scripts\activate
-    ```
+
+   ```bash
+   python -m venv venv
+   source venv/bin/activate  # On Windows: venv\Scripts\activate
+   ```
 
 3. Install dependencies:
-    ```bash
-    pip install -r requirements.txt
-    ```
+   ```bash
+   pip install -r requirements.txt
+   ```
 
 ## Running the Server
 
 1. Start the FastAPI server:
-    ```bash
-    uvicorn main:app --reload
-    ```
+
+   ```bash
+   uvicorn main:app --reload
+   ```
 
 2. The server will be available at `http://127.0.0.1:8000`.
 
