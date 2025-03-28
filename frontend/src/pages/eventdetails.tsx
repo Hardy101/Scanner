@@ -20,12 +20,14 @@ const EventDetails: React.FC = () => {
   const textRef = useRef<HTMLSpanElement | null>(null);
   const navigate = useNavigate();
 
+  const [isFormActive, setIsFormActive] = useState(false);
   const { setIsModalActive } = useModalState();
   const [activeStep, setActiveStep] = useState("guestList");
   const [copied, setCopied] = useState(false);
   const [formData, setFormData] = useState<formData>({
     eventName: "Birthday Party",
-    eventDate: "15th March 2025",
+    eventDate: "12/12/1212",
+    eventVenue: "15 Caramet Hall off Jump off bridge",
     guests: 50,
   });
 
@@ -196,12 +198,38 @@ const EventDetails: React.FC = () => {
           </div>
         )}
       </Modal>
-      {/* Edit Events Button */}
-      <button className="absolute right-4 bottom-4 bg-white p-2 rounded-full box-shadow-1">
-        <img src={icons.edit} alt="Edit icon" className="w-6" />
-      </button>
 
       <Overlay />
+
+      {/* Logic For editing event details */}
+      {isFormActive ? (
+        <p
+          id="formActions"
+          className="absolute w-full left-0 bottom-0 flex justify-between gap-4 p-4 text-sm"
+        >
+          <button
+            onClick={() => setIsFormActive(false)}
+            className="bg-red py-1 px-4 rounded-md text-white font-poppins-bold"
+          >
+            Cancel
+          </button>
+          <button
+            onClick={() => setIsFormActive(false)}
+            className="flex-grow bg-white py-1 rounded-md text-primary font-poppins-bold"
+          >
+            Save
+          </button>
+        </p>
+      ) : (
+        // Edit Button
+        <button
+          onClick={() => setIsFormActive(true)}
+          className="absolute right-4 bottom-4 bg-white p-2 rounded-full box-shadow-1"
+        >
+          <img src={icons.edit} alt="Edit icon" className="w-6" />
+        </button>
+      )}
+
       {/* End of Floating Elements */}
 
       <div className="nav flex items-center justify-between text-sm">
@@ -214,35 +242,49 @@ const EventDetails: React.FC = () => {
 
       <div className="body mt-10">
         <input
-          readOnly
+          readOnly={!isFormActive}
+          type="text"
           id="eventName"
           name="eventName"
           value={formData.eventName}
           onChange={handleChange}
-          className="border-l-4 text-lg pl-3 pr-4 py-1 text-white outline-none"
+          className={`border-l-4 text-lg pl-3 pr-4 py-1 outline-none ${
+            isFormActive
+              ? "bg-secondary text-primary border-secondary-2"
+              : "bg-transparent text-white"
+          }`}
         />
 
-        <ul className="mt-8 mb-8">
+        <ul className="mt-8 mb-8 grid gap-2">
           <li className="text-secondary-2 flex items-center gap-2">
             <i className="lni lni-alarm-1"></i>
             <input
-              readOnly
+              readOnly={!isFormActive}
+              type="date"
               id="eventDate"
               name="eventDate"
               value={formData.eventDate}
               onChange={handleChange}
-              className="w-full outline-none"
+              className={`w-full outline-none ${
+                isFormActive
+                  ? "bg-secondary text-primary"
+                  : "bg-transparent text-white"
+              }`}
             />
           </li>
           <li className="text-secondary-2 flex items-center gap-2">
             <i className="lni lni-location-arrow-right"></i>
             <input
-              readOnly
+              readOnly={!isFormActive}
               id="eventVenue"
               name="eventVenue"
               value={formData.eventVenue}
               onChange={handleChange}
-              className="w-full outline-none"
+              className={`w-full outline-none ${
+                isFormActive
+                  ? "bg-secondary text-primary"
+                  : "bg-transparent text-white"
+              }`}
             />
           </li>
         </ul>
