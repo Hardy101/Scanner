@@ -1,54 +1,65 @@
-# React + TypeScript + Vite
+# Event Invitee Management - Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This is the frontend for the Event Invitee Management tool, built using **React (TypeScript + Vite)**. The app provides event managers with an intuitive UI to create events, manage invitees, and track attendance via QR code scanning.
 
-Currently, two official plugins are available:
+## 🚀 Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- Event creation & management
+- Invitee list with QR code generation
+- Seamless invite sharing
+- QR code scanning for check-in
+- Real-time attendance tracking
+- Analytics dashboard
 
-## Expanding the ESLint configuration
+## 🛠 Tech Stack
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- **React (TypeScript)** – Core framework
+- **Vite** – Fast build tool
+- **Tailwind CSS** – Styling
+- **React Router** – Navigation
+- **Axios** – API calls
+- **Socket.IO Client** – Real-time updates
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+## 📦 Setup & Installation
+
+### 1️⃣ Clone the Repository
+
+```bash
+git clone <your-repo-url>
+cd event-invitee-frontend
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### 2️⃣ Install Dependencies
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
+```bash
+npm install
 ```
+
+### 3️⃣ Configure Environment Variables
+
+Create a `.env` file in the project root:
+
+```bash
+VITE_API_BASE_URL=http://localhost:8000  # FastAPI backend URL
+```
+
+### 4️⃣ Start the Development Server
+
+```bash
+npm run dev
+```
+
+## 📡 API Integration
+
+The frontend communicates with the FastAPI backend for event management, invitee handling, QR code retrieval, and analytics. Ensure the backend is running before testing API requests.
+
+## 📌 TODO
+
+- [ ] Implement authentication flow
+- [ ] Complete event & invitee management UI
+- [ ] Integrate QR scanning feature
+- [ ] Finalize analytics dashboard
+
+---
+
+For any issues or feature requests, feel free to open an issue in the repository!
