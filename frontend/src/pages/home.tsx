@@ -10,9 +10,10 @@ import Overlay from "../components/overlay";
 import Modal from "../components/modal";
 import { useState } from "react";
 
-interface formData {
+export interface formData {
   eventName: string;
   eventDate: string;
+  eventVenue?: string;
   guests: number;
 }
 
@@ -119,7 +120,7 @@ const Home: React.FC = () => {
           Welcome back, hope your doing well today?
         </p>
 
-        <div id="events" className="mt-8 text-black">
+        <div id="events" className="mt-8 text-black grid gap-8">
           <div className="relative bg-white rounded-xl p-4">
             <button id="linkout" className="absolute -bottom-2 -right-2">
               <Link

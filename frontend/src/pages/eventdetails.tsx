@@ -8,6 +8,7 @@ import { icons } from "../constants/media";
 import Modal from "../components/modal";
 import { useModalState } from "../store/useModalStore";
 import Overlay from "../components/overlay";
+import { formData } from "./home";
 
 const guestList = [
   { id: 0, initials: "DA", name: "David Aguero", tags: ["vip", "family"] },
@@ -22,6 +23,16 @@ const EventDetails: React.FC = () => {
   const { setIsModalActive } = useModalState();
   const [activeStep, setActiveStep] = useState("guestList");
   const [copied, setCopied] = useState(false);
+  const [formData, setFormData] = useState<formData>({
+    eventName: "Birthday Party",
+    eventDate: "15th March 2025",
+    guests: 50,
+  });
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
 
   const handleCopy = () => {
     if (textRef.current) {
@@ -202,24 +213,45 @@ const EventDetails: React.FC = () => {
       <Hr />
 
       <div className="body mt-10">
-        <span className="border-l-4 text-lg pl-3 pr-4 py-1 text-white">
-          Birthday Party
-        </span>
+        <input
+          readOnly
+          id="eventName"
+          name="eventName"
+          value={formData.eventName}
+          onChange={handleChange}
+          className="border-l-4 text-lg pl-3 pr-4 py-1 text-white outline-none"
+        />
 
         <ul className="mt-8 mb-8">
           <li className="text-secondary-2 flex items-center gap-2">
             <i className="lni lni-alarm-1"></i>
-            <span>15th March 2025</span>
+            <input
+              readOnly
+              id="eventDate"
+              name="eventDate"
+              value={formData.eventDate}
+              onChange={handleChange}
+              className="w-full outline-none"
+            />
           </li>
           <li className="text-secondary-2 flex items-center gap-2">
             <i className="lni lni-location-arrow-right"></i>
-            <span>15 Caramet Hill Off Jump Off bridge</span>
+            <input
+              readOnly
+              id="eventVenue"
+              name="eventVenue"
+              value={formData.eventVenue}
+              onChange={handleChange}
+              className="w-full outline-none"
+            />
           </li>
         </ul>
         <Hr />
         <div id="guests" className="mt-10">
           <h3 className="font-poppins-bold">Guests</h3>
-          <p className="text-sm text-secondary mt-2">50 Guests</p>
+          <p className="text-sm text-secondary mt-2">
+            {formData.guests} Guests
+          </p>
 
           <ul id="guests" className="mt-8 text-sm grid grid-cols-3 gap-4">
             {guestList.map(({ id, name, tags }) => (
