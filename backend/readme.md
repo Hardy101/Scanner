@@ -88,4 +88,4 @@ This project is licensed under the MIT License. See the `LICENSE` file for detai
 
 ## Contact
 
-For questions or support, please contact [Your Name/Email].
+For questions or support, please contact [Eghosa Ordia/eghordia130@gmail.com].
