@@ -49,7 +49,11 @@ const EventDetails: React.FC = () => {
             <h3 className="font-poppins-bold text-lg">Guest List</h3>
             <ul className="grid gap-2 divide-y divide-secondary-2 mt-6 text-xs">
               {guestList.map(({ id, initials, name, tags }) => (
-                <li key={id} className="flex items-center gap-2 pb-2">
+                <li
+                  onClick={() => setActiveStep("guestDetails")}
+                  key={id}
+                  className="flex items-center gap-2 pb-2"
+                >
                   <span className="p-2 bg-primary text-white rounded-full my-auto">
                     {initials}
                   </span>
@@ -69,6 +73,43 @@ const EventDetails: React.FC = () => {
               text="Add Guest"
               classNames="bg-primary text-white rounded-md"
             />
+          </div>
+        )}
+        {activeStep == "guestDetails" && (
+          <div className="text-black grid grid-cols-2">
+            <div className="grid">
+              <h3 className="font-poppins-bold text-lg">Scarlett Johansson</h3>
+              <p className="inline-flex items-center justify-between gap-2 mx-auto text-xs">
+                <span className="text-gray-1 underline">
+                  @qrscanneer/scarlettjohanson
+                </span>
+                <button
+                  onClick={() => handleCopy()}
+                  className="bg-primary text-white rounded-md px-2 py-1"
+                >
+                  {copied ? "copied!" : "copy"}
+                </button>
+              </p>
+            </div>
+
+            <img
+              src={icons.qrcode}
+              alt="Image of a qr code scan"
+              className="w-1/2 ml-auto"
+            />
+
+            <div className="col-span-2 flex gap-8 items-center justify-between">
+              <ActionButton
+                onClick={() => setActiveStep("addGuest")}
+                text="Edit"
+                classNames="grow bg-primary text-white rounded-full"
+              />
+              <ActionButton
+                onClick={() => setActiveStep("addGuest")}
+                text="Delete"
+                classNames="bg-white text-primary rounded-full border-2 border-primary"
+              />
+            </div>
           </div>
         )}
         {activeStep == "addGuest" && (
