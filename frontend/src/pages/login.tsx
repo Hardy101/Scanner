@@ -50,7 +50,9 @@ const Login = () => {
       <h2 className="text-2xl font-poppins-bold">Welcome back</h2>
       <p className="text-sm">
         Do you not have an account yet?{" "}
-        <Link to={'/register'} className="text-secondary font-poppins-bold">Register Here</Link>
+        <Link to={"/register"} className="text-secondary font-poppins-bold">
+          Register Here
+        </Link>
       </p>
       <form
         onSubmit={handleSubmit}
@@ -68,6 +70,12 @@ const Login = () => {
             className={`${input.classNames}`}
           />
         ))}
+        <div className="form-control text-left text-secondary">
+          <button type="button" className="flex gap-2 text-sm">
+            <input type="checkbox" name="remember" id="remember" />
+            <span>remember me on next login</span>
+          </button>
+        </div>
         <button className="bg-white text-center text-primary text-sm box-shadow-1 font-poppins-bold rounded-full px-6 py-4 mt-4">
           <span>Login</span>
         </button>
