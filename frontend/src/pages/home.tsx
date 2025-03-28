@@ -26,6 +26,9 @@ const Home: React.FC = () => {
     eventDate: "",
     guests: 0,
   });
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+  };
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
@@ -51,7 +54,7 @@ const Home: React.FC = () => {
         >
           <i className="lni lni-xmark"></i>
         </button>
-        <div className="text-black text-xs">
+        <form onSubmit={handleSubmit} className="text-black text-xs">
           <h3 className="font-poppins-bold text-lg text-primary">
             Create Event
           </h3>
@@ -102,7 +105,7 @@ const Home: React.FC = () => {
               Create Event
             </button>
           </div>
-        </div>
+        </form>
       </Modal>
       {/* End of floating Elements */}
 
