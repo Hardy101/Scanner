@@ -11,6 +11,7 @@ class UserCreate(BaseModel):
     name: str
     email: str
     password: str
+    role: str = "invitee"
 
 class UserLogin(BaseModel):
     name: str
@@ -30,7 +31,10 @@ def register(user: UserCreate, db: Session = Depends(get_db)):
     if existing_user:
         raise HTTPException(status_code=400, detail="Email already registered")
 
-    new_user = User(email=user.email, hashed_password=hash_password(user.password))
+    if user.role not in ["admin", "event_manager", "invitee"]:
+        raise HTTPException(status_code=400, detail="Invalid role")
+
+    new_user = User(email=user.email, hashed_password=hash_password(user.password), role=user.role)
     db.add(new_user)
     db.commit()
     return {"message": "User created successfully"}
@@ -41,5 +45,5 @@ def login(user: UserLogin, db: Session = Depends(get_db)):
     if not db_user or not verify_password(user.password, db_user.hashed_password):
         raise HTTPException(status_code=400, detail="Invalid credentials")
 
-    token = create_access_token({"sub": user.email})
+    token = create_access_token({"sub": user.email, "role": db_user.role})
     return {"access_token": token, "token_type": "bearer"}

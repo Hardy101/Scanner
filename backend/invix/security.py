@@ -34,7 +34,7 @@ def get_db():
     finally:
         db.close()
 
-def verify_token(token: str, db: SessionLocal = Depends(get_db)) -> Optional[User]:
+def verify_token(token: str, db: SessionLocal = Depends(get_db)) -> User:
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Invalid authentication credentials",
@@ -44,13 +44,14 @@ def verify_token(token: str, db: SessionLocal = Depends(get_db)) -> Optional[Use
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
         email: str = payload.get("sub")
-        if email is None:
+        role: str = payload.get("role")
+        if email is None or role is None:
             raise credentials_exception
     except JWTError:
         raise credentials_exception
 
     user = db.query(User).filter(User.email == email).first()
-    if user is None:
+    if user is None or user.role != role:
         raise credentials_exception
 
     return user
