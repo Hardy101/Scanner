@@ -6,7 +6,6 @@ import Hr from "./hr";
 
 import { useDropdownState } from "../store/useDropdownStore";
 import { useModalState } from "../store/useModalStore";
-import InstallButton from "./installButton";
 import { useAuth } from "../context/AuthProvider";
 import LogoutButton from "./logOutbutton";
 
