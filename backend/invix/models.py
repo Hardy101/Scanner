@@ -1,5 +1,5 @@
 from sqlalchemy import Column, Integer, String
-from database import Base
+from backend.invix.database import Base
 from pydantic import BaseModel
 
 class User(Base):

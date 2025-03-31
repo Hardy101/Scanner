@@ -1,8 +1,8 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from database import SessionLocal
-from models import User
-from security import hash_password, verify_password, create_access_token
+from backend.invix.database import SessionLocal
+from backend.invix.models import User
+from backend.invix.security import hash_password, verify_password, create_access_token
 from pydantic import BaseModel
 
 router = APIRouter()
