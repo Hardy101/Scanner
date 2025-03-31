@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router";
+import axios from "axios";
 
 import { icons } from "../constants/media";
 
@@ -7,8 +8,9 @@ interface FormData {
   name: string;
   email: string;
   password: string;
-  errors?: string;
 }
+
+const url = "http://127.0.0.1:8000";
 
 const Register = () => {
   const navigate = useNavigate();
@@ -17,30 +19,21 @@ const Register = () => {
     name: "",
     email: "",
     password: "",
-    errors: "",
   });
-  const [errors, setErrors] = useState({
-    name: "",
-    email: "",
-    password: "",
-  });
+  const [errors, setErrors] = useState("");
 
   const validateForm = () => {
     let valid = true;
-    const newErrors = { name: "", email: "", password: "" };
+    let newErrors = "";
 
     if (formData.name.trim().length < 3) {
-      newErrors.name = "Name must be at least 3 characters";
+      newErrors = "Name must be at least 3 characters";
       valid = false;
-    }
-
-    if (!/^\S+@\S+\.\S+$/.test(formData.email)) {
-      newErrors.email = "Enter a valid email address";
+    } else if (!/^\S+@\S+\.\S+$/.test(formData.email)) {
+      newErrors = "Enter a valid email address";
       valid = false;
-    }
-
-    if (formData.password.length < 8) {
-      newErrors.password = "Password must be at least 8 characters";
+    } else if (formData.password.length < 8) {
+      newErrors = "Password must be at least 8 characters";
       valid = false;
     }
 
@@ -55,8 +48,20 @@ const Register = () => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
     if (validateForm()) {
-      alert("Success!"), navigate("/home");
+      const response = axios.post(`${url}/auth/register`, formData);
+      response
+        .then(
+          (res) => (
+            console.log(res.data),
+            alert(`Success! ${JSON.stringify(res.data)}`),
+            navigate("/home")
+          )
+        )
+        .catch(
+          (err) => (setErrors(err.response.data.detail), console.log(errors))
+        );
     }
   };
   const formFieldClasses =
@@ -107,11 +112,9 @@ const Register = () => {
         onSubmit={handleSubmit}
         className="flex flex-col gap-4 w-4/5 md:w-3/5 mx-auto"
       >
-        <p className="grid text-red-500 text-left text-sm">
-          {errors.name && <span>{errors.name}</span>}
-          {errors.email && <span>{errors.email}</span>}
-          {errors.password && <span>{errors.password}</span>}
-        </p>
+        {errors && (
+          <p className="grid text-red-500 text-left text-sm"> {errors}</p>
+        )}
         {formFields.map((input, idx) => (
           <input
             key={idx}

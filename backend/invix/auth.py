@@ -34,7 +34,7 @@ def register(user: UserCreate, db: Session = Depends(get_db)):
     if user.role not in ["admin", "event_manager", "invitee"]:
         raise HTTPException(status_code=400, detail="Invalid role")
 
-    new_user = User(email=user.email, hashed_password=hash_password(user.password), role=user.role)
+    new_user = User(name=user.name, email=user.email, hashed_password=hash_password(user.password), role='invitee')
     db.add(new_user)
     db.commit()
     return {"message": "User created successfully"}
