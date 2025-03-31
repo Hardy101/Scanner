@@ -4,7 +4,7 @@ from invix.auth import router as auth_router
 from invix.security import verify_token
 from invix.models import PublicUser, User as UserModel
 from sqlalchemy.orm import Session
-from backend.invix.database import get_db
+from invix.database import get_db
 from typing import List
 
 app = FastAPI()
