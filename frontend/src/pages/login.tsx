@@ -48,25 +48,15 @@ const Login = () => {
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (validateForm()) {
       try {
-        const response = axios.post(`${url}/auth/login`, formData, {
+        await axios.post(`${url}/auth/login`, formData, {
           withCredentials: true,
           headers: { "Content-Type": "application/json" },
         });
-        response
-          .then((res) => navigate("/home"))
-          .catch((err) => {
-            console.error("Login Error", err),
-              setErrors((prev) => ({
-                ...prev,
-                general:
-                  err.response.data.detail ||
-                  "Something went wrong, please fill the form again",
-              }));
-          });
+        alert("success");
       } catch (err: any) {
         console.error("Login error", err);
         setErrors((prev) => ({
