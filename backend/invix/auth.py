@@ -56,7 +56,9 @@ def login(user: UserLogin, db: Session = Depends(get_db)):
         raise HTTPException(status_code=400, detail="Invalid credentials")
 
     token = create_access_token({"sub": user.email, "role": db_user.role})
-    response = JSONResponse(content={"message": "Login successful"})
+    response = JSONResponse(
+        content={"message": "Login successful", "access_token": token}
+    )
     response.set_cookie(
         key="access_token", value=token, httponly=True, secure=True, samesite="Lax"
     )

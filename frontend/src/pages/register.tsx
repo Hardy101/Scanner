@@ -68,7 +68,7 @@ const Register = () => {
           (res) => (
             console.log(res.data),
             alert(`Success! User created successfully`),
-            navigate("/home")
+            navigate("/login")
           )
         )
         .catch(
