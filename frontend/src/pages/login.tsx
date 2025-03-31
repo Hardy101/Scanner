@@ -1,5 +1,8 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router";
+import axios from "axios";
+
+import { url } from "./register";
 
 interface FormData {
   email: string;
@@ -13,8 +16,33 @@ const Login = () => {
   const [formData, setFormData] = useState<FormData>({
     email: "",
     password: "",
-    errors: "",
   });
+
+  const [errors, setErrors] = useState<{
+    email: string;
+    password: string;
+    general: string;
+  }>({
+    email: "",
+    password: "",
+    general: "",
+  });
+
+  const validateForm = () => {
+    let valid = true;
+    let newErrors = { name: "", email: "", password: "", general: "" };
+
+    if (!/^\S+@\S+\.\S+$/.test(formData.email)) {
+      newErrors.email = "Enter a valid email address";
+      valid = false;
+    } else if (formData.password.length < 8) {
+      newErrors.password = "Password must be at least 8 characters";
+      valid = false;
+    }
+
+    setErrors(newErrors);
+    return valid;
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -23,27 +51,22 @@ const Login = () => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    navigate("/home");
+    if (validateForm()) {     
+      const response = axios.post(`${url}/auth/login`, formData);
+      response
+        .then((res) => (console.log(res.data), navigate("/home")))
+        .catch((err) =>
+          setErrors((prev) => ({
+            ...prev,
+            general:
+              err.response.data.detail ||
+              "Something went wrong, please fill the form again",
+          }))
+        );
+    }
   };
   const formFieldClasses =
     "bg-transparent text-secondary font-poppins placeholder:text-secondary border border-shadow text-xs px-4 py-3 rounded-md";
-
-  const formFields = [
-    {
-      type: "email",
-      id: "email",
-      value: formData.email,
-      placeholder: "Enter email",
-      classNames: formFieldClasses,
-    },
-    {
-      type: "password",
-      id: "password",
-      value: formData.password,
-      placeholder: "Enter password",
-      classNames: formFieldClasses,
-    },
-  ];
 
   return (
     <div className="min-h-screen bg-primary pt-16 flex flex-col gap-4 text-white text-center">
@@ -58,18 +81,48 @@ const Login = () => {
         onSubmit={handleSubmit}
         className="flex flex-col gap-4 w-4/5 md:w-3/5 mt-8 mx-auto"
       >
-        {formFields.map((input, idx) => (
+        {errors.general && (
+          <p className="error-msg flex items-center gap-2 bg-red-300 text-red-500 text-xs rounded-md p-2 ">
+            <i className="fa-solid fa-triangle-exclamation text-lg"></i>
+            <span>{errors.general}</span>
+          </p>
+        )}
+        <div className="form-control grid gap-2">
           <input
-            key={idx}
-            type={input.type}
-            id={input.id}
-            name={input.id}
-            value={input.value}
+            type="text"
+            name="email"
+            id="email"
+            placeholder="Enter email"
+            value={formData.email.trim()}
             onChange={handleChange}
-            placeholder={input.placeholder}
-            className={`${input.classNames}`}
+            className={`${formFieldClasses} ${
+              errors.email ? "border-2 border-red" : "border border-shadow"
+            }`}
           />
-        ))}
+          {errors.email && (
+            <p className="text-red-500 text-xs font-poppins-medium text-left">
+              {errors.email}
+            </p>
+          )}
+        </div>
+        <div className="form-control grid gap-2">
+          <input
+            type="text"
+            name="password"
+            id="password"
+            placeholder="Enter password"
+            value={formData.password.trim()}
+            onChange={handleChange}
+            className={`${formFieldClasses} ${
+              errors.password ? "border-2 border-red" : "border border-shadow"
+            }`}
+          />
+          {errors.password && (
+            <p className="text-red-500 text-xs font-poppins-medium text-left">
+              {errors.password}
+            </p>
+          )}
+        </div>
         <div className="form-control text-left text-secondary">
           <button type="button" className="flex gap-2 text-sm">
             <input type="checkbox" name="remember" id="remember" />

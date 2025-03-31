@@ -11,7 +11,7 @@ interface FormData {
 }
 
 // const urlLocal = "http://127.0.0.1:8000";
-const url = "https://scanner-ohvw.onrender.com";
+export const url = "https://scanner-ohvw.onrender.com";
 
 const Register = () => {
   const navigate = useNavigate();
@@ -67,7 +67,7 @@ const Register = () => {
         .then(
           (res) => (
             console.log(res.data),
-            alert(`Success! ${JSON.stringify(res.data)}`),
+            alert(`Success! User created successfully`),
             navigate("/home")
           )
         )
