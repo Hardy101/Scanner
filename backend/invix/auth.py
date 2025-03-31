@@ -14,7 +14,6 @@ class UserCreate(BaseModel):
     role: str = "invitee"
 
 class UserLogin(BaseModel):
-    name: str
     email: str
     password: str
 
