@@ -52,10 +52,15 @@ const Login = () => {
     e.preventDefault();
     if (validateForm()) {
       try {
-        await axios.post(`${url}/auth/login`, formData, {
+        const response = await axios.post(`${url}/auth/login`, formData, {
           withCredentials: true,
           headers: { "Content-Type": "application/json" },
         });
+        const token = response.data.access_token;
+        const expirationDate = new Date();
+        expirationDate.setHours(expirationDate.getHours() + 1);
+        document.cookie = `token=${token}; path=/; expires=${expirationDate}; secure; HttpOnly`;
+        navigate("/home");
         alert("success");
       } catch (err: any) {
         console.error("Login error", err);
