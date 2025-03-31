@@ -10,7 +10,8 @@ interface FormData {
   password: string;
 }
 
-const url = "http://127.0.0.1:8000";
+// const urlLocal = "http://127.0.0.1:8000";
+const url = "https://scanner-ohvw.onrender.com";
 
 const Register = () => {
   const navigate = useNavigate();
@@ -92,7 +93,7 @@ const Register = () => {
       <img
         src={icons.logo}
         alt="Logo"
-        className="w-1/5 mx-auto"
+        className="w-1/6 mx-auto"
         style={{
           pointerEvents: "none",
         }}
@@ -108,7 +109,7 @@ const Register = () => {
         className="grid gap-4 w-4/5 md:w-3/5 mx-auto"
       >
         {errors.general && (
-          <p className="error-msg flex items-center gap-2 bg-red-300 text-red-500 text-sm rounded-md p-2 ">
+          <p className="error-msg flex items-center gap-2 bg-red-300 text-red-500 text-xs rounded-md p-2 ">
             <i className="fa-solid fa-triangle-exclamation text-lg"></i>
             <span>{errors.general}</span>
           </p>
@@ -127,7 +128,7 @@ const Register = () => {
             }`}
           />
           {errors.name && (
-            <p className="text-red-500 text-sm font-poppins-medium text-left">
+            <p className="text-red-500 text-xs font-poppins-medium text-left">
               {errors.name}
             </p>
           )}
@@ -141,11 +142,11 @@ const Register = () => {
             value={formData.email.trim()}
             onChange={handleChange}
             className={`${formFieldClasses} ${
-              errors.email ? "border-2 border-red" : " border border-shadow"
+              errors.email ? "border-2 border-red" : "border border-shadow"
             }`}
           />
           {errors.email && (
-            <p className="text-red-500 text-sm font-poppins-medium text-left">
+            <p className="text-red-500 text-xs font-poppins-medium text-left">
               {errors.email}
             </p>
           )}
@@ -159,11 +160,11 @@ const Register = () => {
             value={formData.password.trim()}
             onChange={handleChange}
             className={`${formFieldClasses} ${
-              errors.password ? "border-2 border-red" : " border border-shadow"
+              errors.password ? "border-2 border-red" : "border border-shadow"
             }`}
           />
           {errors.password && (
-            <p className="text-red-500 text-sm font-poppins-medium text-left">
+            <p className="text-red-500 text-xs font-poppins-medium text-left">
               {errors.password}
             </p>
           )}
