@@ -4,16 +4,15 @@ import axios from "axios";
 
 import { url } from "./register";
 
-interface FormData {
+interface formData {
   email: string;
   password: string;
-  errors?: string;
 }
 
 const Login = () => {
   const navigate = useNavigate();
 
-  const [formData, setFormData] = useState<FormData>({
+  const [formData, setFormData] = useState<formData>({
     email: "",
     password: "",
   });
@@ -51,18 +50,19 @@ const Login = () => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (validateForm()) {     
+    if (validateForm()) {
       const response = axios.post(`${url}/auth/login`, formData);
       response
-        .then((res) => (console.log(res.data), navigate("/home")))
-        .catch((err) =>
-          setErrors((prev) => ({
-            ...prev,
-            general:
-              err.response.data.detail ||
-              "Something went wrong, please fill the form again",
-          }))
-        );
+        .then((res) => navigate("/home"))
+        .catch((err: any) => {
+          console.error("Login Error", err),
+            setErrors((prev) => ({
+              ...prev,
+              general:
+                err.response.data.detail ||
+                "Something went wrong, please fill the form again",
+            }));
+        });
     }
   };
   const formFieldClasses =

@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router";
-
+ 
 import "./App.css";
 import SplashScreen from "./pages/splashscreen";
 import Register from "./pages/register";

@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException
+from fastapi.responses import JSONResponse
 from sqlalchemy.orm import Session
 from invix.database import SessionLocal
 from invix.models import User
@@ -14,7 +15,6 @@ class UserCreate(BaseModel):
     role: str = "invitee"
 
 class UserLogin(BaseModel):
-    name: str
     email: str
     password: str
 
@@ -46,4 +46,13 @@ def login(user: UserLogin, db: Session = Depends(get_db)):
         raise HTTPException(status_code=400, detail="Invalid credentials")
 
     token = create_access_token({"sub": user.email, "role": db_user.role})
-    return {"access_token": token, "token_type": "bearer"}
+    response = JSONResponse(content={"message": "Login successful"})
+    response.set_cookie(
+        key="access_token",
+        value=token,
+        httponly=True,
+        secure=True, 
+        samesite="Lax"
+    )
+    return response
+    # return {"access_token": token, "token_type": "bearer"}
