@@ -12,20 +12,24 @@ SECRET_KEY = "whitecrow"
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
-# pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 def hash_password(password: str):
     return bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt())
+
 
 def verify_password(plain_password, hashed_password):
     # return pwd_context.verify(plain_password, hashed_password)
     return bcrypt.checkpw(plain_password.encode("utf-8"), hashed_password)
 
+
 def create_access_token(data: dict, expires_delta: timedelta = None):
     to_encode = data.copy()
-    expire = datetime.now() + (expires_delta or timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES))
+    expire = datetime.now() + (
+        expires_delta or timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+    )
     to_encode.update({"exp": expire})
     return jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
+
 
 def get_db():
     db = SessionLocal()
@@ -34,13 +38,14 @@ def get_db():
     finally:
         db.close()
 
+
 def verify_token(token: str, db: SessionLocal = Depends(get_db)) -> User:
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Invalid authentication credentials",
         headers={"WWW-Authenticate": "Bearer"},
     )
-    
+
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
         email: str = payload.get("sub")
