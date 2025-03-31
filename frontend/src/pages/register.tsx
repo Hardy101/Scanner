@@ -20,20 +20,31 @@ const Register = () => {
     email: "",
     password: "",
   });
-  const [errors, setErrors] = useState("");
+
+  const [errors, setErrors] = useState<{
+    name: string;
+    email: string;
+    password: string;
+    general: string;
+  }>({
+    name: "",
+    email: "",
+    password: "",
+    general: "",
+  });
 
   const validateForm = () => {
     let valid = true;
-    let newErrors = "";
+    let newErrors = { name: "", email: "", password: "", general: "" };
 
     if (formData.name.trim().length < 3) {
-      newErrors = "Name must be at least 3 characters";
+      newErrors.name = "Name must be at least 3 characters";
       valid = false;
     } else if (!/^\S+@\S+\.\S+$/.test(formData.email)) {
-      newErrors = "Enter a valid email address";
+      newErrors.email = "Enter a valid email address";
       valid = false;
     } else if (formData.password.length < 8) {
-      newErrors = "Password must be at least 8 characters";
+      newErrors.password = "Password must be at least 8 characters";
       valid = false;
     }
 
@@ -60,36 +71,20 @@ const Register = () => {
           )
         )
         .catch(
-          (err) => (setErrors(err.response.data.detail), console.log(errors))
+          (err) => (
+            setErrors((prev) => ({
+              ...prev,
+              general:
+                err.response.data.detail ||
+                "Something went wrong, please fill the form again",
+            })),
+            console.log(errors)
+          )
         );
     }
   };
   const formFieldClasses =
-    "bg-transparent text-secondary font-poppins placeholder:text-secondary border border-shadow text-xs px-4 py-3 rounded-md";
-
-  const formFields = [
-    {
-      type: "text",
-      id: "name",
-      value: formData.name,
-      placeholder: "Name",
-      classNames: formFieldClasses,
-    },
-    {
-      type: "email",
-      id: "email",
-      value: formData.email,
-      placeholder: "Email",
-      classNames: formFieldClasses,
-    },
-    {
-      type: "password",
-      id: "password",
-      value: formData.password,
-      placeholder: "Password. Atleast 8 chars long",
-      classNames: formFieldClasses,
-    },
-  ];
+    "block w-full bg-transparent text-secondary font-poppins placeholder:text-secondary text-xs px-4 py-3 rounded-md focus:border-transparent";
 
   return (
     <div className="min-h-screen bg-primary py-16 flex flex-col gap-4 text-white text-center">
@@ -110,23 +105,69 @@ const Register = () => {
       </p>
       <form
         onSubmit={handleSubmit}
-        className="flex flex-col gap-4 w-4/5 md:w-3/5 mx-auto"
+        className="grid gap-4 w-4/5 md:w-3/5 mx-auto"
       >
-        {errors && (
-          <p className="grid text-red-500 text-left text-sm"> {errors}</p>
+        {errors.general && (
+          <p className="error-msg flex items-center gap-2 bg-red-300 text-red-500 text-sm rounded-md p-2 ">
+            <i className="fa-solid fa-triangle-exclamation text-lg"></i>
+            <span>{errors.general}</span>
+          </p>
         )}
-        {formFields.map((input, idx) => (
+
+        <div className="form-control grid gap-2">
           <input
-            key={idx}
-            type={input.type}
-            id={input.id}
-            name={input.id}
-            value={input.value.trim()}
+            type="text"
+            name="name"
+            id="name"
+            placeholder="Enter name"
+            value={formData.name.trim()}
             onChange={handleChange}
-            placeholder={input.placeholder}
-            className={`${input.classNames}`}
+            className={`${formFieldClasses} ${
+              errors.name ? "border-2 border-red" : " border border-shadow"
+            }`}
           />
-        ))}
+          {errors.name && (
+            <p className="text-red-500 text-sm font-poppins-medium text-left">
+              {errors.name}
+            </p>
+          )}
+        </div>
+        <div className="form-control grid gap-2">
+          <input
+            type="text"
+            name="email"
+            id="email"
+            placeholder="Enter email"
+            value={formData.email.trim()}
+            onChange={handleChange}
+            className={`${formFieldClasses} ${
+              errors.email ? "border-2 border-red" : " border border-shadow"
+            }`}
+          />
+          {errors.email && (
+            <p className="text-red-500 text-sm font-poppins-medium text-left">
+              {errors.email}
+            </p>
+          )}
+        </div>
+        <div className="form-control grid gap-2">
+          <input
+            type="text"
+            name="password"
+            id="password"
+            placeholder="Enter password"
+            value={formData.password.trim()}
+            onChange={handleChange}
+            className={`${formFieldClasses} ${
+              errors.password ? "border-2 border-red" : " border border-shadow"
+            }`}
+          />
+          {errors.password && (
+            <p className="text-red-500 text-sm font-poppins-medium text-left">
+              {errors.password}
+            </p>
+          )}
+        </div>
         <button className="bg-white text-center text-primary text-sm box-shadow-1 font-poppins-bold rounded-full px-6 py-4 mt-4">
           <span>Register</span>
         </button>
