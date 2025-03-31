@@ -11,7 +11,7 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173/login", 'https://scanner-ohvw.onrender.com/auth/login'],  # ✅ Allow frontend URL
+    allow_origins=["http://localhost:5173", "https://invix-mocha.vercel.app/", "http://localhost:5173/login", 'https://invix-mocha.vercel.app/login'],  # ✅ Allow frontend URL
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
