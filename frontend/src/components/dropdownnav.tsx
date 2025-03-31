@@ -7,8 +7,11 @@ import Hr from "./hr";
 import { useDropdownState } from "../store/useDropdownStore";
 import { useModalState } from "../store/useModalStore";
 import InstallButton from "./installButton";
+import { useAuth } from "../context/AuthProvider";
+import LogoutButton from "./logOutbutton";
 
 const DropdownNav: React.FC = () => {
+  const { isAuthenticated } = useAuth();
   const dropdownref = useRef<HTMLDivElement | null>(null);
   const { isDropdownActive, setIsDropdownActive } = useDropdownState();
   const { setIsModalActive } = useModalState();
@@ -58,7 +61,7 @@ const DropdownNav: React.FC = () => {
       <div className="relative w-5/6 bg-[#225050] rounded-xl px-4 pt-10 pb-2 mx-auto">
         <button
           onClick={() => setIsDropdownActive(false)}
-          className="absolute flex bg-shadow text-secondary rounded-md p-2 text-xl right-4 top-4"
+          className="absolute flex bg-shadow text-secondary rounded-md px-2 py-1 text-xl right-4 top-4"
         >
           <i className="fa-solid fa-xmark"></i>
         </button>
@@ -74,7 +77,7 @@ const DropdownNav: React.FC = () => {
         </ul>
         <Hr />
         <div className="actions flex items-center justify-between gap-6 text-xs mt-4">
-          <InstallButton />
+          {/* <InstallButton /> */}
           <button
             onClick={() => {
               setIsModalActive(true), setIsDropdownActive(false);
@@ -83,6 +86,7 @@ const DropdownNav: React.FC = () => {
           >
             Add Event
           </button>
+          {isAuthenticated && <LogoutButton />}
         </div>
       </div>
     </div>
