@@ -8,15 +8,18 @@ from pydantic import BaseModel
 
 router = APIRouter()
 
+
 class UserCreate(BaseModel):
     name: str
     email: str
     password: str
     role: str = "invitee"
 
+
 class UserLogin(BaseModel):
     email: str
     password: str
+
 
 def get_db():
     db = SessionLocal()
@@ -24,6 +27,7 @@ def get_db():
         yield db
     finally:
         db.close()
+
 
 @router.post("/register")
 def register(user: UserCreate, db: Session = Depends(get_db)):
@@ -34,10 +38,16 @@ def register(user: UserCreate, db: Session = Depends(get_db)):
     if user.role not in ["admin", "event_manager", "invitee"]:
         raise HTTPException(status_code=400, detail="Invalid role")
 
-    new_user = User(name=user.name, email=user.email, hashed_password=hash_password(user.password), role='invitee')
+    new_user = User(
+        name=user.name,
+        email=user.email,
+        hashed_password=hash_password(user.password),
+        role="invitee",
+    )
     db.add(new_user)
     db.commit()
     return {"message": "User created successfully"}
+
 
 @router.post("/login")
 def login(user: UserLogin, db: Session = Depends(get_db)):
@@ -48,11 +58,7 @@ def login(user: UserLogin, db: Session = Depends(get_db)):
     token = create_access_token({"sub": user.email, "role": db_user.role})
     response = JSONResponse(content={"message": "Login successful"})
     response.set_cookie(
-        key="access_token",
-        value=token,
-        httponly=True,
-        secure=True, 
-        samesite="Lax"
+        key="access_token", value=token, httponly=True, secure=True, samesite="Lax"
     )
     return response
     # return {"access_token": token, "token_type": "bearer"}

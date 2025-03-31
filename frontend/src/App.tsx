@@ -9,25 +9,28 @@ import Scan from "./pages/scan";
 import Profile from "./pages/profile";
 import Login from "./pages/login";
 import PrivateRoute from "./components/PrivateRoute";
+import { AuthProvider } from "./context/AuthProvider";
 
 function App() {
   return (
     <main>
       <section className="min-h-screen overflow-clip font-poppins">
-        <BrowserRouter>
-          <Routes>
-            <Route path="" element={<SplashScreen />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/login" element={<Login />} />
+        <AuthProvider>
+          <BrowserRouter>
+            <Routes>
+              <Route path="" element={<SplashScreen />} />
+              <Route path="/register" element={<Register />} />
+              <Route path="/login" element={<Login />} />
 
-            <Route element={<PrivateRoute />}>
-              <Route path="/home" element={<Home />} />
-              <Route path="/event" element={<EventDetails />} />
-              <Route path="/scan" element={<Scan />} />
-              <Route path="/profile" element={<Profile />} />
-            </Route>
-          </Routes>
-        </BrowserRouter>
+              <Route element={<PrivateRoute />}>
+                <Route path="/home" element={<Home />} />
+                <Route path="/event" element={<EventDetails />} />
+                <Route path="/scan" element={<Scan />} />
+                <Route path="/profile" element={<Profile />} />
+              </Route>
+            </Routes>
+          </BrowserRouter>
+        </AuthProvider>
       </section>
     </main>
   );

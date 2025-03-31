@@ -1,15 +1,9 @@
-// components/PrivateRoute.tsx
-import { Navigate, Outlet } from "react-router-dom";
-import { isAuthenticated } from "../utils/auth"; // Import the updated isAuthenticated function
+import { Outlet, Navigate } from "react-router-dom";
+import { useAuth } from "../context/AuthProvider";
 
-const PrivateRoute = () => {
-  // If the user is not authenticated, redirect to the login page
-  if (!isAuthenticated()) {
-    return <Navigate to="/login" />;
-  }
-
-  // If the user is authenticated, render the protected route
-  return <Outlet />;
+const PrivateRoutes: React.FC = () => {
+  const { isAuthenticated } = useAuth();
+  return isAuthenticated ? <Outlet /> : <Navigate to="/login" />;
 };
 
-export default PrivateRoute;
+export default PrivateRoutes;

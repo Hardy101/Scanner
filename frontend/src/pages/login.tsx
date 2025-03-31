@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router";
 import axios from "axios";
 
 import { url } from "./register";
+import { useAuth } from "../context/AuthProvider";
 
 interface formData {
   email: string;
@@ -11,6 +12,7 @@ interface formData {
 
 const Login = () => {
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   const [formData, setFormData] = useState<formData>({
     email: "",
@@ -57,17 +59,14 @@ const Login = () => {
           headers: { "Content-Type": "application/json" },
         });
         const token = response.data.access_token;
-        const expirationDate = new Date();
-        expirationDate.setHours(expirationDate.getHours() + 1);
-        document.cookie = `token=${token}; path=/; expires=${expirationDate}; secure; HttpOnly`;
+        login(token);
         navigate("/home");
-        alert("success");
       } catch (err: any) {
         console.error("Login error", err);
         setErrors((prev) => ({
           ...prev,
           general:
-            err.response.data.detail ||
+            err?.response?.data?.detail ||
             "Something went wrong, please fill the form again",
         }));
       }
