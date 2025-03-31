@@ -1,8 +1,8 @@
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from typing import Optional
-from backend.invix.database import SessionLocal
-from backend.invix.models import User
+from invix.database import SessionLocal
+from invix.models import User
 from datetime import datetime, timedelta
 from jose import JWTError, jwt
 from passlib.context import CryptContext

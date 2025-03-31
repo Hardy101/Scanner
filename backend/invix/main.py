@@ -1,8 +1,8 @@
 from fastapi import Depends, FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from backend.invix.auth import router as auth_router
-from backend.invix.security import verify_token
-from backend.invix.models import PublicUser, User as UserModel
+from invix.auth import router as auth_router
+from invix.security import verify_token
+from invix.models import PublicUser, User as UserModel
 from sqlalchemy.orm import Session
 from backend.invix.database import get_db
 from typing import List
@@ -13,8 +13,8 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://localhost:5173", 'http://localhost', '*'],  # ✅ Allow frontend URL
     allow_credentials=True,
-    allow_methods=["*"],  # ✅ Allow all HTTP methods (GET, POST, etc.)
-    allow_headers=["*"],  # ✅ Allow all headers
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 app.include_router(auth_router, prefix="/auth")
