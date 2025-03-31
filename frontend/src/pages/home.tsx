@@ -40,9 +40,10 @@ const Home: React.FC = () => {
       <DropdownNav />
       <button
         onClick={() => navigate("/scan")}
-        className="absolute flex right-4 bottom-4 bg-white p-2 rounded-full box-shadow-1 text-primary text-2xl"
+        className="absolute flex right-4 bottom-4 bg-white p-4 rounded-full box-shadow-1 text-primary text-2xl"
       >
-        <i className="lni lni-camera-1"></i>
+        {/* <i className="lni lni-camera-1"></i> */}
+        <i className="fa-solid fa-camera"></i>
       </button>
       <Modal>
         <button
@@ -52,7 +53,8 @@ const Home: React.FC = () => {
           }}
           className="absolute flex bg-primary text-secondary rounded-md p-1 text-xl right-4 top-4 hover:bg-secondary-2"
         >
-          <i className="lni lni-xmark"></i>
+          {/* <i className="lni lni-xmark"></i> */}
+          <i className="fa-solid fa-xmark"></i>
         </button>
         <form onSubmit={handleSubmit} className="text-black text-xs">
           <h3 className="font-poppins-bold text-lg text-primary">
@@ -128,9 +130,10 @@ const Home: React.FC = () => {
             <button id="linkout" className="absolute -bottom-2 -right-2">
               <Link
                 to={"/event"}
-                className="flex bg-secondary-2 border-2 border-primary p-1 rounded-full text-white text-3xl"
+                className="flex bg-secondary-2 border-2 border-primary py-2 px-3 rounded-full text-white text-3xl"
               >
-                <i className="lni lni-arrow-angular-top-right"></i>
+                {/* <i className="lni lni-arrow-angular-top-right"></i> */}
+                <i className="fa-solid fa-arrow-up-long rotate-45"></i>
               </Link>
             </button>
             <button className="absolute right-2 top-2 grid bg-red-2 px-4 py-2 rounded-full text-white text-xs">

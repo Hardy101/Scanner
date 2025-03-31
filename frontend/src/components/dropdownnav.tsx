@@ -58,9 +58,9 @@ const DropdownNav: React.FC = () => {
       <div className="relative w-5/6 bg-[#225050] rounded-xl px-4 pt-10 pb-2 mx-auto">
         <button
           onClick={() => setIsDropdownActive(false)}
-          className="absolute flex bg-shadow text-secondary rounded-md p-1 text-xl right-4 top-4"
+          className="absolute flex bg-shadow text-secondary rounded-md p-2 text-xl right-4 top-4"
         >
-          <i className="lni lni-xmark"></i>
+          <i className="fa-solid fa-xmark"></i>
         </button>
         <ul className="text-secondary leading-7">
           <li className="hover:text-white">

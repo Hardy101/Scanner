@@ -37,7 +37,8 @@ const InstallButton = () => {
       onClick={handleInstallClick}
       className="flex items-center gap-2 bg-primary rounded-full py-2 px-4"
     >
-      <i className="lni lni-download-1"></i>
+      {/* <i className="lni lni-download-1"></i> */}
+      <i className="fa-solid fa-download"></i>
       Install App
     </button>
   );
