@@ -51,18 +51,31 @@ const Login = () => {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (validateForm()) {
-      const response = axios.post(`${url}/auth/login`, formData);
-      response
-        .then((res) => navigate("/home"))
-        .catch((err: any) => {
-          console.error("Login Error", err),
-            setErrors((prev) => ({
-              ...prev,
-              general:
-                err.response.data.detail ||
-                "Something went wrong, please fill the form again",
-            }));
+      try {
+        const response = axios.post(`${url}/auth/login`, formData, {
+          withCredentials: true,
+          headers: { "Content-Type": "application/json" },
         });
+        response
+          .then((res) => navigate("/home"))
+          .catch((err) => {
+            console.error("Login Error", err),
+              setErrors((prev) => ({
+                ...prev,
+                general:
+                  err.response.data.detail ||
+                  "Something went wrong, please fill the form again",
+              }));
+          });
+      } catch (err: any) {
+        console.error("Login error", err);
+        setErrors((prev) => ({
+          ...prev,
+          general:
+            err.response.data.detail ||
+            "Something went wrong, please fill the form again",
+        }));
+      }
     }
   };
   const formFieldClasses =
