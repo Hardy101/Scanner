@@ -1,9 +1,9 @@
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi.responses import JSONResponse
 from sqlalchemy.orm import Session
-from invix.database import SessionLocal
-from invix.models import User
-from invix.security import hash_password, verify_password, create_access_token
+from .database import SessionLocal
+from .models import User
+from .security import hash_password, verify_password, create_access_token
 from pydantic import BaseModel
 
 router = APIRouter()
@@ -11,7 +11,7 @@ router = APIRouter()
 
 class UserCreate(BaseModel):
     name: str
-    email: str
+    email: str 
     password: str
     role: str = "invitee"
 

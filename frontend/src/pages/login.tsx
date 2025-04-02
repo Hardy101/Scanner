@@ -59,7 +59,7 @@ const Login = () => {
           headers: { "Content-Type": "application/json" },
         });
         const token = response.data.access_token;
-        login(token);
+        login(token); 
         navigate("/home");
       } catch (err: any) {
         console.error("Login error", err);

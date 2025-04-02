@@ -2,8 +2,6 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router";
 import axios from "axios";
 
-import { icons } from "../constants/media";
-
 interface FormData {
   name: string;
   email: string;
@@ -89,15 +87,16 @@ const Register = () => {
 
   return (
     <div className="min-h-screen bg-primary py-16 flex flex-col gap-4 text-white text-center">
-      <h2 className="text-2xl font-poppins-bold">Welcome to</h2>
-      <img
+      <h2 className="text-2xl font-poppins-medium">Welcome to</h2>
+      {/* <img
         src={icons.logo}
         alt="Logo"
         className="w-1/6 mx-auto"
         style={{
           pointerEvents: "none",
         }}
-      />
+      /> */}
+      <h1 className="text-4xl font-poppins-bold">INVIX</h1>
       <p className="text-sm">
         Already have an account?{" "}
         <Link to={"/login"} className="text-secondary font-poppins-bold">

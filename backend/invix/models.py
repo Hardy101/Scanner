@@ -1,5 +1,5 @@
 from sqlalchemy import Column, Integer, String
-from invix.database import Base
+from .database import Base
 from pydantic import BaseModel
 
 class User(Base):
@@ -16,6 +16,7 @@ class PublicUser(BaseModel):
     id: int
     name: str
     email: str
+    password: str
     
     class Config:
         from_attributes = True

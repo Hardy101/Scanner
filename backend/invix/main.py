@@ -1,10 +1,10 @@
 from fastapi import Depends, FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from invix.auth import router as auth_router
-from invix.security import verify_token
-from invix.models import PublicUser, User as UserModel
+from .auth import router as auth_router
+from .security import verify_token
+from .models import PublicUser, User as UserModel
 from sqlalchemy.orm import Session
-from invix.database import get_db
+from .database import get_db
 from typing import List
 
 app = FastAPI()
@@ -50,7 +50,7 @@ def event_manager_route(user: UserModel = Depends(check_role("event_manager"))):
 
 
 @app.get("/users", response_model=List[PublicUser])
-def get_users(db: Session = Depends(get_db)):  # Injects the database session
+def get_users(db: Session = Depends(get_db)):
     users = db.query(UserModel).all()
     return [PublicUser.model_validate(user) for user in users]
     return db.query(UserModel).all()
