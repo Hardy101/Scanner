@@ -2,6 +2,7 @@ from sqlalchemy import Column, Integer, String
 from .database import Base
 from pydantic import BaseModel
 
+
 class User(Base):
     __tablename__ = "users"
 
@@ -16,7 +17,6 @@ class PublicUser(BaseModel):
     id: int
     name: str
     email: str
-    password: str
-    
+
     class Config:
         from_attributes = True
