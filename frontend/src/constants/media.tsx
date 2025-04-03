@@ -6,6 +6,7 @@ import scan from "../assets/scan.png";
 import edit from "../assets/edit.png";
 import qrcode from "../assets/qrcode.png";
 import profile from "../assets/profile-img.png";
+import success from "../assets/gif/success.gif";
 
 export const icons = {
   logo,
@@ -15,6 +16,10 @@ export const icons = {
   scan,
   edit,
   qrcode,
+};
+
+export const gifs = {
+  success,
 };
 
 export { profile };

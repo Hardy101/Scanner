@@ -61,23 +61,18 @@ const EventDetails: React.FC = () => {
             </button>
             <h3 className="font-poppins-bold text-lg">Guest List</h3>
             <ul className="grid gap-2 divide-y divide-secondary-2 mt-6 text-xs">
-              {guestList.map(({ id, initials, name, tags }) => (
+              {guestList.map(({ id, name, tags }) => (
                 <li
                   onClick={() => setActiveStep("guestDetails")}
                   key={id}
-                  className="flex items-center gap-2 pb-2"
+                  className="flex flex-col pb-2"
                 >
-                  <span className="p-2 bg-primary text-white rounded-full my-auto">
-                    {initials}
-                  </span>
-                  <div className="flex flex-col">
-                    <span>{name}</span>
-                    <ul className="flex gap-1 font-poppins-bold text-primary">
-                      {tags.map((tag, idx) => (
-                        <li key={idx}>{tag}</li>
-                      ))}
-                    </ul>
-                  </div>
+                  <span>{name}</span>
+                  <ul className="flex gap-1 font-poppins-bold text-primary">
+                    {tags.map((tag, idx) => (
+                      <li key={idx}>{tag}</li>
+                    ))}
+                  </ul>
                 </li>
               ))}
             </ul>
