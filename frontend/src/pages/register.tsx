@@ -2,6 +2,9 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router";
 import axios from "axios";
 
+import { useModalState } from "../store/useModalStore";
+import Modal from "../components/modal";
+
 interface FormData {
   name: string;
   email: string;
@@ -33,6 +36,10 @@ const Register = () => {
     password: "",
     general: "",
   });
+
+  const { isModalActive, setIsModalActive } = useModalState();
+
+  setIsModalActive(true);
 
   const validateForm = () => {
     let valid = true;
@@ -88,7 +95,24 @@ const Register = () => {
     "block w-full bg-transparent text-secondary font-poppins placeholder:text-secondary text-xs px-4 py-3 rounded-md focus:border-transparent";
 
   return (
-    <div className="min-h-screen bg-primary py-16 flex flex-col gap-4 text-white text-center">
+    <div className="relative min-h-screen bg-primary py-16 flex flex-col gap-4 text-white text-center">
+      <Modal>
+        <div
+          className="tenor-gif-embed"
+          data-postid="20499674"
+          data-share-method="host"
+          data-aspect-ratio="1.30081"
+          data-width="100%"
+        >
+          <a href="https://tenor.com/view/success-gif-20499674">Success GIF</a>
+          from <a href="https://tenor.com/search/success-gifs">Success GIFs</a>
+        </div>
+        <script
+          type="text/javascript"
+          async
+          src="https://tenor.com/embed.js"
+        ></script>
+      </Modal>
       <h2 className="text-2xl font-poppins-medium">Welcome to</h2>
       {/* <img
         src={icons.logo}
