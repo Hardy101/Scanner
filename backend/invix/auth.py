@@ -63,4 +63,3 @@ def login(user: UserLogin, db: Session = Depends(get_db)):
         key="access_token", value=token, httponly=True, secure=True, samesite="Lax"
     )
     return response
-    # return {"access_token": token, "token_type": "bearer"}

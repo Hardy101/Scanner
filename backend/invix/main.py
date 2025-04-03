@@ -1,7 +1,6 @@
 from fastapi import Depends, FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from auth import router as auth_router
-from security import verify_token
 from models import PublicUser, User as UserModel
 from sqlalchemy.orm import Session
 from database import get_db
