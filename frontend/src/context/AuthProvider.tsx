@@ -1,8 +1,16 @@
-import React, { createContext, useContext, useState, ReactNode } from "react";
+import { url } from "../pages/register";
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  ReactNode,
+} from "react";
 
 interface AuthContextType {
   isAuthenticated: boolean;
-  login: (token: string) => void;
+  loading: boolean;
+  login: () => void;
   logout: () => void;
 }
 
@@ -11,20 +19,44 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
-  const [token, setToken] = useState<string | null>(null);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [loading, setLoading] = useState(true);
 
-  const login = (userToken: string) => {
-    setToken(userToken);
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        const res = await fetch(`${url}/auth/me`, {
+          method: "GET",
+          credentials: "include",
+        });
+        if (!res.ok) throw new Error("Not authenticated");
+        await res.json();
+        setIsAuthenticated(true);
+      } catch (err) {
+        setIsAuthenticated(false);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    checkAuth();
+  }, []);
+
+  const login = () => {
+    setIsAuthenticated(true); // call after successful login
   };
 
   const logout = () => {
-    setToken(null);
+    fetch(`${url}/auth/logout`, {
+      method: "POST",
+      credentials: "include",
+    }).finally(() => {
+      setIsAuthenticated(false);
+    });
   };
 
-  const isAuthenticated = !!token;
-
   return (
-    <AuthContext.Provider value={{ isAuthenticated, login, logout }}>
+    <AuthContext.Provider value={{ isAuthenticated, loading, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

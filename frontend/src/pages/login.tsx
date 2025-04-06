@@ -54,12 +54,11 @@ const Login = () => {
     e.preventDefault();
     if (validateForm()) {
       try {
-        const response = await axios.post(`${url}/auth/login`, formData, {
+        await axios.post(`${url}/auth/login`, formData, {
           withCredentials: true,
           headers: { "Content-Type": "application/json" },
         });
-        const token = response.data.access_token;
-        login(token); 
+        login();
         navigate("/home");
       } catch (err: any) {
         console.error("Login error", err);
