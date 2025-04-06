@@ -2,6 +2,10 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router";
 import axios from "axios";
 
+import { useModalState } from "../store/useModalStore";
+import Modal from "../components/modal";
+import { gifs } from "../constants/media";
+
 interface FormData {
   name: string;
   email: string;
@@ -33,6 +37,8 @@ const Register = () => {
     password: "",
     general: "",
   });
+
+  const { setIsModalActive } = useModalState();
 
   const validateForm = () => {
     let valid = true;
@@ -67,8 +73,11 @@ const Register = () => {
         .then(
           (res) => (
             console.log(res.data),
-            alert(`Success! User created successfully`),
-            navigate("/login")
+            setIsModalActive(true),
+            setTimeout(() => {
+              navigate("/login");
+              setIsModalActive(false);
+            }, 1000)
           )
         )
         .catch(
@@ -88,26 +97,22 @@ const Register = () => {
     "block w-full bg-transparent text-secondary font-poppins placeholder:text-secondary text-xs px-4 py-3 rounded-md focus:border-transparent";
 
   return (
-    <div className="min-h-screen bg-primary py-16 flex flex-col gap-4 text-white text-center">
+    <div className="relative min-h-screen bg-primary py-16 flex flex-col gap-4 text-white text-center">
+      <Modal classNames="text-black">
+        <img className="w-2/5 mx-auto" src={gifs.success} />
+      </Modal>
       <h2 className="text-2xl font-poppins-medium">Welcome to</h2>
-      {/* <img
-        src={icons.logo}
-        alt="Logo"
-        className="w-1/6 mx-auto"
-        style={{
-          pointerEvents: "none",
-        }}
-      /> */}
       <h1 className="text-4xl font-poppins-bold">INVIX</h1>
       <p className="text-sm">
-        Already have an account?{" "}
+        Already have an account?
         <Link to={"/login"} className="text-secondary font-poppins-bold">
+          {" "}
           Login
         </Link>
       </p>
       <form
         onSubmit={handleSubmit}
-        className="grid gap-4 w-4/5 md:w-3/5 mx-auto"
+        className="grid gap-4 w-4/5 md:w-2/5 mt-8 mx-auto"
       >
         {errors.general && (
           <p className="error-msg flex items-center gap-2 bg-red-300 text-red-500 text-xs rounded-md p-2 ">

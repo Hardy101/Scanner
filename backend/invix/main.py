@@ -1,14 +1,20 @@
-from fastapi import Depends, FastAPI, HTTPException
+from fastapi import Depends, FastAPI
+from contextlib import asynccontextmanager
 from fastapi.middleware.cors import CORSMiddleware
 from auth import router as auth_router
-from security import verify_token
 from models import PublicUser, User as UserModel
 from sqlalchemy.orm import Session
-from database import get_db
+from database import get_db, init_db
 from typing import List
 
-app = FastAPI()
 
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    init_db()
+    yield
+
+
+app = FastAPI(lifespan=lifespan)
 
 app.add_middleware(
     CORSMiddleware,
@@ -22,30 +28,6 @@ app.add_middleware(
 )
 
 app.include_router(auth_router, prefix="/auth")
-
-
-@app.get("/protected")
-def protected_route(user: UserModel = Depends(verify_token)):
-    return {"message": f"Welcome, {user.email}! This is a protected route."}
-
-
-def check_role(required_role: str):
-    def role_dependency(user: UserModel = Depends(verify_token)):
-        if user.role != required_role:
-            raise HTTPException(status_code=403, detail="Insufficient permissions")
-        return user
-
-    return role_dependency
-
-
-@app.get("/admin-only")
-def admin_route(user: UserModel = Depends(check_role("admin"))):
-    return {"message": "Welcome, Admin! This route is restricted."}
-
-
-@app.get("/event-manager")
-def event_manager_route(user: UserModel = Depends(check_role("event_manager"))):
-    return {"message": "Welcome, Event Manager! You can manage events."}
 
 
 @app.get("/users", response_model=List[PublicUser])

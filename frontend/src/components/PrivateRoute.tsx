@@ -9,6 +9,4 @@ const PrivateRoutes: React.FC = () => {
   return isAuthenticated ? <Outlet /> : <Navigate to="/login" />;
 };
 
-
 export default PrivateRoutes;
- 

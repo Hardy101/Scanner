@@ -11,6 +11,7 @@ class User(Base):
     email = Column(String, unique=True, index=True, nullable=False)
     hashed_password = Column(String, nullable=False)
     role = Column(String, default="invitee")
+    plan = Column(String, default="basic")
 
 
 class PublicUser(BaseModel):
