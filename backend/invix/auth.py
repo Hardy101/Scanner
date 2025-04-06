@@ -6,10 +6,7 @@ from models import User
 from security import hash_password, verify_password, create_access_token, ALGORITHM, SECRET_KEY
 from jose import JWTError, jwt
 from pydantic import BaseModel
-<<<<<<< HEAD
-=======
 from security import SECRET_KEY, ALGORITHM
->>>>>>> c783c747d737c3198705d81186574c8c332a374f
 from datetime import datetime, timedelta
 
 router = APIRouter()
