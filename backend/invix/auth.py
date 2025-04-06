@@ -1,17 +1,19 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Request
+from jose import jwt, JWTError
 from fastapi.responses import JSONResponse
 from sqlalchemy.orm import Session
 from database import SessionLocal
 from models import User
 from security import hash_password, verify_password, create_access_token
 from pydantic import BaseModel
+from security import SECRET_KEY, ALGORITHM
 
 router = APIRouter()
 
 
 class UserCreate(BaseModel):
     name: str
-    email: str 
+    email: str
     password: str
     role: str = "invitee"
 
@@ -56,10 +58,38 @@ def login(user: UserLogin, db: Session = Depends(get_db)):
         raise HTTPException(status_code=400, detail="Invalid credentials")
 
     token = create_access_token({"sub": user.email, "role": db_user.role})
-    response = JSONResponse(
-        content={"message": "Login successful", "access_token": token}
-    )
+    response = JSONResponse(content={"message": "Login successful"})
     response.set_cookie(
         key="access_token", value=token, httponly=True, secure=True, samesite="Lax"
     )
     return response
+
+
+def get_current_user(request: Request, db: Session = Depends(get_db)):
+    token = request.cookies.get("access_token")
+    if not token:
+        raise HTTPException(status_code=401, detail="Not authenticated")
+
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        email = payload.get("sub")
+        if email is None:
+            raise HTTPException(status_code=401, detail="Invalid token")
+    except JWTError:
+        raise HTTPException(status_code=401, detail="Invalid token")
+
+    user = db.query(User).filter(User.email == email).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    return user
+
+ 
+@router.get("/me")
+def get_me(current_user: User = Depends(get_current_user)):
+    user_data = {
+        "name": current_user.name,
+        "email": current_user.email,
+        "plan": current_user.plan,
+    }
+    return user_data

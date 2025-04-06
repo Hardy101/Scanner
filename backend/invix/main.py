@@ -1,13 +1,20 @@
-from fastapi import Depends, FastAPI, HTTPException
+from fastapi import Depends, FastAPI
+from contextlib import asynccontextmanager
 from fastapi.middleware.cors import CORSMiddleware
 from auth import router as auth_router
 from models import PublicUser, User as UserModel
 from sqlalchemy.orm import Session
-from database import get_db
+from database import get_db, init_db
 from typing import List
 
-app = FastAPI()
 
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    init_db()
+    yield
+
+
+app = FastAPI(lifespan=lifespan)
 
 app.add_middleware(
     CORSMiddleware,
