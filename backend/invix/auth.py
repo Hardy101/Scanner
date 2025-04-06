@@ -6,6 +6,10 @@ from models import User
 from security import hash_password, verify_password, create_access_token, ALGORITHM, SECRET_KEY
 from jose import JWTError, jwt
 from pydantic import BaseModel
+<<<<<<< HEAD
+=======
+from security import SECRET_KEY, ALGORITHM
+>>>>>>> c783c747d737c3198705d81186574c8c332a374f
 from datetime import datetime, timedelta
 
 router = APIRouter()
@@ -62,19 +66,19 @@ def login(user: UserLogin, db: Session = Depends(get_db)):
         content={"message": "Login successful"}
     )
     response.set_cookie(
-        key="access_token", value=token, httponly=True, secure=False, samesite="Lax",  expires=datetime.now() + timedelta(days=7)
+        key="access_token", value=token, httponly=True, secure=False, samesite="Lax", expires=datetime.now() + timedelta(days=7)
     )
     return response
 
 
-@router.get('/me')
+@router.get("/me")
 def get_current_user(request: Request, db: Session = Depends(get_db)):
     token = request.cookies.get('access_token')
     if not token:
         raise HTTPException(status_code=401, detail='Not authenticated')
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        user = db.query(User).filter(User.email == payload["sub"]).first()
+        user = db.query(User).filter(User.email == payload.get("sub")).first()
         if not user:
             raise HTTPException(status_code=401, detail="User not found")
         return {"email": user.email, "role": user.role}

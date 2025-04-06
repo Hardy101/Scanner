@@ -19,7 +19,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -43,7 +43,11 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   }, []);
 
   const login = () => {
+<<<<<<< HEAD
     setIsAuthenticated(true); // call after successful login
+=======
+    setIsAuthenticated(true); //call after successful login
+>>>>>>> c783c747d737c3198705d81186574c8c332a374f
   };
 
   const logout = () => {
