@@ -1,9 +1,10 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Request
 from fastapi.responses import JSONResponse
 from sqlalchemy.orm import Session
-from .database import SessionLocal
-from .models import User
-from .security import hash_password, verify_password, create_access_token
+from database import SessionLocal
+from models import User
+from security import hash_password, verify_password, create_access_token, ALGORITHM, SECRET_KEY
+from jose import JWTError, jwt
 from pydantic import BaseModel
 
 router = APIRouter()
@@ -63,4 +64,18 @@ def login(user: UserLogin, db: Session = Depends(get_db)):
         key="access_token", value=token, httponly=True, secure=True, samesite="Lax"
     )
     return response
-    # return {"access_token": token, "token_type": "bearer"}
+
+
+@router.get('/me')
+def get_current_user(request: Request, db: Session = Depends(get_db)):
+    token = request.cookies.get('access_token')
+    if not token:
+        raise HTTPException(status_code=401, detail='Not authenticated')
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])(token)
+        user = db.query(User).filter(User.email == payload["sub"]).first()
+        if not user:
+            raise HTTPException(status_code=401, detail="User not found")
+        return {"email": user.email, "role": user.role}
+    except JWTError:
+        raise HTTPException(status_code=401, detail="Invalid token")

@@ -57,7 +57,7 @@ const DropdownNav: React.FC = () => {
       ref={dropdownref}
       className="w-full absolute flex top-15 left-0 z-4 opacity-0"
     >
-      <div className="relative w-5/6 bg-[#225050] rounded-xl px-4 pt-10 pb-2 mx-auto">
+      <div className="relative w-5/6 bg-[#225050] rounded-xl px-4 pt-10 pb-2 mx-auto md:2/5">
         <button
           onClick={() => setIsDropdownActive(false)}
           className="absolute flex bg-shadow text-secondary rounded-md px-2 py-1 text-xl right-4 top-4"
