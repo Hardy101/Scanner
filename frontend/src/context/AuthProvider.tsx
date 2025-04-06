@@ -5,15 +5,14 @@ import React, {
   useEffect,
   ReactNode,
 } from "react";
-import axios from "axios";
 
 import { url } from "../pages/register";
 
 // Define types for the context and user data
 interface AuthContextType {
   isAuthenticated: boolean;
-  user: { name: string; email: string; plan: string } | null;
-  login: (email: string, password: string) => Promise<void>;
+  loading: boolean;
+  login: () => void;
   logout: () => void;
 }
 
@@ -23,53 +22,43 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
-  const [user, setUser] = useState<{
-    name: string;
-    email: string;
-    plan: string;
-  } | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        const response = await axios.get(`${url}/auth/me`, {
-          withCredentials: true,
+        const res = await fetch(`${url}/auth/me`, {
+          method: "GET",
+          credentials: "include",
         });
-        setUser(response.data);
+        if (!res.ok) throw new Error("Not authenticated");
+        await res.json();
         setIsAuthenticated(true);
-      } catch (error) {
-        console.log("User is not authenticated");
+      } catch (err) {
         setIsAuthenticated(false);
-        setUser(null);
+      } finally {
+        setLoading(false);
       }
     };
 
     checkAuth();
   }, []);
 
-  const login = async (email: string, password: string) => {
-    try {
-      const response = await axios.post(
-        `${url}/auth/login`,
-        { email, password},
-        { withCredentials: true }
-      );
-      setUser(response.data);
-      setIsAuthenticated(true);
-    } catch (error) {
-      console.error("Login failed", error);
-      setIsAuthenticated(false);
-    }
+  const login = () => {
+    setIsAuthenticated(true); //call after successful login
   };
 
   const logout = () => {
-    setUser(null);
-    setIsAuthenticated(false);
-    // You might want to delete the cookies or clear the session
+    fetch(`${url}/auth/logout`, {
+      method: "POST",
+      credentials: "include",
+    }).finally(() => {
+      setIsAuthenticated(false);
+    });
   };
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, user, login, logout }}>
+    <AuthContext.Provider value={{ isAuthenticated, loading, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

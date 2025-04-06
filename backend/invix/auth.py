@@ -7,6 +7,7 @@ from models import User
 from security import hash_password, verify_password, create_access_token
 from pydantic import BaseModel
 from security import SECRET_KEY, ALGORITHM
+from datetime import datetime, timedelta
 
 router = APIRouter()
 
@@ -60,11 +61,12 @@ def login(user: UserLogin, db: Session = Depends(get_db)):
     token = create_access_token({"sub": user.email, "role": db_user.role})
     response = JSONResponse(content={"message": "Login successful"})
     response.set_cookie(
-        key="access_token", value=token, httponly=True, secure=True, samesite="Lax"
+        key="access_token", value=token, httponly=True, secure=False, samesite="Lax", expires=datetime.now() + timedelta(days=7)
     )
     return response
 
 
+@router.get("/me")
 def get_current_user(request: Request, db: Session = Depends(get_db)):
     token = request.cookies.get("access_token")
     if not token:
@@ -72,24 +74,16 @@ def get_current_user(request: Request, db: Session = Depends(get_db)):
 
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        email = payload.get("sub")
-        if email is None:
-            raise HTTPException(status_code=401, detail="Invalid token")
+        user = db.query(User).filter(User.email == payload.get("sub")).first()
+        if not user:
+            raise HTTPException(status_code=401, detail="User not found")
+        return {"email": user.email, "role": user.role}
     except JWTError:
         raise HTTPException(status_code=401, detail="Invalid token")
 
-    user = db.query(User).filter(User.email == email).first()
-    if not user:
-        raise HTTPException(status_code=404, detail="User not found")
 
-    return user
-
- 
-@router.get("/me")
-def get_me(current_user: User = Depends(get_current_user)):
-    user_data = {
-        "name": current_user.name,
-        "email": current_user.email,
-        "plan": current_user.plan,
-    }
-    return user_data
+@router.post("/logout")
+def logout():
+    response = JSONResponse(content={"message": "Logged out"})
+    response.delete_cookie("access_token")
+    return response

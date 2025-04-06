@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router";
+import axios from "axios";
 
+import { url } from "./register";
 import { useAuth } from "../context/AuthProvider";
 
 interface formData {
@@ -52,8 +54,11 @@ const Login = () => {
     e.preventDefault();
     if (validateForm()) {
       try {
-        // headers: { "Content-Type": "application/json" },
-        await login(formData.email, formData.password);
+        await axios.post(`${url}/auth/login`, formData, {
+          withCredentials: true,
+          headers: { "Content-Type": "application/json" },
+        });
+        login();
         navigate("/home");
       } catch (err: any) {
         console.error("Login error", err);
