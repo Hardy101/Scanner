@@ -1,8 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router";
-import axios from "axios";
 
-import { url } from "./register";
 import { useAuth } from "../context/AuthProvider";
 
 interface formData {
