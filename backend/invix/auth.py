@@ -12,8 +12,8 @@ from .security import (
 )
 from jose import JWTError, jwt
 from pydantic import BaseModel
-from security import SECRET_KEY, ALGORITHM
-from variables import EXPIRY_DATE
+from .security import SECRET_KEY, ALGORITHM
+from .variables import EXPIRY_DATE
 
 router = APIRouter()
 
