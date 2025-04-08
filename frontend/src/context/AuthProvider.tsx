@@ -1,3 +1,4 @@
+import axios from "axios";
 import { url } from "../pages/register";
 import React, {
   createContext,
@@ -6,6 +7,7 @@ import React, {
   useEffect,
   ReactNode,
 } from "react";
+import { error } from "console";
 
 interface AuthContextType {
   isAuthenticated: boolean;
@@ -46,13 +48,14 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     setIsAuthenticated(true); //call after successful login
   };
 
-  const logout = () => {
-    fetch(`${url}/auth/logout`, {
-      method: "POST",
-      credentials: "include",
-    }).finally(() => {
+  const logout = async () => {
+    try {
+      await axios.post(`${url}/auth/logout`, {}, { withCredentials: true });
+    } catch (err) {
+      console.error("Logout failed", err);
+    } finally {
       setIsAuthenticated(false);
-    });
+    }
   };
 
   return (

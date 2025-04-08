@@ -7,6 +7,7 @@ import edit from "../assets/edit.png";
 import qrcode from "../assets/qrcode.png";
 import profile from "../assets/profile-img.png";
 import success from "../assets/gif/success.gif";
+import loading from "../assets/gif/loading.gif";
 
 export const icons = {
   logo,
@@ -20,6 +21,7 @@ export const icons = {
 
 export const gifs = {
   success,
+  loading,
 };
 
 export { profile };

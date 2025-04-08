@@ -94,6 +94,6 @@ def get_current_user(request: Request, db: Session = Depends(get_db)):
 
 @router.post("/logout")
 def logout():
+    response.delete_cookie(key="access_token", httponly=True, secure=True, samesite="None")
     response = JSONResponse(content={"message": "Logged out"})
-    response.delete_cookie("access_token")
     return response

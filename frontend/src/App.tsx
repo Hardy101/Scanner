@@ -9,6 +9,7 @@ import Scan from "./pages/scan";
 import Profile from "./pages/profile";
 import Login from "./pages/login";
 import PrivateRoute from "./components/PrivateRoute";
+import PublicRoute from "./components/PublicRoute";
 import { AuthProvider } from "./context/AuthProvider";
 
 function App() {
@@ -19,8 +20,24 @@ function App() {
           <BrowserRouter>
             <Routes>
               <Route path="" element={<SplashScreen />} />
-              <Route path="/register" element={<Register />} />
-              <Route path="/login" element={<Login />} />
+
+              <Route
+                path="/login"
+                element={
+                  <PublicRoute>
+                    <Login />
+                  </PublicRoute>
+                }
+              />
+
+              <Route
+                path="/register"
+                element={
+                  <PublicRoute>
+                    <Register />
+                  </PublicRoute>
+                }
+              />
 
               <Route element={<PrivateRoute />}>
                 <Route path="/home" element={<Home />} />
