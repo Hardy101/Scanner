@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, Request
+from fastapi import APIRouter, Depends, HTTPException, Request, Response
 from fastapi.responses import JSONResponse
 from sqlalchemy.orm import Session
 from .database import SessionLocal
@@ -93,7 +93,8 @@ def get_current_user(request: Request, db: Session = Depends(get_db)):
 
 
 @router.post("/logout")
-def logout():
-    response.delete_cookie(key="access_token", httponly=True, secure=True, samesite="None")
-    response = JSONResponse(content={"message": "Logged out"})
-    return response
+def logout(response: Response):
+    response.delete_cookie(
+        key="access_token", httponly=True, secure=True, samesite="None"
+    )
+    return JSONResponse(content={"message": "Logged out"})

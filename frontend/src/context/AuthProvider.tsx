@@ -24,6 +24,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    if (!isAuthenticated) return;
+
     const checkAuth = async () => {
       try {
         const res = await fetch(`${url}/auth/me`, {
