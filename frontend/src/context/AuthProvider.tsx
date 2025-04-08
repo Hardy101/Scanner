@@ -53,8 +53,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
         `${url}/auth/logout`,
         {},
         {
-          withCredentials: true,
-          headers: { "Content-Type": "application/json" },
+          withCredentials: true
         }
       );
       setIsAuthenticated(false);
