@@ -54,10 +54,11 @@ const Login = () => {
     e.preventDefault();
     if (validateForm()) {
       try {
-        await axios.post(`${url}/auth/login`, formData, {
+        const response = await axios.post(`${url}/auth/login`, formData, {
           withCredentials: true,
           headers: { "Content-Type": "application/json" },
         });
+        console.log(response.data);
         login();
         navigate("/home");
       } catch (err: any) {

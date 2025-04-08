@@ -5,9 +5,14 @@ const LogoutButton = () => {
   const { logout } = useAuth();
   const navigate = useNavigate();
 
-  const handleLogout = () => {
-    logout();
-    navigate("/");
+  const handleLogout = async () => {
+    const success = await logout();
+
+    if (success) {
+      navigate("/");
+    } else {
+      console.error("Logout failed. Not navigating.");
+    }
   };
 
   return (

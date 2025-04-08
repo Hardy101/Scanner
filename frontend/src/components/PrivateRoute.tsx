@@ -6,7 +6,7 @@ import LoadingComponent from "./loading";
 const PrivateRoutes: React.FC = () => {
   const { isAuthenticated, loading } = useAuth();
  
-  if (loading) return <LoadingComponent />;
+  // if (loading) return <LoadingComponent />;
 
   return isAuthenticated ? <Outlet /> : <Navigate to="/login" />;
 };

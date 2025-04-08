@@ -23,5 +23,8 @@ dist-ssr
 *.sln
 *.sw?
 
-*react dependecies.txt
+react dependecies.txt
 *.venv
+*.pyc
+__pycache__/
+*.pyc

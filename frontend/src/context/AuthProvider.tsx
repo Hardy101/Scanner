@@ -11,7 +11,7 @@ interface AuthContextType {
   isAuthenticated: boolean;
   loading: boolean;
   login: () => void;
-  logout: () => void;
+  logout: () => Promise<boolean>;
 }
 
 import { url } from "../pages/register";
@@ -24,22 +24,24 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [loading, setLoading] = useState(true);
 
+  const checkAuth = async () => {
+    try {
+      const res = await fetch(`${url}/auth/me`, {
+        method: "GET",
+        credentials: "include",
+      });
+      if (!res.ok) throw new Error("Not authenticated");
+      const response = await res.json();
+      setIsAuthenticated(true);
+      console.log("User Authenticated", response);
+    } catch {
+      setIsAuthenticated(false);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    const checkAuth = async () => {
-      try {
-        const res = await fetch(`${url}/auth/me`, {
-          method: "GET",
-          credentials: "include",
-        });
-        if (!res.ok) throw new Error("Not authenticated");
-        await res.json();
-        setIsAuthenticated(true);
-      } catch (err) {
-        setIsAuthenticated(false);
-      } finally {
-        setLoading(false);
-      }
-    };
     checkAuth();
   }, []);
 
@@ -47,18 +49,26 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     setIsAuthenticated(true);
   };
 
-  const logout = async () => {
+  const logout = async (): Promise<boolean> => {
     try {
-      await axios.post(
+      const response = await axios.post(
         `${url}/auth/logout`,
         {},
         {
-          withCredentials: true
+          withCredentials: true,
         }
       );
-      setIsAuthenticated(false);
+      if (response.status === 200) {
+        console.log("Logout successful", response.data);
+        setIsAuthenticated(false);
+        return true;
+      } else {
+        console.error("Logout failed, unexpected response", response.data);
+        return false;
+      }
     } catch (err) {
       console.error("Logout failed", err);
+      return false;
     }
   };
 

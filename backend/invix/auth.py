@@ -71,7 +71,7 @@ def login(user: UserLogin, db: Session = Depends(get_db)):
         value=token,
         httponly=True,
         secure=True,
-        samesite="None",
+        samesite="Lax",
         max_age=EXPIRY_DATE,
     )
     return response
