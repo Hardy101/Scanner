@@ -7,7 +7,7 @@ const LogoutButton = () => {
 
   const handleLogout = () => {
     logout();
-    navigate("");
+    navigate("/");
   };
 
   return (

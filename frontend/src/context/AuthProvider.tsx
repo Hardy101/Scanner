@@ -1,5 +1,4 @@
 import axios from "axios";
-import { url } from "../pages/register";
 import React, {
   createContext,
   useContext,
@@ -15,6 +14,8 @@ interface AuthContextType {
   logout: () => void;
 }
 
+import { url } from "../pages/register";
+
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({
@@ -24,8 +25,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!isAuthenticated) return;
-
     const checkAuth = async () => {
       try {
         const res = await fetch(`${url}/auth/me`, {
@@ -41,7 +40,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
         setLoading(false);
       }
     };
-
     checkAuth();
   }, []);
 
@@ -51,11 +49,17 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
 
   const logout = async () => {
     try {
-      await axios.post(`${url}/auth/logout`, {}, { withCredentials: true });
+      await axios.post(
+        `${url}/auth/logout`,
+        {},
+        {
+          withCredentials: true,
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+      setIsAuthenticated(false);
     } catch (err) {
       console.error("Logout failed", err);
-    } finally {
-      setIsAuthenticated(false);
     }
   };
 
