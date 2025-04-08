@@ -44,7 +44,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   }, []);
 
   const login = () => {
-    setIsAuthenticated(true); //call after successful login
+    setIsAuthenticated(true);
   };
 
   const logout = async () => {
