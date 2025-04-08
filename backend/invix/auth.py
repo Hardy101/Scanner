@@ -1,20 +1,26 @@
 from fastapi import APIRouter, Depends, HTTPException, Request
 from fastapi.responses import JSONResponse
 from sqlalchemy.orm import Session
-from database import SessionLocal
-from models import User
-from security import hash_password, verify_password, create_access_token, ALGORITHM, SECRET_KEY
+from .database import SessionLocal
+from .models import User
+from .security import (
+    hash_password,
+    verify_password,
+    create_access_token,
+    ALGORITHM,
+    SECRET_KEY,
+)
 from jose import JWTError, jwt
 from pydantic import BaseModel
 from security import SECRET_KEY, ALGORITHM
-from datetime import datetime, timedelta
+from variables import EXPIRY_DATE
 
 router = APIRouter()
 
 
 class UserCreate(BaseModel):
     name: str
-    email: str 
+    email: str
     password: str
     role: str = "invitee"
 
@@ -59,20 +65,23 @@ def login(user: UserLogin, db: Session = Depends(get_db)):
         raise HTTPException(status_code=400, detail="Invalid credentials")
 
     token = create_access_token({"sub": user.email, "role": db_user.role})
-    response = JSONResponse(
-        content={"message": "Login successful"}
-    )
+    response = JSONResponse(content={"message": "Login successful"})
     response.set_cookie(
-        key="access_token", value=token, httponly=True, secure=False, samesite="Lax", expires=datetime.now() + timedelta(days=7)
+        key="access_token",
+        value=token,
+        httponly=True,
+        secure=True,
+        samesite="None",
+        max_age=EXPIRY_DATE,
     )
     return response
 
 
 @router.get("/me")
 def get_current_user(request: Request, db: Session = Depends(get_db)):
-    token = request.cookies.get('access_token')
+    token = request.cookies.get("access_token")
     if not token:
-        raise HTTPException(status_code=401, detail='Not authenticated')
+        raise HTTPException(status_code=401, detail="Not authenticated")
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
         user = db.query(User).filter(User.email == payload.get("sub")).first()

@@ -1,10 +1,10 @@
 from fastapi import Depends, FastAPI
 from contextlib import asynccontextmanager
 from fastapi.middleware.cors import CORSMiddleware
-from auth import router as auth_router
-from models import PublicUser, User as UserModel
+from .auth import router as auth_router
+from .models import PublicUser, User as UserModel
+from .database import get_db, init_db
 from sqlalchemy.orm import Session
-from database import get_db, init_db
 from typing import List
 
 
