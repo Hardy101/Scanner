@@ -26,5 +26,3 @@ dist-ssr
 react dependecies.txt
 *.venv
 *.pyc
-__pycache__/
-*.pyc
