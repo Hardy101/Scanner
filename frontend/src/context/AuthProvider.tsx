@@ -7,7 +7,6 @@ import React, {
   useEffect,
   ReactNode,
 } from "react";
-import { error } from "console";
 
 interface AuthContextType {
   isAuthenticated: boolean;
