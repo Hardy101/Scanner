@@ -1,6 +1,6 @@
 # File for FastAPI operations and database connection management.
 from pydantic import BaseModel
-from datetime import datetime
+from datetime import date
 from typing import List
 
 
@@ -17,6 +17,17 @@ class UserLogin(BaseModel):
     password: str
 
 
+class PublicUser(BaseModel):
+    id: int
+    name: str
+    email: str
+    role: str
+    plan: str
+
+    class Config:
+        from_attributes = True
+
+
 # For Event Management
 class Guest(BaseModel):
     name: str
@@ -25,10 +36,9 @@ class Guest(BaseModel):
 
 class EventBase(BaseModel):
     name: str
-    date: datetime
+    date: date
     location: str
     expected_guests: int
-    guests: List[Guest]
 
 
 # Model for Event Response (for viewing)
@@ -36,10 +46,10 @@ class EventResponse(EventBase):
     id: int
 
     class Config:
-        orm_mode = True  # To support SQLAlchemy models directly
+        from_attributes = True  # To support SQLAlchemy models directly
 
 
-class EventCreate(EventBase):
+class EventOut(EventBase):
     pass
 
 
@@ -47,9 +57,8 @@ class EventUpdate(EventBase):
     pass
 
 
-class EventOut(EventBase):
-    id: int
-    created_at: datetime
+class EventCreate(EventBase):
+    created_by: int
 
     class Config:
         from_attributes = True

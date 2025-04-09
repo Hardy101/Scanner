@@ -1,9 +1,15 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from models import Event
+from schemas import PublicUser
 from schemas import EventCreate, EventUpdate, EventOut, EventResponse, Guest
 from database import get_db
-from operations.functions import get_events, create_event, add_guests_to_event
+from operations.functions import (
+    get_events as fetch_events,
+    create_event as create_event_crud,
+    add_guests_to_event,
+    fetch_current_user,
+)
 from typing import List
 
 router = APIRouter(tags=["Events"])
@@ -16,16 +22,22 @@ def get_status():
 
 @router.get("/all", response_model=List[EventResponse])
 def get_events(skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
-    events = get_events(db=db, skip=skip, limit=limit)
+    events = fetch_events(db=db, skip=skip, limit=limit)
     return events
 
 
-@router.post("/event", response_model=EventResponse)
-def create_event(event: EventCreate, db: Session = Depends(get_db)):
-    return create_event(db=db, event=event)
+@router.post("/add-event", response_model=EventOut)
+def create_event(
+    event: EventCreate,
+    db: Session = Depends(get_db),
+    current_user: PublicUser = fetch_current_user,
+):
+    new_event = create_event_crud(db=db, event=event, user_id=current_user.id)
+    print(new_event)
+    return new_event
 
 
-@router.post("/event/{event_id}/guests/", response_model=EventResponse)
+@router.post("/{event_id}/guests/", response_model=EventResponse)
 def add_guests_route(event_id: int, guests: List[Guest], db: Session = Depends(get_db)):
     db_event = add_guests_to_event(db=db, event_id=event_id, guests=guests)
     return db_event

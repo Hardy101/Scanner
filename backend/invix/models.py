@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, DateTime, ForeignKey
+from sqlalchemy import Column, Integer, String, Date, ForeignKey
 from sqlalchemy.orm import relationship
 from database import Base
 from pydantic import BaseModel
@@ -15,26 +15,16 @@ class User(Base):
     plan = Column(String, default="basic")
 
 
-class PublicUser(BaseModel):
-    id: int
-    name: str
-    email: str
-    role: str
-    plan: str
-
-    class Config:
-        from_attributes = True
-
-
 # Model for Event Table
 class Event(Base):
     __tablename__ = "events"
 
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, index=True)
-    date = Column(DateTime)
+    date = Column(Date)
     location = Column(String)
-
+    expected_guests = Column(Integer, default=0)
+    created_by = Column(Integer, ForeignKey("users.id"))
     guests = relationship("Guest", back_populates="event")
 
 
@@ -46,5 +36,7 @@ class Guest(Base):
     name = Column(String)
     tags = Column(String, default="")
     event_id = Column(Integer, ForeignKey("events.id"))
-
     event = relationship("Event", back_populates="guests")
+
+    def __repr__(self):
+        return f"<Event(id={self.id}, name={self.name}, date={self.date})>"

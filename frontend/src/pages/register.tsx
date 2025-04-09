@@ -71,8 +71,8 @@ const Register = () => {
       const response = axios.post(`${url}/auth/register`, formData);
       response
         .then(
-          (res) => (
-            console.log(res.data),
+          () => (
+            // console.log(res.data),
             setIsModalActive(true),
             setTimeout(() => {
               navigate("/login");

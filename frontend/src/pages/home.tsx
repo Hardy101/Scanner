@@ -34,10 +34,17 @@ const Home: React.FC = () => {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const response = axios.post(`${url}/event`, formData, {
-      withCredentials: true,
-    });
-    console.log(`Response from server: ${response}`);
+    console.log(`Form data: ${JSON.stringify(formData)}`);
+
+    try {
+      axios.post(`${url}/event/add-event`, formData, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+    } catch (err) {
+      console.error(`Error: ${err}`);
+    }
   };
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -76,16 +83,13 @@ const Home: React.FC = () => {
             Create Event
           </h3>
           <div className="form-control grid gap-2 mt-6">
-            <label
-              htmlFor="eventName"
-              className="font-poppins-bold text-primary"
-            >
+            <label htmlFor="name" className="font-poppins-bold text-primary">
               Name of Event
             </label>
             <input
               type="text"
-              name="eventName"
-              id="eventName"
+              name="name"
+              id="name"
               value={formData.name}
               onChange={handleChange}
               placeholder="Enter Name"
@@ -93,16 +97,13 @@ const Home: React.FC = () => {
             />
           </div>
           <div className="form-control grid gap-2 mt-4">
-            <label
-              htmlFor="eventDate"
-              className="font-poppins-bold text-primary"
-            >
+            <label htmlFor="date" className="font-poppins-bold text-primary">
               Date of Event
             </label>
             <input
               type="date"
-              name="eventDate"
-              id="eventDate"
+              name="date"
+              id="date"
               onChange={handleChange}
               value={formData.date}
               placeholder="Select Date"
@@ -111,15 +112,15 @@ const Home: React.FC = () => {
           </div>
           <div className="form-control grid gap-2 mt-4">
             <label
-              htmlFor="eventVenue"
+              htmlFor="location"
               className="font-poppins-bold text-primary"
             >
               Venue
             </label>
             <input
               type="text"
-              name="eventVenue"
-              id="eventVenue"
+              name="location"
+              id="location"
               onChange={handleChange}
               value={formData.location}
               placeholder="Select Venue"
@@ -132,8 +133,9 @@ const Home: React.FC = () => {
             </label>
             <input
               type="number"
-              name="guests"
-              id="guests"
+              name="expected_guests"
+              id="expected_guests"
+              min={1}
               onChange={handleChange}
               value={formData.expected_guests}
               placeholder="Select number of guests"
