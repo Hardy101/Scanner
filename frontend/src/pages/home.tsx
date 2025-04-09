@@ -9,6 +9,7 @@ import { useModalState } from "../store/useModalStore";
 import Overlay from "../components/overlay";
 import Modal from "../components/modal";
 import { useState } from "react";
+import { useAuth } from "../context/AuthProvider";
 
 export interface formData {
   eventName: string;
@@ -19,6 +20,7 @@ export interface formData {
 
 const Home: React.FC = () => {
   const navigate = useNavigate();
+  const { user } = useAuth();
   const { setIsDropdownActive } = useDropdownState();
   const { setIsModalActive } = useModalState();
   const [formData, setFormData] = useState<formData>({
@@ -120,7 +122,8 @@ const Home: React.FC = () => {
       </div>
       <Hr />
       <div className="body mt-10 ">
-        <h2 className="text-2xl font-poppins-bold">Hi, Peter</h2>
+        <h2 className="text-2xl font-poppins-bold">Hi, {user?.name}</h2>
+
         <p className="text-sm text-secondary">
           Welcome back, hope your doing well today?
         </p>

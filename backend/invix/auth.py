@@ -1,9 +1,9 @@
-from fastapi import APIRouter, Depends, HTTPException, Request, Response
+from fastapi import APIRouter, Depends, HTTPException, Request
 from fastapi.responses import JSONResponse
 from sqlalchemy.orm import Session
-from .database import SessionLocal
-from .models import User
-from .security import (
+from database import SessionLocal
+from models import User
+from security import (
     hash_password,
     verify_password,
     create_access_token,
@@ -12,8 +12,9 @@ from .security import (
 )
 from jose import JWTError, jwt
 from pydantic import BaseModel
-from .security import SECRET_KEY, ALGORITHM
-from .variables import EXPIRY_DATE
+from security import SECRET_KEY, ALGORITHM
+from variables import EXPIRY_DATE
+from models import PublicUser
 
 router = APIRouter()
 
@@ -71,23 +72,28 @@ def login(user: UserLogin, db: Session = Depends(get_db)):
         value=token,
         httponly=True,
         secure=True,
-        samesite="Lax",
+        samesite="None",
         max_age=EXPIRY_DATE,
     )
     return response
 
 
-@router.get("/me")
+@router.get("/me", response_model=PublicUser)
 def get_current_user(request: Request, db: Session = Depends(get_db)):
     token = request.cookies.get("access_token")
     if not token:
         raise HTTPException(status_code=401, detail="Not authenticated")
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        user = db.query(User).filter(User.email == payload.get("sub")).first()
+        email = payload.get("sub")
+        if email is None:
+            raise HTTPException(status_code=401, detail="Invalid token payload")
+
+        user = db.query(User).filter(User.email == email).first()
         if not user:
             raise HTTPException(status_code=401, detail="User not found")
-        return {"email": user.email, "role": user.role}
+        return PublicUser.model_validate(user, from_attributes=True)
+
     except JWTError:
         raise HTTPException(status_code=401, detail="Invalid token")
 
@@ -96,6 +102,11 @@ def get_current_user(request: Request, db: Session = Depends(get_db)):
 def logout():
     response = JSONResponse(content={"message": "Logout successful"})
     response.delete_cookie(
-        key="access_token", httponly=True, secure=True, samesite="Lax"
+        key="access_token", httponly=True, secure=True, samesite="None"
     )
     return response
+
+
+@router.get("/user", response_model=PublicUser)
+def get_user(user: User = Depends(get_current_user)):
+    return PublicUser.model_validate(user)

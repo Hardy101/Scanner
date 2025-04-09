@@ -1,4 +1,4 @@
-import { ReactNode, useEffect, useRef } from "react";
+import { memo, ReactNode, useEffect, useRef } from "react";
 import gsap from "gsap";
 import { useModalState } from "../store/useModalStore";
 
@@ -7,7 +7,7 @@ interface ModalProps {
   classNames?: string;
 }
 
-const Modal: React.FC<ModalProps> = ({ children, classNames, ...props }) => {
+const Modal: React.FC<ModalProps> = memo(({ children, classNames, ...props }) => {
   const { isModalActive } = useModalState();
 
   const modalRef = useRef<HTMLDivElement | null>(null);
@@ -60,6 +60,6 @@ const Modal: React.FC<ModalProps> = ({ children, classNames, ...props }) => {
       {children}
     </div>
   );
-};
+});
 
 export default Modal;

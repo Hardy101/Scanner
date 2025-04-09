@@ -47,18 +47,21 @@ const Login = () => {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    // setFormData({ ...formData, [name]: value });
+    setFormData((prev) => {
+      if (prev[name as keyof formData] === value) return prev;
+      return { ...prev, [name]: value };
+    });
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (validateForm()) {
       try {
-        const response = await axios.post(`${url}/auth/login`, formData, {
+        await axios.post(`${url}/auth/login`, formData, {
           withCredentials: true,
           headers: { "Content-Type": "application/json" },
         });
-        console.log(response.data);
         login();
         navigate("/home");
       } catch (err: any) {

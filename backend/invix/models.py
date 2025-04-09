@@ -1,5 +1,5 @@
 from sqlalchemy import Column, Integer, String
-from .database import Base
+from database import Base
 from pydantic import BaseModel
 
 
@@ -18,6 +18,8 @@ class PublicUser(BaseModel):
     id: int
     name: str
     email: str
+    role: str
+    plan: str
 
     class Config:
         from_attributes = True

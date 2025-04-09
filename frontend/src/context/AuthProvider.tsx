@@ -7,9 +7,18 @@ import React, {
   ReactNode,
 } from "react";
 
+interface UserInfo {
+  id: number;
+  name: string;
+  email: string;
+  role: string;
+  plan: string;
+}
+
 interface AuthContextType {
   isAuthenticated: boolean;
   loading: boolean;
+  user: UserInfo | null;
   login: () => void;
   logout: () => Promise<boolean>;
 }
@@ -22,6 +31,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+  const [user, setUser] = useState<UserInfo | null>(null);
   const [loading, setLoading] = useState(true);
 
   const checkAuth = async () => {
@@ -31,9 +41,10 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
         credentials: "include",
       });
       if (!res.ok) throw new Error("Not authenticated");
-      const response = await res.json();
+      const response: UserInfo = await res.json();
+      setUser(response);
       setIsAuthenticated(true);
-      console.log("User Authenticated", response);
+      // console.log("User Authenticated", response);
     } catch {
       setIsAuthenticated(false);
     } finally {
@@ -45,8 +56,9 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     checkAuth();
   }, []);
 
-  const login = () => {
+  const login = async () => {
     setIsAuthenticated(true);
+    await checkAuth();
   };
 
   const logout = async (): Promise<boolean> => {
@@ -59,21 +71,24 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
         }
       );
       if (response.status === 200) {
-        console.log("Logout successful", response.data);
+        // console.log("Logout successful", response.data);
         setIsAuthenticated(false);
+        setUser(null);
         return true;
       } else {
         console.error("Logout failed, unexpected response", response.data);
         return false;
       }
     } catch (err) {
-      console.error("Logout failed", err);
+      // console.error("Logout failed", err);
       return false;
     }
   };
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, loading, login, logout }}>
+    <AuthContext.Provider
+      value={{ isAuthenticated, loading, user, login, logout }}
+    >
       {children}
     </AuthContext.Provider>
   );

@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { memo, useEffect, useRef } from "react";
 import gsap from "gsap";
 import { Link } from "react-router";
 
@@ -9,7 +9,7 @@ import { useModalState } from "../store/useModalStore";
 import { useAuth } from "../context/AuthProvider";
 import LogoutButton from "./logOutbutton";
 
-const DropdownNav: React.FC = () => {
+const DropdownNav: React.FC = memo(() => {
   const { isAuthenticated } = useAuth();
   const dropdownref = useRef<HTMLDivElement | null>(null);
   const { isDropdownActive, setIsDropdownActive } = useDropdownState();
@@ -90,6 +90,6 @@ const DropdownNav: React.FC = () => {
       </div>
     </div>
   );
-};
+});
 
 export default DropdownNav;

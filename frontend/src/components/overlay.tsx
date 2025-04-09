@@ -1,10 +1,10 @@
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, memo } from "react";
 import { useDropdownState } from "../store/useDropdownStore";
 import { useModalState } from "../store/useModalStore";
 
 import gsap from "gsap";
 
-const Overlay = () => {
+const Overlay = memo(() => {
   const overlayRef = useRef<HTMLDivElement | null>(null);
   const { isDropdownActive } = useDropdownState();
   const { isModalActive } = useModalState();
@@ -50,6 +50,6 @@ const Overlay = () => {
       style={{ pointerEvents: "none" }}
     ></div>
   );
-};
+});
 
 export default Overlay;

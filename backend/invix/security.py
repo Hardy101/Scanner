@@ -1,7 +1,7 @@
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
-from .database import SessionLocal
-from .models import User
+from database import SessionLocal
+from models import User
 from datetime import datetime, timedelta
 from jose import JWTError, jwt
 import bcrypt
