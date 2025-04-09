@@ -7,28 +7,13 @@ from security import (
     hash_password,
     verify_password,
     create_access_token,
-    ALGORITHM,
-    SECRET_KEY,
 )
 from jose import JWTError, jwt
-from pydantic import BaseModel
-from security import SECRET_KEY, ALGORITHM
-from variables import EXPIRY_DATE
+from variables import EXPIRY_DATE, ALGORITHM, SECRET_KEY
 from models import PublicUser
+from schemas import UserCreate, UserLogin
 
-router = APIRouter()
-
-
-class UserCreate(BaseModel):
-    name: str
-    email: str
-    password: str
-    role: str = "invitee"
-
-
-class UserLogin(BaseModel):
-    email: str
-    password: str
+router = APIRouter(tags=["Auth"])
 
 
 def get_db():

@@ -2,15 +2,12 @@ from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from database import SessionLocal
 from models import User
+from variables import ALGORITHM, SECRET_KEY, EXPIRY_DATE
 from datetime import datetime, timedelta
 from jose import JWTError, jwt
 import bcrypt
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/login")
-
-SECRET_KEY = "whitecrow"
-ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 60 * 24
 
 
 def hash_password(password: str):
@@ -24,9 +21,7 @@ def verify_password(plain_password, hashed_password):
 
 def create_access_token(data: dict, expires_delta: timedelta = None):
     to_encode = data.copy()
-    expire = datetime.now() + (
-        expires_delta or timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
-    )
+    expire = datetime.now() + (expires_delta or timedelta(minutes=EXPIRY_DATE))
     to_encode.update({"exp": expire})
     return jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
 

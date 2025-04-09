@@ -1,7 +1,7 @@
 from fastapi import Depends, FastAPI
 from contextlib import asynccontextmanager
 from fastapi.middleware.cors import CORSMiddleware
-from auth import router as auth_router
+from routes import auth, event
 from models import PublicUser, User as UserModel
 from database import get_db, init_db
 from sqlalchemy.orm import Session
@@ -27,7 +27,8 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.include_router(auth_router, prefix="/auth")
+app.include_router(auth.router, prefix="/auth")
+app.include_router(event.router, prefix="/event")
 
 
 @app.get("/users", response_model=List[PublicUser])
