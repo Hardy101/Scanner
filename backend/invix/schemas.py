@@ -27,6 +27,7 @@ class EventBase(BaseModel):
     name: str
     date: datetime
     location: str
+    expected_guests: int
     guests: List[Guest]
 
 

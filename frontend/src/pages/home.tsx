@@ -10,12 +10,14 @@ import Overlay from "../components/overlay";
 import Modal from "../components/modal";
 import { useState } from "react";
 import { useAuth } from "../context/AuthProvider";
+import { url } from "./register";
+import axios from "axios";
 
 export interface formData {
-  eventName: string;
-  eventDate: string;
-  eventVenue?: string;
-  guests: number;
+  name: string;
+  date: string;
+  location: string;
+  expected_guests: number;
 }
 
 const Home: React.FC = () => {
@@ -24,12 +26,18 @@ const Home: React.FC = () => {
   const { setIsDropdownActive } = useDropdownState();
   const { setIsModalActive } = useModalState();
   const [formData, setFormData] = useState<formData>({
-    eventName: "",
-    eventDate: "",
-    guests: 0,
+    name: "",
+    date: "",
+    location: "",
+    expected_guests: 0,
   });
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    const response = axios.post(`${url}/event`, formData, {
+      withCredentials: true,
+    });
+    console.log(`Response from server: ${response}`);
   };
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -51,7 +59,12 @@ const Home: React.FC = () => {
         <button
           onClick={() => {
             setIsModalActive(false),
-              setFormData({ eventName: "", eventDate: "", guests: 0 });
+              setFormData({
+                name: "",
+                date: "",
+                location: "",
+                expected_guests: 0,
+              });
           }}
           className="absolute flex bg-primary text-secondary rounded-md p-1 text-xl right-4 top-4 hover:bg-secondary-2"
         >
@@ -63,21 +76,27 @@ const Home: React.FC = () => {
             Create Event
           </h3>
           <div className="form-control grid gap-2 mt-6">
-            <label className="font-poppins-bold text-primary">
+            <label
+              htmlFor="eventName"
+              className="font-poppins-bold text-primary"
+            >
               Name of Event
             </label>
             <input
               type="text"
               name="eventName"
               id="eventName"
-              value={formData.eventName}
+              value={formData.name}
               onChange={handleChange}
               placeholder="Enter Name"
               className="w-full bg-secondary text-primary placeholder:text-primary px-2 py-2 text-xs rounded-sm"
             />
           </div>
           <div className="form-control grid gap-2 mt-4">
-            <label className="font-poppins-bold text-primary">
+            <label
+              htmlFor="eventDate"
+              className="font-poppins-bold text-primary"
+            >
               Date of Event
             </label>
             <input
@@ -85,13 +104,30 @@ const Home: React.FC = () => {
               name="eventDate"
               id="eventDate"
               onChange={handleChange}
-              value={formData.eventDate}
+              value={formData.date}
               placeholder="Select Date"
               className="w-full bg-secondary text-primary placeholder:text-primary px-2 py-2 text-xs rounded-sm"
             />
           </div>
           <div className="form-control grid gap-2 mt-4">
-            <label className="font-poppins-bold text-primary">
+            <label
+              htmlFor="eventVenue"
+              className="font-poppins-bold text-primary"
+            >
+              Venue
+            </label>
+            <input
+              type="text"
+              name="eventVenue"
+              id="eventVenue"
+              onChange={handleChange}
+              value={formData.location}
+              placeholder="Select Venue"
+              className="w-full bg-secondary text-primary placeholder:text-primary px-2 py-2 text-xs rounded-sm"
+            />
+          </div>
+          <div className="form-control grid gap-2 mt-4">
+            <label htmlFor="guests" className="font-poppins-bold text-primary">
               Expected Guests
             </label>
             <input
@@ -99,7 +135,7 @@ const Home: React.FC = () => {
               name="guests"
               id="guests"
               onChange={handleChange}
-              value={formData.guests}
+              value={formData.expected_guests}
               placeholder="Select number of guests"
               className="w-full bg-secondary text-primary placeholder:text-primary px-2 py-2 text-xs rounded-sm"
             />

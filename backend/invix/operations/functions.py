@@ -5,7 +5,7 @@ import models, schemas
 
 
 def create_event(db: Session, event: schemas.EventCreate):
-    db_event = models.Event(name=event.name, date=event.date, location=event.location)
+    db_event = models.Event(name=event.name, date=event.date, location=event.location, expected_guests=event.expected_guests)
     db.add(db_event)
     db.commit()
     db.refresh(db_event)
