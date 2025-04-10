@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from models import Event
 from schemas import PublicUser
-from schemas import EventCreate, EventUpdate, EventOut, EventResponse, Guest
+from schemas import EventUpdate, EventOut, EventResponse, Guest
 from database import get_db
 from operations.functions import (
     get_events as fetch_events,
@@ -21,16 +21,28 @@ def get_status():
 
 
 @router.get("/all", response_model=List[EventResponse])
-def get_events(skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
+def get_all_events(skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
     events = fetch_events(db=db, skip=skip, limit=limit)
+    return events
+
+
+@router.get("/events", response_model=List[EventResponse])
+def get_user_events(
+    db: Session = Depends(get_db),
+    current_user: PublicUser = Depends(fetch_current_user),
+):
+    events = db.query(Event).filter(Event.created_by == current_user.id).all()
+    if not events:
+        return []
+        raise HTTPException(status_code=404, detail="No events found for user")
     return events
 
 
 @router.post("/add-event", response_model=EventOut)
 def create_event(
-    event: EventCreate,
+    event: EventOut,
     db: Session = Depends(get_db),
-    current_user: PublicUser = fetch_current_user,
+    current_user: PublicUser = Depends(fetch_current_user),
 ):
     new_event = create_event_crud(db=db, event=event, user_id=current_user.id)
     print(new_event)

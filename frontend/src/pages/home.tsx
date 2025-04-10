@@ -8,10 +8,13 @@ import { useDropdownState } from "../store/useDropdownStore";
 import { useModalState } from "../store/useModalStore";
 import Overlay from "../components/overlay";
 import Modal from "../components/modal";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthProvider";
 import { url } from "./register";
 import axios from "axios";
+import { useEventStore } from "../store/useEventsStore";
+import LoadingComponent from "../components/loading";
+import { formatDate } from "../utils/functions";
 
 export interface formData {
   name: string;
@@ -31,25 +34,45 @@ const Home: React.FC = () => {
     location: "",
     expected_guests: 0,
   });
+  const { events, isLoading, fetchEvents } = useEventStore();
+
+  const refreshEvents = () => {
+    fetchEvents();
+  };
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    console.log(`Form data: ${JSON.stringify(formData)}`);
-
     try {
       axios.post(`${url}/event/add-event`, formData, {
+        withCredentials: true,
         headers: {
           "Content-Type": "application/json",
         },
       });
-    } catch (err) {
-      console.error(`Error: ${err}`);
+      setFormData({
+        name: "",
+        date: "",
+        location: "",
+        expected_guests: 0,
+      });
+      refreshEvents();
+    } catch (err: any) {
+      if (err.response) {
+        console.error(`Error: ${err.response.data}`);
+      } else {
+        console.error(`Error: ${err.message}`);
+      }
     }
   };
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
+
+  useEffect(() => {
+    refreshEvents();
+  }, [fetchEvents]);
+
   return (
     <div className="relative min-h-screen bg-primary text-white p-4 md:p-8">
       {/* Floating Elements */}
@@ -166,32 +189,40 @@ const Home: React.FC = () => {
           Welcome back, hope your doing well today?
         </p>
 
-        <div id="events" className="mt-8 text-black grid md:grid-cols-3 gap-8">
-          <div className="relative bg-white rounded-xl p-4">
-            <button id="linkout" className="absolute -bottom-2 -right-2">
-              <Link
-                to={"/event"}
-                className="flex bg-secondary-2 border-2 border-primary py-2 px-3 rounded-full text-white text-3xl"
-              >
-                {/* <i className="lni lni-arrow-angular-top-right"></i> */}
-                <i className="fa-solid fa-arrow-up-long rotate-45"></i>
-              </Link>
-            </button>
-            <button className="absolute right-2 top-2 grid bg-red-2 px-4 py-2 rounded-full text-white text-xs">
-              <span className="text-xl font-bold">15</span>
-              <span>Mar</span>
-            </button>
-            <span className="border-l-4 border-black text-lg bg-secondary pl-3 pr-4 py-1 text-black">
-              Birthday Party
-            </span>
-            <ul className="text-xs text-gray-1 mt-5">
-              <li className="grid">
-                <span>50 Guests</span>
-                <span>51, One Corner Street off Petepe Road</span>
+        {isLoading ? (
+          <LoadingComponent />
+        ) : (
+          <ul id="events" className="mt-8 text-black grid md:grid-cols-3 gap-8">
+            {events.map((event) => (
+              <li key={event.id} className="relative bg-white rounded-xl p-4">
+                <button id="linkout" className="absolute -bottom-2 -right-2">
+                  <Link
+                    to={"/event"}
+                    className="flex bg-secondary-2 border-2 border-primary py-2 px-3 rounded-full text-white text-3xl"
+                  >
+                    {/* <i className="lni lni-arrow-angular-top-right"></i> */}
+                    <i className="fa-solid fa-arrow-up-long rotate-45"></i>
+                  </Link>
+                </button>
+                <div className="absolute right-2 top-2 grid bg-red-2 px-4 py-2 rounded-full text-white text-center text-xs">
+                  <span className="text-xl font-bold">
+                    {formatDate(event.date).day}
+                  </span>
+                  <span>{formatDate(event.date).month}</span>
+                </div>
+                <span className="border-l-4 border-black text-lg bg-secondary pl-3 pr-4 py-1 text-black">
+                  {event.name}
+                </span>
+                <ul className="text-xs text-gray-1 mt-5">
+                  <li className="grid">
+                    <span>{event.expected_guests} Guests</span>
+                    <span>{event.location}</span>
+                  </li>
+                </ul>
               </li>
-            </ul>
-          </div>
-        </div>
+            ))}
+          </ul>
+        )}
       </div>
     </div>
   );

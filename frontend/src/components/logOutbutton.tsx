@@ -1,14 +1,17 @@
 import { useAuth } from "../context/AuthProvider";
 import { useNavigate } from "react-router-dom";
+import { useEventStore } from "../store/useEventsStore";
 
 const LogoutButton = () => {
   const { logout } = useAuth();
+  const { clearEvents } = useEventStore();
   const navigate = useNavigate();
 
   const handleLogout = async () => {
     const success = await logout();
 
     if (success) {
+      clearEvents()
       navigate("/");
     } else {
       console.error("Logout failed. Not navigating.");

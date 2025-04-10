@@ -67,6 +67,6 @@ def fetch_current_user(request: Request, db: Session = Depends(get_db)) -> User:
         if not user:
             raise HTTPException(status_code=401, detail="User not found")
 
-        return user 
+        return user
     except JWTError:
         raise HTTPException(status_code=401, detail="Invalid token")

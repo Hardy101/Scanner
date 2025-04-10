@@ -58,7 +58,6 @@ class EventUpdate(EventBase):
 
 
 class EventCreate(EventBase):
-    created_by: int
 
     class Config:
         from_attributes = True
