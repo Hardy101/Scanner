@@ -3,7 +3,8 @@ import { useNavigate } from "react-router";
 import NavButton from "../components/navbutton";
 import Hr from "../components/hr";
 import { profile } from "../constants/media";
-import { useState } from "react";
+import {  useState } from "react";
+import { useAuth } from "../context/AuthProvider";
 
 const Profile: React.FC = () => {
   const [isFormActive, setIsFormActive] = useState(false);
@@ -11,6 +12,7 @@ const Profile: React.FC = () => {
     setIsFormActive(false);
   };
   const navigate = useNavigate();
+  const { user } = useAuth();
   return (
     <div className="relative min-h-screen bg-primary text-white p-4 md:p-8">
       <div className="nav flex items-center justify-between text-sm">
@@ -42,11 +44,11 @@ const Profile: React.FC = () => {
             <ul className="grid gap-3">
               <li className="flex items-center gap-2">
                 <i className="lni lni-user-4"></i>
-                <span>Carmin Phalange</span>
+                <span>{user?.name}</span>
               </li>
               <li className="flex items-center gap-2">
                 <i className="lni lni-envelope-1"></i>
-                <span>carminephal@email.com</span>
+                <span>{user?.email}</span>
               </li>
               <li className="flex justify-between items-center gap-2">
                 <i className="lni lni-key-1"></i>
@@ -55,7 +57,7 @@ const Profile: React.FC = () => {
               </li>
               <li className="flex justify-between items-center gap-2">
                 <i className="lni lni-hand-taking-dollar" />
-                <span>Basic Plan</span>
+                <span>{user?.plan}</span>
                 <NavButton
                   text="Upgrade plan"
                   classNames="text-right ml-auto"

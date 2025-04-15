@@ -41,7 +41,7 @@ function App() {
 
               <Route element={<PrivateRoute />}>
                 <Route path="/home" element={<Home />} />
-                <Route path="/event" element={<EventDetails />} />
+                <Route path="/event/:id" element={<EventDetails />} />
                 <Route path="/scan" element={<Scan />} />
                 <Route path="/profile" element={<Profile />} />
               </Route>

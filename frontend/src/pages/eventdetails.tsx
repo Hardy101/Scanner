@@ -25,10 +25,10 @@ const EventDetails: React.FC = () => {
   const [activeStep, setActiveStep] = useState("guestList");
   const [copied, setCopied] = useState(false);
   const [formData, setFormData] = useState<formData>({
-    eventName: "Birthday Party",
-    eventDate: "2025-03-29",
-    eventVenue: "15 Caramet Hall off Jump off bridge",
-    guests: 50,
+    name: "Birthday Party",
+    date: "2025-03-29",
+    location: "15 Caramet Hall off Jump off bridge",
+    expected_guests: 50,
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -181,7 +181,7 @@ const EventDetails: React.FC = () => {
             <div className="form-control mt-8 flex gap-4">
               <ActionButton
                 onClick={() => setActiveStep("addGuest")}
-                text="Add More Guests"
+                text="Add More expected_guests"
                 classNames="w-full bg-primary text-white rounded-full"
               />
               <ActionButton
@@ -239,9 +239,9 @@ const EventDetails: React.FC = () => {
         <input
           readOnly={!isFormActive}
           type="text"
-          id="eventName"
-          name="eventName"
-          value={formData.eventName}
+          id="name"
+          name="name"
+          value={formData.name}
           onChange={handleChange}
           className={`border-l-4 text-lg pl-3 pr-4 py-1 outline-none ${
             isFormActive
@@ -256,9 +256,9 @@ const EventDetails: React.FC = () => {
             <input
               readOnly={!isFormActive}
               type="date"
-              id="eventDate"
-              name="eventDate"
-              value={formData.eventDate}
+              id="date"
+              name="date"
+              value={formData.date}
               onChange={handleChange}
               className={`w-full outline-none ${
                 isFormActive
@@ -271,9 +271,9 @@ const EventDetails: React.FC = () => {
             <i className="lni lni-location-arrow-right"></i>
             <input
               readOnly={!isFormActive}
-              id="eventVenue"
-              name="eventVenue"
-              value={formData.eventVenue}
+              id="location"
+              name="location"
+              value={formData.location}
               onChange={handleChange}
               className={`w-full outline-none ${
                 isFormActive
@@ -284,13 +284,13 @@ const EventDetails: React.FC = () => {
           </li>
         </ul>
         <Hr />
-        <div id="guests" className="mt-10">
-          <h3 className="font-poppins-bold">Guests</h3>
+        <div id="expected_guests" className="mt-10">
+          <h3 className="font-poppins-bold">expected_guests</h3>
           <p className="text-sm text-secondary mt-2">
-            {formData.guests} Guests
+            {formData.expected_guests} expected_guests
           </p>
 
-          <ul id="guests" className="mt-8 text-sm grid grid-cols-3 gap-4">
+          <ul id="expected_guests" className="mt-8 text-sm grid grid-cols-3 gap-4">
             {guestList.map(({ id, name, tags }) => (
               <li
                 key={id}
@@ -308,7 +308,7 @@ const EventDetails: React.FC = () => {
           <NavButton
             onClick={() => setIsModalActive(true)}
             classNames="block mt-4 py-2 mx-auto"
-            text="See all guests"
+            text="See all expected_guests"
           />
         </div>
       </div>

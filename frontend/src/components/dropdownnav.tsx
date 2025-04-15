@@ -52,6 +52,10 @@ const DropdownNav: React.FC = memo(() => {
     return () => ctx.revert();
   }, [isDropdownActive]);
 
+  const handleDropdownClose = () => {
+    setIsDropdownActive(false);
+  }
+
   return (
     <div
       ref={dropdownref}
@@ -59,7 +63,7 @@ const DropdownNav: React.FC = memo(() => {
     >
       <div className="relative w-5/6 bg-[#225050] rounded-xl px-4 pt-10 pb-2 mx-auto md:w-2/5">
         <button
-          onClick={() => setIsDropdownActive(false)}
+          onClick={handleDropdownClose}
           className="absolute flex bg-shadow text-secondary rounded-md px-2 py-1 text-xl right-4 top-4"
         >
           <i className="fa-solid fa-xmark"></i>

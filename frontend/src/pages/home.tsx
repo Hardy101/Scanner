@@ -15,6 +15,7 @@ import axios from "axios";
 import { useEventStore } from "../store/useEventsStore";
 import LoadingComponent from "../components/loading";
 import { formatDate } from "../utils/functions";
+import LogoutButton from "../components/logOutbutton";
 
 export interface formData {
   name: string;
@@ -179,7 +180,22 @@ const Home: React.FC = () => {
           <span>Sunday, </span>
           <span>15th October 2025</span>
         </p>
-        <NavButton text="Menu" onClick={() => setIsDropdownActive(true)} />
+        <ul className="hidden gap-2 items-center md:flex text-secondary">
+          <li>
+            <Link to={"/profile"}>Profile</Link>
+          </li>
+          <li className="mr-10">
+            <Link to={""}>Analytics</Link>
+          </li>
+          <li>
+            <LogoutButton/>
+          </li>
+        </ul>
+        <NavButton
+          text="Menu"
+          onClick={() => setIsDropdownActive(true)}
+          classNames="md:hidden"
+        />
       </div>
       <Hr />
       <div className="body mt-10 ">
@@ -197,7 +213,7 @@ const Home: React.FC = () => {
               <li key={event.id} className="relative bg-white rounded-xl p-4">
                 <button id="linkout" className="absolute -bottom-2 -right-2">
                   <Link
-                    to={"/event"}
+                    to={`/event/${event.id}`}
                     className="flex bg-secondary-2 border-2 border-primary py-2 px-3 rounded-full text-white text-3xl"
                   >
                     {/* <i className="lni lni-arrow-angular-top-right"></i> */}

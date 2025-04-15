@@ -1,17 +1,20 @@
 import { useAuth } from "../context/AuthProvider";
 import { useNavigate } from "react-router-dom";
 import { useEventStore } from "../store/useEventsStore";
+import { useDropdownState } from "../store/useDropdownStore";
 
 const LogoutButton = () => {
   const { logout } = useAuth();
   const { clearEvents } = useEventStore();
+  const { setIsDropdownActive } = useDropdownState();
   const navigate = useNavigate();
 
   const handleLogout = async () => {
     const success = await logout();
 
     if (success) {
-      clearEvents()
+      clearEvents();
+      setIsDropdownActive(false);
       navigate("/");
     } else {
       console.error("Logout failed. Not navigating.");
