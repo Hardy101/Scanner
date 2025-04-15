@@ -154,8 +154,7 @@ const EventDetails: React.FC = () => {
               />
               <ActionButton
                 onClick={() => {
-                  setActiveStep("addGuest");
-                  console.log('"cancel")');
+                  setActiveStep("guestList");
                 }}
                 text="Cancel"
                 classNames="bg-white text-primary border-2 border-primary rounded-full"
@@ -320,7 +319,7 @@ const EventDetails: React.FC = () => {
           </ul>
           <NavButton
             onClick={() => setIsModalActive(true)}
-            classNames="block mt-4 py-2 mx-auto"
+            classNames="block mt-4 py-2 ml-auto"
             text="See Guest List"
           />
         </div>
