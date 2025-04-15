@@ -15,7 +15,7 @@ import axios from "axios";
 import { useEventStore } from "../store/useEventsStore";
 import LoadingComponent from "../components/loading";
 import { formatDate } from "../utils/functions";
-import LogoutButton from "../components/logOutbutton";
+import LgNavbar from "../components/lgNavbar";
 
 export interface formData {
   name: string;
@@ -40,23 +40,32 @@ const Home: React.FC = () => {
   const refreshEvents = () => {
     fetchEvents();
   };
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     try {
-      axios.post(`${url}/event/add-event`, formData, {
+      const response = await axios.post(`${url}/event/add-event`, formData, {
         withCredentials: true,
         headers: {
           "Content-Type": "application/json",
         },
       });
-      setFormData({
-        name: "",
-        date: "",
-        location: "",
-        expected_guests: 0,
-      });
-      refreshEvents();
+
+      if (response && response.status === 200) {
+        const eventId = response.data.id;
+        console.log("Event created successfully");
+        setFormData({
+          name: "",
+          date: "",
+          location: "",
+          expected_guests: 0,
+        });
+        setIsModalActive(false);
+        // Redirect to the event details page after creating the event
+        navigate(`/event/${eventId}`);
+        refreshEvents();
+      }
     } catch (err: any) {
       if (err.response) {
         console.error(`Error: ${err.response.data}`);
@@ -65,6 +74,7 @@ const Home: React.FC = () => {
       }
     }
   };
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
@@ -180,17 +190,7 @@ const Home: React.FC = () => {
           <span>Sunday, </span>
           <span>15th October 2025</span>
         </p>
-        <ul className="hidden gap-2 items-center md:flex text-secondary">
-          <li>
-            <Link to={"/profile"}>Profile</Link>
-          </li>
-          <li className="mr-10">
-            <Link to={""}>Analytics</Link>
-          </li>
-          <li>
-            <LogoutButton/>
-          </li>
-        </ul>
+        <LgNavbar />
         <NavButton
           text="Menu"
           onClick={() => setIsDropdownActive(true)}

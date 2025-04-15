@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from models import Event
 from schemas import PublicUser
-from schemas import EventUpdate, EventOut, EventResponse, Guest
+from schemas import EventUpdate, EventOut, EventResponse, Guest, EventCreate
 from database import get_db
 from operations.functions import (
     get_events as fetch_events,
@@ -38,9 +38,9 @@ def get_user_events(
     return events
 
 
-@router.post("/add-event", response_model=EventOut)
+@router.post("/add-event", response_model=EventCreate)
 def create_event(
-    event: EventOut,
+    event: EventCreate,
     db: Session = Depends(get_db),
     current_user: PublicUser = Depends(fetch_current_user),
 ):
@@ -50,7 +50,7 @@ def create_event(
 
 
 @router.post("/{event_id}/guests/", response_model=EventResponse)
-def add_guests_route(event_id: int, guests: List[Guest], db: Session = Depends(get_db)):
+def add_guests(event_id: int, guests: List[Guest], db: Session = Depends(get_db)):
     db_event = add_guests_to_event(db=db, event_id=event_id, guests=guests)
     return db_event
 

@@ -76,11 +76,18 @@ const EventDetails: React.FC = () => {
                 </li>
               ))}
             </ul>
-            <ActionButton
-              onClick={() => setActiveStep("addGuest")}
-              text="Add Guest"
-              classNames="bg-primary text-white rounded-md"
-            />
+            <div className="flex gap-4 justify-end">
+              <ActionButton
+                text="Upload Guest List (*.csv, *.xls)"
+                icon="fa-solid fa-upload"
+                classNames="bg-primary text-white rounded-md"
+              />
+              <ActionButton
+                onClick={() => setActiveStep("addGuest")}
+                text="Add Guest"
+                classNames="bg-primary text-white rounded-md"
+              />
+            </div>
           </div>
         )}
         {activeStep == "guestDetails" && (
@@ -146,7 +153,10 @@ const EventDetails: React.FC = () => {
                 classNames="w-full bg-primary text-white rounded-full"
               />
               <ActionButton
-                onClick={() => setActiveStep("success")}
+                onClick={() => {
+                  setActiveStep("addGuest");
+                  console.log('"cancel")');
+                }}
                 text="Cancel"
                 classNames="bg-white text-primary border-2 border-primary rounded-full"
               />
@@ -162,7 +172,7 @@ const EventDetails: React.FC = () => {
             <img
               src={icons.qrcode}
               alt="QR code of profile created successfully"
-              className="w-1/2 mx-auto"
+              className="w-1/5 mx-auto"
               style={{
                 pointerEvents: "none",
               }}
@@ -181,7 +191,7 @@ const EventDetails: React.FC = () => {
             <div className="form-control mt-8 flex gap-4">
               <ActionButton
                 onClick={() => setActiveStep("addGuest")}
-                text="Add More expected_guests"
+                text="Add More Guests"
                 classNames="w-full bg-primary text-white rounded-full"
               />
               <ActionButton
@@ -290,7 +300,10 @@ const EventDetails: React.FC = () => {
             {formData.expected_guests} expected_guests
           </p>
 
-          <ul id="expected_guests" className="mt-8 text-sm grid grid-cols-3 gap-4">
+          <ul
+            id="expected_guests"
+            className="mt-8 text-sm grid grid-cols-3 gap-4"
+          >
             {guestList.map(({ id, name, tags }) => (
               <li
                 key={id}
@@ -308,7 +321,7 @@ const EventDetails: React.FC = () => {
           <NavButton
             onClick={() => setIsModalActive(true)}
             classNames="block mt-4 py-2 mx-auto"
-            text="See all expected_guests"
+            text="See Guest List"
           />
         </div>
       </div>
