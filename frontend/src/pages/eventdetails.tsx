@@ -11,6 +11,7 @@ import { useModalState } from "../store/useModalStore";
 import Overlay from "../components/overlay";
 import { formData } from "./home";
 import { url } from "./register";
+import { Guest } from "../constants/interfaces";
 
 const guestList = [
   { id: 0, initials: "DA", name: "David Aguero", tags: ["vip", "family"] },
@@ -24,6 +25,10 @@ const EventDetails: React.FC = () => {
   const navigate = useNavigate();
 
   const [isFormActive, setIsFormActive] = useState(false);
+  const [guest, setGuest] = useState<Guest>({
+    name: "",
+    tags: [],
+  });
   const { setIsModalActive } = useModalState();
   const [activeStep, setActiveStep] = useState("guestList");
   const [copied, setCopied] = useState(false);
@@ -54,9 +59,48 @@ const EventDetails: React.FC = () => {
     fetchEventDetails();
   }, []);
 
+  // Change function for events details
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
+  };
+
+  // Change function for guest details
+  const handleGuestFormChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    if (name === "tags") {
+      setGuest((prev) => ({
+        ...prev,
+        tags: value
+          .split(",")
+          .map((tag) => tag.trim())
+          .filter(Boolean),
+      }));
+    } else {
+      setGuest({ ...guest, [name]: value });
+    }
+  };
+
+  const handleGuestSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    try {
+      const response = await axios.post(`${url}/event/${id}/guests`, guest, {
+        withCredentials: true,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      if (response.status === 200) {
+        setActiveStep("success");
+        setGuest({ name: "", tags: [] });
+      }
+    } catch (err: any) {
+      if (err.response) {
+        console.error(`Error: ${err.response.data}`);
+      } else {
+        console.error(`Error: ${err.message}`);
+      }
+    }
   };
 
   const handleCopy = () => {
@@ -151,12 +195,15 @@ const EventDetails: React.FC = () => {
           </div>
         )}
         {activeStep == "addGuest" && (
-          <div className="text-black">
+          <form onSubmit={handleGuestSubmit} className="text-black">
             <h3 className="font-poppins-bold text-lg">Add Guest</h3>
             <div className="form-control grid gap-2 mt-4">
               <label className="text-sm">Name of Guest</label>
               <input
                 type="text"
+                name="name"
+                value={guest.name}
+                onChange={handleGuestFormChange}
                 placeholder="Enter Name"
                 className="w-full bg-secondary text-primary placeholder:text-primary px-2 py-2 text-xs rounded-sm"
               />
@@ -165,17 +212,20 @@ const EventDetails: React.FC = () => {
               <label className="text-sm">Tag</label>
               <input
                 type="text"
+                name="tags"
+                value={guest.tags}
+                onChange={handleGuestFormChange}
                 placeholder="Enter Tag"
                 className="w-full bg-secondary text-primary placeholder:text-primary px-2 py-2 text-xs rounded-sm"
               />
             </div>
             <div className="form-control mt-8 flex gap-4">
               <ActionButton
-                onClick={() => setActiveStep("success")}
                 text="Add Guest"
                 classNames="w-full bg-primary text-white rounded-full"
               />
               <ActionButton
+                type="button"
                 onClick={() => {
                   setActiveStep("guestList");
                 }}
@@ -183,7 +233,7 @@ const EventDetails: React.FC = () => {
                 classNames="bg-white text-primary border-2 border-primary rounded-full"
               />
             </div>
-          </div>
+          </form>
         )}
         {activeStep == "success" && (
           <div className="text-center text-primary">
@@ -275,7 +325,7 @@ const EventDetails: React.FC = () => {
           name="name"
           value={formData.name}
           onChange={handleChange}
-          className={`border-l-4 text-lg pl-3 pr-4 py-1 outline-none ${
+          className={`w-full border-l-4 text-lg pl-3 pr-4 py-1 outline-none ${
             isFormActive
               ? "bg-secondary text-primary border-secondary-2"
               : "bg-transparent text-white"

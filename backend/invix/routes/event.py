@@ -19,13 +19,13 @@ router = APIRouter(tags=["Events"])
 def get_status():
     return {"message": "Your URL is working! API is up and running."}
 
-
+# Returns the list of all the events
 @router.get("/all", response_model=List[EventResponse])
 def get_all_events(skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
     events = fetch_events(db=db, skip=skip, limit=limit)
     return events
 
-
+# Returns the list of events belonging to the authenticated user
 @router.get("/events", response_model=List[EventResponse])
 def get_user_events(
     db: Session = Depends(get_db),
@@ -37,7 +37,7 @@ def get_user_events(
         raise HTTPException(status_code=404, detail="No events found for user")
     return events
 
-
+# Returns a newly-created event
 @router.post("/add-event", response_model=EventOut)
 def create_event(
     event: EventCreate,
@@ -49,12 +49,13 @@ def create_event(
     return new_event
 
 
-@router.post("/{event_id}/guests/", response_model=EventResponse)
+@router.post("/{event_id}/guests/", response_model=Guest)
 def add_guests(event_id: int, guests: List[Guest], db: Session = Depends(get_db)):
     db_event = add_guests_to_event(db=db, event_id=event_id, guests=guests)
     return db_event
 
-
+# Returns the event with the given ID
+# If the event is not found, it raises a 404 error
 @router.get("/{event_id}", response_model=EventOut)
 def get_event(event_id: int, db: Session = Depends(get_db)):
     event = db.query(Event).filter(Event.id == event_id).first()
