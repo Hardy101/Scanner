@@ -49,15 +49,18 @@ class EventResponse(EventBase):
         from_attributes = True  # To support SQLAlchemy models directly
 
 
-class EventOut(EventBase):
-    pass
-
 
 class EventUpdate(EventBase):
     pass
 
 
 class EventCreate(EventBase):
+
+    class Config:
+        from_attributes = True
+
+class EventOut(EventCreate):
+    id: int
 
     class Config:
         from_attributes = True

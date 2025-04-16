@@ -54,7 +54,7 @@ const Home: React.FC = () => {
 
       if (response && response.status === 200) {
         const eventId = response.data.id;
-        console.log("Event created successfully");
+        // console.log("Event created successfully", response.data);
         setFormData({
           name: "",
           date: "",

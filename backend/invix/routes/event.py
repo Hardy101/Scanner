@@ -38,7 +38,7 @@ def get_user_events(
     return events
 
 
-@router.post("/add-event", response_model=EventCreate)
+@router.post("/add-event", response_model=EventOut)
 def create_event(
     event: EventCreate,
     db: Session = Depends(get_db),
