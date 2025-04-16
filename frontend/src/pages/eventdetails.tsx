@@ -1,5 +1,6 @@
-import { useNavigate } from "react-router";
-import { useRef, useState } from "react";
+import { useNavigate, useParams } from "react-router";
+import { useEffect, useRef, useState } from "react";
+import axios from "axios";
 
 import NavButton from "../components/navbutton";
 import ActionButton from "../components/actionbutton";
@@ -9,6 +10,7 @@ import Modal from "../components/modal";
 import { useModalState } from "../store/useModalStore";
 import Overlay from "../components/overlay";
 import { formData } from "./home";
+import { url } from "./register";
 
 const guestList = [
   { id: 0, initials: "DA", name: "David Aguero", tags: ["vip", "family"] },
@@ -17,6 +19,7 @@ const guestList = [
 ];
 
 const EventDetails: React.FC = () => {
+  const { id } = useParams();
   const textRef = useRef<HTMLSpanElement | null>(null);
   const navigate = useNavigate();
 
@@ -25,11 +28,31 @@ const EventDetails: React.FC = () => {
   const [activeStep, setActiveStep] = useState("guestList");
   const [copied, setCopied] = useState(false);
   const [formData, setFormData] = useState<formData>({
-    name: "Birthday Party",
-    date: "2025-03-29",
-    location: "15 Caramet Hall off Jump off bridge",
-    expected_guests: 50,
+    name: "",
+    date: "",
+    location: "",
+    expected_guests: 0,
   });
+
+  const fetchEventDetails = async () => {
+    const response = await axios.get(`${url}/event/${id}`, {
+      withCredentials: true,
+    });
+    if (response.status == 200) {
+      const event = response.data;
+      setFormData({
+        name: event.name,
+        date: event.date,
+        location: event.location,
+        expected_guests: event.expected_guests,
+      });
+    }
+  };
+
+  // Load Event Details on initial laod
+  useEffect(() => {
+    fetchEventDetails();
+  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -65,7 +88,7 @@ const EventDetails: React.FC = () => {
                 <li
                   onClick={() => setActiveStep("guestDetails")}
                   key={id}
-                  className="flex flex-col pb-2"
+                  className="flex flex-col pb-2 cursor-pointer hover:bg-secondary"
                 >
                   <span>{name}</span>
                   <ul className="flex gap-1 font-poppins-bold text-primary">
@@ -240,7 +263,7 @@ const EventDetails: React.FC = () => {
         <p className="grid text-left">
           <span>Event Details</span>
         </p>
-        <NavButton onClick={() => navigate(-1)} text="Back" classNames="" />
+        <NavButton onClick={() => navigate(-1)} text="Back" />
       </div>
       <Hr />
 
@@ -294,9 +317,9 @@ const EventDetails: React.FC = () => {
         </ul>
         <Hr />
         <div id="expected_guests" className="mt-10">
-          <h3 className="font-poppins-bold">expected_guests</h3>
+          <h3 className="font-poppins-bold">Expected guests</h3>
           <p className="text-sm text-secondary mt-2">
-            {formData.expected_guests} expected_guests
+            {formData.expected_guests} guests
           </p>
 
           <ul
