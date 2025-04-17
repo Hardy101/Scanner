@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from models import Event
+from models import Event, Guest as GuestModel
 from schemas import PublicUser
 from schemas import EventUpdate, EventOut, EventResponse, Guest, EventCreate
 from database import get_db
@@ -19,11 +19,13 @@ router = APIRouter(tags=["Events"])
 def get_status():
     return {"message": "Your URL is working! API is up and running."}
 
+
 # Returns the list of all the events
 @router.get("/all", response_model=List[EventResponse])
 def get_all_events(skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
     events = fetch_events(db=db, skip=skip, limit=limit)
     return events
+
 
 # Returns the list of events belonging to the authenticated user
 @router.get("/events", response_model=List[EventResponse])
@@ -34,8 +36,8 @@ def get_user_events(
     events = db.query(Event).filter(Event.created_by == current_user.id).all()
     if not events:
         return []
-        raise HTTPException(status_code=404, detail="No events found for user")
     return events
+
 
 # Returns a newly-created event
 @router.post("/add-event", response_model=EventOut)
@@ -49,11 +51,6 @@ def create_event(
     return new_event
 
 
-@router.post("/{event_id}/guests/", response_model=Guest)
-def add_guests(event_id: int, guests: List[Guest], db: Session = Depends(get_db)):
-    db_event = add_guests_to_event(db=db, event_id=event_id, guests=guests)
-    return db_event
-
 # Returns the event with the given ID
 # If the event is not found, it raises a 404 error
 @router.get("/{event_id}", response_model=EventOut)
@@ -62,6 +59,31 @@ def get_event(event_id: int, db: Session = Depends(get_db)):
     if not event:
         raise HTTPException(status_code=404, detail="Event not found")
     return event
+
+
+# Route to get all guests
+@router.get("/guests/", response_model=List[Guest])
+def get_all_guests(db: Session = Depends(get_db)):
+    guests = db.query(GuestModel).all()
+    if not guests:
+        return []
+    return guests
+
+
+# Adds guests to an event and returns the updated list of guests
+@router.post("/{event_id}/add-guest/", response_model=List[Guest])
+def add_guests(event_id: int, guests: List[Guest], db: Session = Depends(get_db)):
+    add_guests_to_event(db=db, event_id=event_id, guests=guests)
+
+    all_guests = db.query(GuestModel).filter(GuestModel.event_id == event_id).all()
+    return all_guests
+
+
+# Route to get guests by event ID
+@router.get("/{event_id}/guests/", response_model=List[Guest])
+def get_guests_by_event(event_id: int, db: Session = Depends(get_db)):
+    guests = db.query(GuestModel).filter(GuestModel.event_id == event_id).all()
+    return guests
 
 
 @router.put("/{event_id}", response_model=EventOut)

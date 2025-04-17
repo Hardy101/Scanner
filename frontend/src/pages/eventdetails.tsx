@@ -13,12 +13,6 @@ import { formData } from "./home";
 import { url } from "../constants/variables";
 import { Guest } from "../constants/interfaces";
 
-const guestList = [
-  { id: 0, initials: "DA", name: "David Aguero", tags: ["vip", "family"] },
-  { id: 1, initials: "BL", name: "Brock Lesnar", tags: ["wrestler"] },
-  { id: 2, initials: "RG", name: "Ross Geller", tags: ["killer"] },
-];
-
 const EventDetails: React.FC = () => {
   const { id } = useParams();
   const textRef = useRef<HTMLSpanElement | null>(null);
@@ -27,8 +21,9 @@ const EventDetails: React.FC = () => {
   const [isFormActive, setIsFormActive] = useState(false);
   const [guest, setGuest] = useState<Guest>({
     name: "",
-    tags: [],
+    tags: "",
   });
+  const [guestList, setGuestList] = useState([{ name: "", tags: "" }]);
   const { setIsModalActive } = useModalState();
   const [activeStep, setActiveStep] = useState("guestList");
   const [copied, setCopied] = useState(false);
@@ -40,17 +35,21 @@ const EventDetails: React.FC = () => {
   });
 
   const fetchEventDetails = async () => {
-    const response = await axios.get(`${url}/event/${id}`, {
-      withCredentials: true,
-    });
-    if (response.status == 200) {
-      const event = response.data;
-      setFormData({
-        name: event.name,
-        date: event.date,
-        location: event.location,
-        expected_guests: event.expected_guests,
-      });
+    try {
+      const [eventRes, guestsRes] = await Promise.all([
+        axios.get(`${url}/event/${id}`, { withCredentials: true }),
+        axios.get(`${url}/event/${id}/guests`),
+      ]);
+      if (eventRes.status === 200) {
+        const { name, date, location, expected_guests } = eventRes.data;
+        setFormData({ name, date, location, expected_guests });
+      }
+
+      if (guestsRes.status === 200) {
+        setGuestList(guestsRes.data);
+      }
+    } catch (err: any) {
+      console.error(`Error: ${err}`);
     }
   };
 
@@ -60,7 +59,7 @@ const EventDetails: React.FC = () => {
   }, []);
 
   // Change function for events details
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleEventFormChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
@@ -68,31 +67,28 @@ const EventDetails: React.FC = () => {
   // Change function for guest details
   const handleGuestFormChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    if (name === "tags") {
-      setGuest((prev) => ({
-        ...prev,
-        tags: value
-          .split(",")
-          .map((tag) => tag.trim())
-          .filter(Boolean),
-      }));
-    } else {
-      setGuest({ ...guest, [name]: value });
-    }
+
+    setGuest({ ...guest, [name]: value });
   };
 
   const handleGuestSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    console.log(guest);
     try {
-      const response = await axios.post(`${url}/event/${id}/guests`, guest, {
-        withCredentials: true,
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      const response = await axios.post(
+        `${url}/event/${id}/add-guest`,
+        [guest],
+        {
+          withCredentials: true,
+        }
+      );
+
       if (response.status === 200) {
         setActiveStep("success");
-        setGuest({ name: "", tags: [] });
+        fetchEventDetails();
+        setGuest({ name: "", tags: "" });
+      } else {
+        console.error("Error adding guest:", response.data);
       }
     } catch (err: any) {
       if (err.response) {
@@ -128,18 +124,20 @@ const EventDetails: React.FC = () => {
             </button>
             <h3 className="font-poppins-bold text-lg">Guest List</h3>
             <ul className="grid gap-2 divide-y divide-secondary-2 mt-6 text-xs">
-              {guestList.map(({ id, name, tags }) => (
+              {guestList.map(({ name, tags }, idx) => (
                 <li
                   onClick={() => setActiveStep("guestDetails")}
-                  key={id}
-                  className="flex flex-col pb-2 cursor-pointer hover:bg-secondary"
+                  key={idx}
+                  className="grid grid-cols-2 flex-col pb-2 cursor-pointer hover:bg-secondary"
                 >
                   <span>{name}</span>
-                  <ul className="flex gap-1 font-poppins-bold text-primary">
-                    {tags.map((tag, idx) => (
-                      <li key={idx}>{tag}</li>
-                    ))}
-                  </ul>
+
+                  <button className="text-red hover:text-red-2 text-right">
+                    <i className="fa-solid fa-trash"></i>
+                  </button>
+                  <span className="col-span-2 font-poppins-bold text-primary">
+                    {tags}
+                  </span>
                 </li>
               ))}
             </ul>
@@ -324,7 +322,7 @@ const EventDetails: React.FC = () => {
           id="name"
           name="name"
           value={formData.name}
-          onChange={handleChange}
+          onChange={handleEventFormChange}
           className={`w-full border-l-4 text-lg pl-3 pr-4 py-1 outline-none ${
             isFormActive
               ? "bg-secondary text-primary border-secondary-2"
@@ -341,7 +339,7 @@ const EventDetails: React.FC = () => {
               id="date"
               name="date"
               value={formData.date}
-              onChange={handleChange}
+              onChange={handleEventFormChange}
               className={`w-full outline-none ${
                 isFormActive
                   ? "bg-secondary text-primary"
@@ -356,7 +354,7 @@ const EventDetails: React.FC = () => {
               id="location"
               name="location"
               value={formData.location}
-              onChange={handleChange}
+              onChange={handleEventFormChange}
               className={`w-full outline-none ${
                 isFormActive
                   ? "bg-secondary text-primary"
@@ -376,16 +374,14 @@ const EventDetails: React.FC = () => {
             id="expected_guests"
             className="mt-8 text-sm grid grid-cols-3 gap-4"
           >
-            {guestList.map(({ id, name, tags }) => (
+            {guestList.map(({ name, tags }, idx) => (
               <li
-                key={id}
+                key={idx}
                 className="flex flex-col text-left bg-secondary-3 border border-shadow rounded-xl p-2"
               >
                 <span>{name}</span>
                 <ul className="flex gap-1 text-secondary font-poppins-medium text-xs">
-                  {tags.map((tag, idx) => (
-                    <li key={idx}>{tag}</li>
-                  ))}
+                  {tags}
                 </ul>
               </li>
             ))}

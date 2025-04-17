@@ -31,7 +31,10 @@ class PublicUser(BaseModel):
 # For Event Management
 class Guest(BaseModel):
     name: str
-    tags: List[str]
+    tags: str
+
+    class Config:
+        from_attributes = True
 
 
 class EventBase(BaseModel):

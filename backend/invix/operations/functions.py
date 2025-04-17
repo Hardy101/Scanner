@@ -43,8 +43,8 @@ def add_guests_to_event(db: Session, event_id: int, guests: List[schemas.Guest])
     for guest in guests:
         db_guest = models.Guest(
             name=guest.name,
-            tags=",".join(guest.tags),  # Store the tags as a comma-separated string
-            event_id=db_event.id,  # Link the guest to the event
+            tags=guest.tags,
+            event_id=db_event.id,
         )
         db.add(db_guest)
 

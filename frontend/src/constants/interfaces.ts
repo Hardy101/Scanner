@@ -1,4 +1,4 @@
 export interface Guest {
   name: string;
-  tags: string[];
+  tags: string;
 }
