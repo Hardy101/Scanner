@@ -10,7 +10,7 @@ import Modal from "../components/modal";
 import { useModalState } from "../store/useModalStore";
 import Overlay from "../components/overlay";
 import { formData } from "./home";
-import { url } from "./register";
+import { url } from "../constants/variables";
 import { Guest } from "../constants/interfaces";
 
 const guestList = [

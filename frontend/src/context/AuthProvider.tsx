@@ -7,6 +7,8 @@ import React, {
   ReactNode,
 } from "react";
 
+import { url } from "../constants/variables";
+
 interface UserInfo {
   id: number;
   name: string;
@@ -22,8 +24,6 @@ interface AuthContextType {
   login: () => void;
   logout: () => Promise<boolean>;
 }
-
-import { url } from "../pages/register";
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 

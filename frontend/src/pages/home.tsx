@@ -10,7 +10,7 @@ import Overlay from "../components/overlay";
 import Modal from "../components/modal";
 import { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthProvider";
-import { url } from "./register";
+import { url } from "../constants/variables";
 import axios from "axios";
 import { useEventStore } from "../store/useEventsStore";
 import LoadingComponent from "../components/loading";

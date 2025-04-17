@@ -2,7 +2,7 @@
 import { create } from "zustand";
 import axios from "axios";
 
-import { url } from "../pages/register";
+import { url } from "../constants/variables";
 
 interface Event {
   id: number;
@@ -13,7 +13,7 @@ interface Event {
 }
 
 interface EventStore {
-  events: Event[]; 
+  events: Event[];
   clearEvents: () => void;
   isLoading: boolean;
   error: string | null;
