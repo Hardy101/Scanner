@@ -56,12 +56,14 @@ const Login = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
     if (validateForm()) {
       try {
         await axios.post(`${url}/auth/login`, formData, {
           withCredentials: true,
           headers: { "Content-Type": "application/json" },
         });
+
         login();
         navigate("/home");
       } catch (err: any) {

@@ -87,7 +87,7 @@ def add_guests(event_id: int, guests: List[Guest], db: Session = Depends(get_db)
 
 
 # Route to get guests by event ID
-@router.get("/guests/{event_id}", response_model=List[Guest])
+@router.get("/guests/{event_id}", response_model=List[GuestResponse])
 def get_guests_by_event(event_id: int, db: Session = Depends(get_db)):
     guests = db.query(GuestModel).filter(GuestModel.event_id == event_id).all()
     return guests

@@ -12,12 +12,14 @@ import Overlay from "../components/overlay";
 import { formData } from "./home";
 import { url } from "../constants/variables";
 import { Guest } from "../constants/interfaces";
+import ToastNotification from "../components/toast";
 
 const EventDetails: React.FC = () => {
   const { id } = useParams();
   const textRef = useRef<HTMLSpanElement | null>(null);
   const navigate = useNavigate();
 
+  const [showToast, setShowToast] = useState(false);
   const [isFormActive, setIsFormActive] = useState(false);
   const [isFormChanged, SetisFormChanged] = useState(false);
   const [guest, setGuest] = useState<Guest>({
@@ -109,6 +111,10 @@ const EventDetails: React.FC = () => {
         }
       );
       if (response.status === 200) {
+        setShowToast(true);
+        setTimeout(() => {
+          setShowToast(false);
+        }, 3000);
         fetchEventDetails();
       } else {
         console.error("Error deleting guest:", response.data);
@@ -171,7 +177,7 @@ const EventDetails: React.FC = () => {
                   key={id}
                   className="grid grid-cols-2 flex-col pb-2 cursor-pointer hover:bg-secondary"
                 >
-                  <span>{name}</span>
+                  <span>{name}{id}</span>
 
                   <button
                     onClick={() => handleDeleteGuest(id)}
@@ -326,6 +332,12 @@ const EventDetails: React.FC = () => {
           </div>
         )}
       </Modal>
+      {showToast && (
+        <ToastNotification
+          onClose={() => setShowToast(false)}
+          text="Guest deleted successfully!"
+        />
+      )}
 
       <Overlay />
 
