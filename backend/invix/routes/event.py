@@ -93,6 +93,7 @@ def get_guests_by_event(event_id: int, db: Session = Depends(get_db)):
     return guests
 
 
+# Update an event by ID
 @router.put("/update/{event_id}", response_model=EventOut)
 def update_event(event_id: int, updated: EventUpdate, db: Session = Depends(get_db)):
     event = db.query(Event).filter(Event.id == event_id).first()
@@ -107,6 +108,7 @@ def update_event(event_id: int, updated: EventUpdate, db: Session = Depends(get_
     return event
 
 
+# Delete an event by ID
 @router.delete("/delete/{event_id}")
 def delete_event(event_id: int, db: Session = Depends(get_db)):
     event = db.query(Event).filter(Event.id == event_id).first()
@@ -118,6 +120,7 @@ def delete_event(event_id: int, db: Session = Depends(get_db)):
     return {"message": "Event deleted"}
 
 
+# Delete a guest by ID
 @router.delete("/delete-guest/{guest_id}")
 def delete_guest(guest_id: int, db: Session = Depends(get_db)):
     guest = db.query(GuestModel).filter(GuestModel.id == guest_id).first()
