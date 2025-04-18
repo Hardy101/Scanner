@@ -14,7 +14,7 @@ import { url } from "../constants/variables";
 import axios from "axios";
 import { useEventStore } from "../store/useEventsStore";
 import LoadingComponent from "../components/loading";
-import { formatDate } from "../utils/functions";
+import { formatDate, fancyDateToday } from "../utils/functions";
 import LgNavbar from "../components/lgNavbar";
 
 export interface formData {
@@ -25,6 +25,7 @@ export interface formData {
 }
 
 const Home: React.FC = () => {
+  const { dayName, fullDate } = fancyDateToday(); // Get the current date and day name
   const navigate = useNavigate();
   const { user } = useAuth();
   const { setIsDropdownActive } = useDropdownState();
@@ -187,8 +188,8 @@ const Home: React.FC = () => {
 
       <div className="nav flex items-center justify-between text-sm">
         <p className="grid text-left">
-          <span>Sunday, </span>
-          <span>15th October 2025</span>
+          <span>{dayName}, </span>
+          <span>{fullDate}</span>
         </p>
         <LgNavbar />
         <NavButton
@@ -208,9 +209,13 @@ const Home: React.FC = () => {
         {isLoading ? (
           <LoadingComponent />
         ) : (
-          <ul id="events" className="mt-8 text-black grid md:grid-cols-3 gap-8">
+          <ul
+            id="events"
+            className="mt-8 text-black grid md:grid-cols-3 items-start gap-8"
+          >
             {events.map((event) => (
               <li key={event.id} className="relative bg-white rounded-xl p-4">
+                {/* Floating elements */}
                 <button id="linkout" className="absolute -bottom-2 -right-2">
                   <Link
                     to={`/event/${event.id}`}
@@ -226,7 +231,8 @@ const Home: React.FC = () => {
                   </span>
                   <span>{formatDate(event.date).month}</span>
                 </div>
-                <span className="border-l-4 border-black text-lg bg-secondary pl-3 pr-4 py-1 text-black">
+                {/* End of floating elements */}
+                <span className="inline-block max-w-4/5 border-l-4 border-black text-lg bg-secondary pl-3 pr-4 py-1 text-black my-auto">
                   {event.name}
                 </span>
                 <ul className="text-xs text-gray-1 mt-5">

@@ -11,11 +11,13 @@ import Login from "./pages/login";
 import PrivateRoute from "./components/PrivateRoute";
 import PublicRoute from "./components/PublicRoute";
 import { AuthProvider } from "./context/AuthProvider";
+import ToastNotification from "./components/toast";
 
 function App() {
   return (
     <main>
       <section className="min-h-screen overflow-clip font-poppins">
+        <ToastNotification />
         <AuthProvider>
           <BrowserRouter>
             <Routes>

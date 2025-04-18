@@ -12,14 +12,15 @@ import Overlay from "../components/overlay";
 import { formData } from "./home";
 import { url } from "../constants/variables";
 import { Guest } from "../constants/interfaces";
-import ToastNotification from "../components/toast";
+import { useToastStore } from "../store/useToastStore";
+import { copyToClipboard } from "../utils/functions";
 
 const EventDetails: React.FC = () => {
   const { id } = useParams();
   const textRef = useRef<HTMLSpanElement | null>(null);
   const navigate = useNavigate();
 
-  const [showToast, setShowToast] = useState(false);
+  const { setIsToastActive, setText } = useToastStore();
   const [isFormActive, setIsFormActive] = useState(false);
   const [isFormChanged, SetisFormChanged] = useState(false);
   const [guest, setGuest] = useState<Guest>({
@@ -89,6 +90,8 @@ const EventDetails: React.FC = () => {
       if (response.status === 200) {
         setActiveStep("success");
         fetchEventDetails();
+        setIsToastActive(true);
+        setText("Guest added successfully!");
       } else {
         console.error("Error adding guest:", response.data);
       }
@@ -102,7 +105,6 @@ const EventDetails: React.FC = () => {
   };
 
   const handleDeleteGuest = async (guestId: string) => {
-    console.log("Guest ID to delete:", guestId);
     try {
       const response = await axios.delete(
         `${url}/event/delete-guest/${guestId}`,
@@ -111,13 +113,28 @@ const EventDetails: React.FC = () => {
         }
       );
       if (response.status === 200) {
-        setShowToast(true);
-        setTimeout(() => {
-          setShowToast(false);
-        }, 3000);
+        setIsToastActive(true);
+        setText("Guest deleted successfully!");
         fetchEventDetails();
       } else {
         console.error("Error deleting guest:", response.data);
+      }
+    } catch (err: any) {
+      console.error(`Error: ${err}`);
+    }
+  };
+
+  const handleDeleteEvent = async () => {
+    try {
+      const response = await axios.delete(`${url}/event/delete/${id}`, {
+        withCredentials: true,
+      });
+      if (response.status === 200) {
+        setIsToastActive(true);
+        setText("Event deleted successfully!");
+        navigate("/home");
+      } else {
+        console.error("Error deleting event:", response.data);
       }
     } catch (err: any) {
       console.error(`Error: ${err}`);
@@ -146,16 +163,6 @@ const EventDetails: React.FC = () => {
     }
   };
 
-  const handleCopy = () => {
-    if (textRef.current) {
-      const textToCopy = textRef.current.innerText;
-      navigator.clipboard.writeText(textToCopy).then(() => {
-        setCopied(true);
-        setTimeout(() => setCopied(false), 2000);
-      });
-    }
-  };
-
   return (
     <div className="relative min-h-screen bg-primary text-white p-4 md:p-8">
       {/* Floating Elements */}
@@ -177,7 +184,10 @@ const EventDetails: React.FC = () => {
                   key={id}
                   className="grid grid-cols-2 flex-col pb-2 cursor-pointer hover:bg-secondary"
                 >
-                  <span>{name}{id}</span>
+                  <span>
+                    {name}
+                    {id}
+                  </span>
 
                   <button
                     onClick={() => handleDeleteGuest(id)}
@@ -215,7 +225,12 @@ const EventDetails: React.FC = () => {
                   @qrscanneer/scarlettjohanson
                 </span>
                 <button
-                  onClick={() => handleCopy()}
+                  onClick={() => {
+                    copyToClipboard(textRef.current).then(() => {
+                      setCopied(true);
+                      setTimeout(() => setCopied(false), 2000);
+                    });
+                  }}
                   className="bg-primary text-white rounded-md px-2 py-1"
                 >
                   {copied ? "copied!" : "copy"}
@@ -305,7 +320,12 @@ const EventDetails: React.FC = () => {
                 @qrscanneer/{guest.name}
               </span>
               <button
-                onClick={() => handleCopy()}
+                onClick={() => {
+                  copyToClipboard(textRef.current).then(() => {
+                    setCopied(true);
+                    setTimeout(() => setCopied(false), 2000);
+                  });
+                }}
                 className="bg-primary text-white rounded-md px-2 py-1 text-sm"
               >
                 {copied ? "copied!" : "copy"}
@@ -332,34 +352,37 @@ const EventDetails: React.FC = () => {
           </div>
         )}
       </Modal>
-      {showToast && (
-        <ToastNotification
-          onClose={() => setShowToast(false)}
-          text="Guest deleted successfully!"
-        />
-      )}
 
       <Overlay />
 
-      {/* Logic For editing event details */}
+      {/* Action buttons for editing event details */}
       {isFormActive ? (
         <p
           id="formActions"
-          className="animate__animated animate__fadeInUp absolute w-full left-0 bottom-0 flex justify-center gap-4 p-4 text-sm"
+          className="animate__animated animate__fadeInUp absolute w-full left-0 bottom-0 flex justify-start gap-4 p-4 text-sm"
         >
           <button
+            onClick={handleDeleteEvent}
+            className="flex gap-2 items-center bg-white text-red py-1 px-4 rounded-md font-poppins-bold"
+          >
+            Delete event
+            <i className="fa-solid fa-trash"></i>
+          </button>
+          <button
             onClick={() => setIsFormActive(false)}
-            className="bg-red py-1 px-4 rounded-md text-white font-poppins-bold"
+            className="flex gap-2 items-center bg-red text-white py-1 px-4 rounded-md font-poppins-bold"
           >
             Cancel changes
+            <i className="fa-solid fa-xmark"></i>
           </button>
           <button
             onClick={updateEventDetails}
             className={`${
               !isFormChanged ? "bg-gray-400" : "bg-white"
-            } py-1 px-16 rounded-md text-primary font-poppins-bold`}
+            } flex gap-2 items-center ml-auto py-1 px-16 rounded-md text-primary font-poppins-bold`}
           >
             Update event
+            <i className="fa-solid fa-pen-nib"></i>
           </button>
         </p>
       ) : (

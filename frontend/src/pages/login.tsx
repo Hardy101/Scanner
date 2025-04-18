@@ -4,6 +4,7 @@ import axios from "axios";
 
 import { url } from "../constants/variables";
 import { useAuth } from "../context/AuthProvider";
+import { useToastStore } from "../store/useToastStore";
 
 interface formData {
   email: string;
@@ -13,6 +14,8 @@ interface formData {
 const Login = () => {
   const navigate = useNavigate();
   const { login } = useAuth();
+
+  const { setIsToastActive, setText } = useToastStore();
 
   const [formData, setFormData] = useState<formData>({
     email: "",
@@ -65,6 +68,8 @@ const Login = () => {
         });
 
         login();
+        setIsToastActive(true);
+        setText("Login successful");
         navigate("/home");
       } catch (err: any) {
         console.error("Login error", err);

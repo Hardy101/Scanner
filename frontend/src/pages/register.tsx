@@ -2,9 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router";
 import axios from "axios";
 
-import { useModalState } from "../store/useModalStore";
-import Modal from "../components/modal";
-import { gifs } from "../constants/media";
+import { useToastStore } from "../store/useToastStore";
 import { url } from "../constants/variables";
 
 interface FormData {
@@ -16,6 +14,7 @@ interface FormData {
 const Register = () => {
   const navigate = useNavigate();
 
+  const { setIsToastActive, setText } = useToastStore();
   const [formData, setFormData] = useState<FormData>({
     name: "",
     email: "",
@@ -33,8 +32,6 @@ const Register = () => {
     password: "",
     general: "",
   });
-
-  const { setIsModalActive } = useModalState();
 
   const validateForm = () => {
     let valid = true;
@@ -68,12 +65,9 @@ const Register = () => {
       response
         .then(
           () => (
-            // console.log(res.data),
-            setIsModalActive(true),
-            setTimeout(() => {
-              navigate("/login");
-              setIsModalActive(false);
-            }, 1000)
+            setIsToastActive(true),
+            setText("Registration successful!"),
+            navigate("/login")
           )
         )
         .catch(
@@ -94,9 +88,6 @@ const Register = () => {
 
   return (
     <div className="relative min-h-screen bg-primary py-16 flex flex-col gap-4 text-white text-center">
-      <Modal classNames="text-black">
-        <img className="w-2/5 mx-auto" src={gifs.success} />
-      </Modal>
       <h2 className="text-2xl font-poppins-medium">Welcome to</h2>
       <h1 className="text-4xl font-poppins-bold">INVIX</h1>
       <p className="text-sm">
