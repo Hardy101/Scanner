@@ -50,7 +50,6 @@ const Login = () => {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    // setFormData({ ...formData, [name]: value });
     setFormData((prev) => {
       if (prev[name as keyof formData] === value) return prev;
       return { ...prev, [name]: value };

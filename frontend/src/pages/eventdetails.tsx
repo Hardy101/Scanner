@@ -57,11 +57,6 @@ const EventDetails: React.FC = () => {
     }
   };
 
-  // Load Event Details on initial laod
-  useEffect(() => {
-    fetchEventDetails();
-  }, []);
-
   // Change function for events details
   const handleEventFormChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -162,6 +157,11 @@ const EventDetails: React.FC = () => {
       }
     }
   };
+
+  // Load Event Details on initial laod
+  useEffect(() => {
+    fetchEventDetails();
+  }, []);
 
   return (
     <div className="relative min-h-screen bg-primary text-white p-4 md:p-8">
