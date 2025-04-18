@@ -19,11 +19,12 @@ const EventDetails: React.FC = () => {
   const navigate = useNavigate();
 
   const [isFormActive, setIsFormActive] = useState(false);
+  const [isFormChanged, SetisFormChanged] = useState(false);
   const [guest, setGuest] = useState<Guest>({
     name: "",
     tags: "",
   });
-  const [guestList, setGuestList] = useState([{ name: "", tags: "" }]);
+  const [guestList, setGuestList] = useState([{ id: "", name: "", tags: "" }]);
   const { setIsModalActive } = useModalState();
   const [activeStep, setActiveStep] = useState("guestList");
   const [copied, setCopied] = useState(false);
@@ -38,7 +39,7 @@ const EventDetails: React.FC = () => {
     try {
       const [eventRes, guestsRes] = await Promise.all([
         axios.get(`${url}/event/${id}`, { withCredentials: true }),
-        axios.get(`${url}/event/${id}/guests`),
+        axios.get(`${url}/event/guests/${id}`),
       ]);
       if (eventRes.status === 200) {
         const { name, date, location, expected_guests } = eventRes.data;
@@ -61,22 +62,22 @@ const EventDetails: React.FC = () => {
   // Change function for events details
   const handleEventFormChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
+    SetisFormChanged(true);
     setFormData({ ...formData, [name]: value });
   };
 
   // Change function for guest details
   const handleGuestFormChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-
     setGuest({ ...guest, [name]: value });
   };
 
   const handleGuestSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(guest);
+
     try {
       const response = await axios.post(
-        `${url}/event/${id}/add-guest`,
+        `${url}/event/add-guest/${id}`,
         [guest],
         {
           withCredentials: true,
@@ -86,7 +87,6 @@ const EventDetails: React.FC = () => {
       if (response.status === 200) {
         setActiveStep("success");
         fetchEventDetails();
-        setGuest({ name: "", tags: "" });
       } else {
         console.error("Error adding guest:", response.data);
       }
@@ -95,6 +95,47 @@ const EventDetails: React.FC = () => {
         console.error(`Error: ${err.response.data}`);
       } else {
         console.error(`Error: ${err.message}`);
+      }
+    }
+  };
+
+  const handleDeleteGuest = async (guestId: string) => {
+    console.log("Guest ID to delete:", guestId);
+    try {
+      const response = await axios.delete(
+        `${url}/event/delete-guest/${guestId}`,
+        {
+          withCredentials: true,
+        }
+      );
+      if (response.status === 200) {
+        fetchEventDetails();
+      } else {
+        console.error("Error deleting guest:", response.data);
+      }
+    } catch (err: any) {
+      console.error(`Error: ${err}`);
+    }
+  };
+
+  const updateEventDetails = async () => {
+    if (!isFormChanged) return;
+    else {
+      try {
+        const response = await axios.put(
+          `${url}/event/update/${id}`,
+          formData,
+          {
+            withCredentials: true,
+          }
+        );
+        if (response.status === 200) {
+          setIsFormActive(false);
+        } else {
+          console.error("Error updating event:", response.data);
+        }
+      } catch (err: any) {
+        console.error(`Error: ${err}`);
       }
     }
   };
@@ -123,17 +164,21 @@ const EventDetails: React.FC = () => {
               <i className="lni lni-xmark"></i>
             </button>
             <h3 className="font-poppins-bold text-lg">Guest List</h3>
-            <ul className="grid gap-2 divide-y divide-secondary-2 mt-6 text-xs">
-              {guestList.map(({ name, tags }, idx) => (
+            <ul className="grid gap-2 divide-y divide-secondary-2 mt-6 text-xs max-h-72 overflow-y-auto">
+              {guestList.map(({ id, name, tags }) => (
                 <li
-                  onClick={() => setActiveStep("guestDetails")}
-                  key={idx}
+                  // onClick={() => setActiveStep("guestDetails")}
+                  key={id}
                   className="grid grid-cols-2 flex-col pb-2 cursor-pointer hover:bg-secondary"
                 >
                   <span>{name}</span>
 
-                  <button className="text-red hover:text-red-2 text-right">
-                    <i className="fa-solid fa-trash"></i>
+                  <button
+                    onClick={() => handleDeleteGuest(id)}
+                    className="flex items-center gap-2 ml-auto bg-red text-right text-white px-2 py-1 rounded-sm hover:bg-red-2"
+                  >
+                    <span>Delete</span>
+                    {/* <i className="fa-solid fa-trash"></i> */}
                   </button>
                   <span className="col-span-2 font-poppins-bold text-primary">
                     {tags}
@@ -204,6 +249,7 @@ const EventDetails: React.FC = () => {
                 onChange={handleGuestFormChange}
                 placeholder="Enter Name"
                 className="w-full bg-secondary text-primary placeholder:text-primary px-2 py-2 text-xs rounded-sm"
+                required
               />
             </div>
             <div className="form-control grid gap-2 mt-2">
@@ -215,6 +261,7 @@ const EventDetails: React.FC = () => {
                 onChange={handleGuestFormChange}
                 placeholder="Enter Tag"
                 className="w-full bg-secondary text-primary placeholder:text-primary px-2 py-2 text-xs rounded-sm"
+                required
               />
             </div>
             <div className="form-control mt-8 flex gap-4">
@@ -238,7 +285,7 @@ const EventDetails: React.FC = () => {
             <span className="text-xl font-poppins-medium">
               Profile Created Successfully
             </span>
-            <span className="mt-8 block">Scarlett Johanson</span>
+            <span className="mt-8 block">{guest.name}</span>
             <img
               src={icons.qrcode}
               alt="QR code of profile created successfully"
@@ -249,7 +296,7 @@ const EventDetails: React.FC = () => {
             />
             <p className="inline-flex items-center flex-wrap gap-2 mx-auto">
               <span ref={textRef} className="text-gray-1 underline">
-                @qrscanneer/scarlettjohanson
+                @qrscanneer/{guest.name}
               </span>
               <button
                 onClick={() => handleCopy()}
@@ -260,12 +307,18 @@ const EventDetails: React.FC = () => {
             </p>
             <div className="form-control mt-8 flex gap-4">
               <ActionButton
-                onClick={() => setActiveStep("addGuest")}
+                onClick={() => {
+                  setActiveStep("addGuest");
+                  setGuest({ name: "", tags: "" });
+                }}
                 text="Add More Guests"
                 classNames="w-full bg-primary text-white rounded-full"
               />
               <ActionButton
-                onClick={() => setActiveStep("guestList")}
+                onClick={() => {
+                  setActiveStep("guestList");
+                  setGuest({ name: "", tags: "" });
+                }}
                 text="Cancel"
                 classNames="bg-white text-primary border-2 border-primary rounded-full"
               />
@@ -280,19 +333,21 @@ const EventDetails: React.FC = () => {
       {isFormActive ? (
         <p
           id="formActions"
-          className="absolute w-full left-0 bottom-0 flex justify-between gap-4 p-4 text-sm"
+          className="animate__animated animate__fadeInUp absolute w-full left-0 bottom-0 flex justify-center gap-4 p-4 text-sm"
         >
           <button
             onClick={() => setIsFormActive(false)}
             className="bg-red py-1 px-4 rounded-md text-white font-poppins-bold"
           >
-            Cancel
+            Cancel changes
           </button>
           <button
-            onClick={() => setIsFormActive(false)}
-            className="flex-grow bg-white py-1 rounded-md text-primary font-poppins-bold"
+            onClick={updateEventDetails}
+            className={`${
+              !isFormChanged ? "bg-gray-400" : "bg-white"
+            } py-1 px-16 rounded-md text-primary font-poppins-bold`}
           >
-            Save
+            Update event
           </button>
         </p>
       ) : (

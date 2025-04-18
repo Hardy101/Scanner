@@ -1,8 +1,15 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from models import Event, Guest as GuestModel
-from schemas import PublicUser
-from schemas import EventUpdate, EventOut, EventResponse, Guest, EventCreate
+from schemas import (
+    PublicUser,
+    EventUpdate,
+    EventOut,
+    EventResponse,
+    Guest,
+    EventCreate,
+    GuestResponse,
+)
 from database import get_db
 from operations.functions import (
     get_events as fetch_events,
@@ -62,7 +69,7 @@ def get_event(event_id: int, db: Session = Depends(get_db)):
 
 
 # Route to get all guests
-@router.get("/guests/", response_model=List[Guest])
+@router.get("/guests/all", response_model=List[GuestResponse])
 def get_all_guests(db: Session = Depends(get_db)):
     guests = db.query(GuestModel).all()
     if not guests:
@@ -71,7 +78,7 @@ def get_all_guests(db: Session = Depends(get_db)):
 
 
 # Adds guests to an event and returns the updated list of guests
-@router.post("/{event_id}/add-guest/", response_model=List[Guest])
+@router.post("/add-guest/{event_id}", response_model=List[Guest])
 def add_guests(event_id: int, guests: List[Guest], db: Session = Depends(get_db)):
     add_guests_to_event(db=db, event_id=event_id, guests=guests)
 
@@ -80,13 +87,13 @@ def add_guests(event_id: int, guests: List[Guest], db: Session = Depends(get_db)
 
 
 # Route to get guests by event ID
-@router.get("/{event_id}/guests/", response_model=List[Guest])
+@router.get("/guests/{event_id}", response_model=List[Guest])
 def get_guests_by_event(event_id: int, db: Session = Depends(get_db)):
     guests = db.query(GuestModel).filter(GuestModel.event_id == event_id).all()
     return guests
 
 
-@router.put("/{event_id}", response_model=EventOut)
+@router.put("/update/{event_id}", response_model=EventOut)
 def update_event(event_id: int, updated: EventUpdate, db: Session = Depends(get_db)):
     event = db.query(Event).filter(Event.id == event_id).first()
     if not event:
@@ -100,7 +107,7 @@ def update_event(event_id: int, updated: EventUpdate, db: Session = Depends(get_
     return event
 
 
-@router.delete("/{event_id}")
+@router.delete("/delete/{event_id}")
 def delete_event(event_id: int, db: Session = Depends(get_db)):
     event = db.query(Event).filter(Event.id == event_id).first()
     if not event:
@@ -109,3 +116,14 @@ def delete_event(event_id: int, db: Session = Depends(get_db)):
     db.delete(event)
     db.commit()
     return {"message": "Event deleted"}
+
+
+@router.delete("/delete-guest/{guest_id}")
+def delete_guest(guest_id: int, db: Session = Depends(get_db)):
+    guest = db.query(GuestModel).filter(GuestModel.id == guest_id).first()
+    if not guest:
+        raise HTTPException(status_code=404, detail="Guest not found")
+
+    db.delete(guest)
+    db.commit()
+    return {"message": "Guest deleted"}

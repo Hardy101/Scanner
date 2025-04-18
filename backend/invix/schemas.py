@@ -37,6 +37,15 @@ class Guest(BaseModel):
         from_attributes = True
 
 
+class GuestResponse(BaseModel):
+    id: int
+    name: str
+    tags: str
+
+    class Config:
+        from_attributes = True
+
+
 class EventBase(BaseModel):
     name: str
     date: date

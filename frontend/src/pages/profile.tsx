@@ -72,7 +72,7 @@ const Profile: React.FC = () => {
       {isFormActive ? (
         <p
           id="formActions"
-          className="absolute w-full left-0 bottom-0 flex justify-between gap-4 p-4 text-sm"
+          className="absolute w-full left-0 bottom-0 flex justify-center gap-4 p-4 text-sm"
         >
           <button
             onClick={handleActive}
@@ -82,7 +82,7 @@ const Profile: React.FC = () => {
           </button>
           <button
             onClick={handleActive}
-            className="flex-grow bg-white py-1 rounded-md text-primary font-poppins-bold"
+            className="bg-white py-1 px-16 rounded-md text-primary font-poppins-bold"
           >
             Save
           </button>
@@ -90,12 +90,12 @@ const Profile: React.FC = () => {
       ) : (
         <p
           id="acctActions"
-          className="absolute w-full left-0 bottom-0 flex justify-between gap-4 p-4 text-sm"
+          className="absolute w-full left-0 bottom-0 flex justify-center gap-4 p-4 text-sm"
         >
           <button className="bg-red py-1 px-4 rounded-md text-white font-poppins-bold">
             Delete Account
           </button>
-          <button className="flex-grow bg-white py-1 rounded-md text-primary font-poppins-bold">
+          <button className="bg-white py-1 px-16 rounded-md text-primary font-poppins-bold">
             Sign out
           </button>
         </p>
