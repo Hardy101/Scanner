@@ -41,7 +41,7 @@ const EventDetails: React.FC = () => {
   const fetchEventDetails = async () => {
     try {
       const [eventRes, guestsRes] = await Promise.all([
-        axios.get(`${url}/event/${id}`, { withCredentials: true }),
+        axios.get(`${url}/event/get-event/${id}`, { withCredentials: true }),
         axios.get(`${url}/event/guests/${id}`),
       ]);
       if (eventRes.status === 200) {

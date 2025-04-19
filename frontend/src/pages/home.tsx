@@ -44,14 +44,15 @@ const Home: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
+    
     try {
-      const response = await axios.post(`${url}/event/add-event`, formData, {
+      const response = await axios.post(`${url}/event/add`, formData, {
         withCredentials: true,
         headers: {
           "Content-Type": "application/json",
         },
       });
+      // log("Response", response);
 
       if (response && response.status === 200) {
         const eventId = response.data.id;
