@@ -2,8 +2,8 @@ from fastapi import Depends, HTTPException, Request
 from sqlalchemy.orm import Session
 from typing import List
 import models, schemas
-from database import SessionLocal
 from models import User
+from database import SessionLocal
 from variables import ALGORITHM, SECRET_KEY
 from jose import JWTError, jwt
 
