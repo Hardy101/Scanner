@@ -1,11 +1,11 @@
 from fastapi import Depends, HTTPException, Request
 from sqlalchemy.orm import Session
 from typing import List
-from ..models import Event, Guest
-from ..schemas import EventCreate, Guest as GuestSchema
-from ..models import User
-from ..database import SessionLocal
-from ..variables import ALGORITHM, SECRET_KEY
+from models import Event, Guest
+from schemas import EventCreate, Guest as GuestSchema
+from models import User
+from database import SessionLocal
+from variables import ALGORITHM, SECRET_KEY
 from jose import JWTError, jwt
 
 

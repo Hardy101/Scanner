@@ -13,7 +13,7 @@ import { formData } from "./home";
 import { url } from "../constants/variables";
 import { Guest } from "../constants/interfaces";
 import { useToastStore } from "../store/useToastStore";
-import { copyToClipboard } from "../utils/functions";
+import { copyToClipboard, handleFileUpload } from "../utils/functions";
 
 const EventDetails: React.FC = () => {
   const { id } = useParams();
@@ -21,8 +21,9 @@ const EventDetails: React.FC = () => {
   const navigate = useNavigate();
 
   const { setIsToastActive, setText } = useToastStore();
-  const [isFormActive, setIsFormActive] = useState(false);
-  const [isFormChanged, SetisFormChanged] = useState(false);
+  const [isFormActive, setIsFormActive] = useState(false); // Track if form is active to show/hide action buttons
+  const [isFormChanged, SetisFormChanged] = useState(false); // Track if form is changed to enable the update button
+  const [singleGuest, setSingleGuest] = useState(true); // Track if single guest is selected
   const [guest, setGuest] = useState<Guest>({
     name: "",
     tags: "",
@@ -204,11 +205,6 @@ const EventDetails: React.FC = () => {
             </ul>
             <div className="flex gap-4 justify-end">
               <ActionButton
-                text="Upload Guest List (*.csv, *.xls)"
-                icon="fa-solid fa-upload"
-                classNames="bg-primary text-white rounded-md"
-              />
-              <ActionButton
                 onClick={() => setActiveStep("addGuest")}
                 text="Add Guest"
                 classNames="bg-primary text-white rounded-md"
@@ -260,42 +256,93 @@ const EventDetails: React.FC = () => {
         )}
         {activeStep == "addGuest" && (
           <form onSubmit={handleGuestSubmit} className="text-black">
-            <h3 className="font-poppins-bold text-lg">Add Guest</h3>
-            <div className="form-control grid gap-2 mt-4">
-              <label className="text-sm">Name of Guest</label>
-              <input
-                type="text"
-                name="name"
-                value={guest.name}
-                onChange={handleGuestFormChange}
-                placeholder="Enter Name"
-                className="w-full bg-secondary text-primary placeholder:text-primary px-2 py-2 text-xs rounded-sm"
-                required
-              />
-            </div>
-            <div className="form-control grid gap-2 mt-2">
-              <label className="text-sm">Tag</label>
-              <input
-                type="text"
-                name="tags"
-                value={guest.tags}
-                onChange={handleGuestFormChange}
-                placeholder="Enter Tag"
-                className="w-full bg-secondary text-primary placeholder:text-primary px-2 py-2 text-xs rounded-sm"
-                required
-              />
-            </div>
+            <h3 className="font-poppins-bold text-xl">Add guest to list</h3>
+            <p className="relative md:w-1/3 mx-auto grid grid-cols-2 text-sm font-poppins-bold text-primary text-center bg-secondary rounded-2xl p-1 mt-2">
+              <span
+                className={`absolute top-1 left-1 w-[calc(50%-0.25rem)] h-[calc(100%-0.5rem)] bg-white rounded-2xl transition-transform duration-300 ease-in-out z-0 ${
+                  singleGuest ? "translate-x-0" : "translate-x-full"
+                }`}
+              ></span>
+              <button
+                onClick={() => setSingleGuest(true)}
+                type="button"
+                className="py-2 z-10"
+              >
+                Single Guest
+              </button>
+              <button
+                onClick={() => setSingleGuest(false)}
+                type="button"
+                className="py-2 z-10"
+              >
+                Multiple Guests
+              </button>
+            </p>
+            {singleGuest && (
+              <>
+                <div className="form-control grid gap-2 mt-4">
+                  <label className="text-sm">Name of Guest</label>
+                  <input
+                    type="text"
+                    name="name"
+                    value={guest.name}
+                    onChange={handleGuestFormChange}
+                    placeholder="Enter Name"
+                    className="bg-white border-2 border-gray-400 text-primary placeholder:text-primary px-2 py-2 text-sm rounded-md focus:border-primary focus:outline-none"
+                    required
+                  />
+                </div>
+                <div className="form-control grid gap-2 mt-4">
+                  <label className="text-sm">Tag</label>
+                  <input
+                    type="text"
+                    name="tags"
+                    value={guest.tags}
+                    onChange={handleGuestFormChange}
+                    placeholder="Enter Tag"
+                    className="bg-white border-2 border-gray-400 text-primary placeholder:text-primary px-2 py-2 text-xs rounded-sm"
+                    required
+                  />
+                </div>
+              </>
+            )}
+
+            {!singleGuest && (
+              <>
+                <div className="form-control mt-4 flex flex-col gap-4">
+                  <label className="text-sm">Upload Guest List</label>
+                  <input
+                    onChange={handleFileUpload}
+                    type="file"
+                    accept=".csv,.xls,.xlsx"
+                    className="flex items-center gap-2 box-shadow-1 font-poppins-medium px-4 py-2 text-sm"
+                  />
+                </div>
+              </>
+            )}
+
             <div className="form-control mt-8 flex gap-4">
-              <ActionButton
-                text="Add Guest"
-                classNames="w-full bg-primary text-white rounded-full"
-              />
+              {singleGuest && (
+                <ActionButton
+                  text="Add Guest"
+                  icon="fa-solid fa-user-plus"
+                  classNames="w-full bg-primary text-white rounded-full"
+                />
+              )}
+              {!singleGuest && (
+                <ActionButton
+                  text="Upload guest list"
+                  icon="fa-solid fa-user-plus"
+                  classNames="w-full bg-primary text-white rounded-full"
+                />
+              )}
               <ActionButton
                 type="button"
                 onClick={() => {
                   setActiveStep("guestList");
                 }}
-                text="Cancel"
+                text="back"
+                icon="fa-solid fa-arrow-left"
                 classNames="bg-white text-primary border-2 border-primary rounded-full"
               />
             </div>

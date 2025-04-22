@@ -1,3 +1,6 @@
+// Importing necessary libraries
+import axios from "axios";
+
 // converting date format to dd-MMM
 export const formatDate = (dateStr: string) => {
   const date = new Date(dateStr);
@@ -39,4 +42,27 @@ export const copyToClipboard = (target: HTMLElement | null): Promise<void> => {
       navigator.clipboard.writeText(textToCopy);
     }
   });
+};
+
+// Function to handle file upload
+export const handleFileUpload = async (
+  e: React.ChangeEvent<HTMLInputElement>
+) => {
+  const file = e.target.files?.[0];
+
+  if (!file) return;
+
+  const formData = new FormData();
+  formData.append("file", file);
+
+  try {
+    const response = await axios.post("/event/upload-file", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    return response.status;
+  } catch (err) {
+    console.error("Upload failed:", err);
+  }
 };

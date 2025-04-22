@@ -132,7 +132,7 @@ const Register = () => {
             name="email"
             id="email"
             placeholder="Enter email"
-            value={formData.email.trim()}
+            value={formData.email.toLowerCase().trim()}
             onChange={handleChange}
             className={`${formFieldClasses} ${
               errors.email ? "border-2 border-red" : "border border-shadow"

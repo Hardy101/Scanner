@@ -1,7 +1,6 @@
 from sqlalchemy import Column, Integer, String, Date, ForeignKey, ARRAY
 from sqlalchemy.orm import relationship
-from .database import Base
-from pydantic import BaseModel
+from database import Base
 
 
 class User(Base):
