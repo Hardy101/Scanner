@@ -1,7 +1,8 @@
 from fastapi import Depends, HTTPException, Request
 from sqlalchemy.orm import Session
 from typing import List
-import models, schemas
+from ..models import Event, Guest
+from ..schemas import EventCreate, Guest as GuestSchema
 from ..models import User
 from ..database import SessionLocal
 from ..variables import ALGORITHM, SECRET_KEY
@@ -16,8 +17,8 @@ def get_db():
         db.close()
 
 
-def create_event(db: Session, event: schemas.EventCreate, user_id: int):
-    db_event = models.Event(
+def create_event(db: Session, event: EventCreate, user_id: int):
+    db_event = Event(
         name=event.name,
         date=event.date,
         location=event.location,
@@ -31,17 +32,17 @@ def create_event(db: Session, event: schemas.EventCreate, user_id: int):
 
 
 def get_events(db: Session, skip: int = 0, limit: int = 10):
-    return db.query(models.Event).offset(skip).limit(limit).all()
+    return db.query(Event).offset(skip).limit(limit).all()
 
 
-def add_guests_to_event(db: Session, event_id: int, guests: List[schemas.Guest]):
-    db_event = db.query(models.Event).filter(models.Event.id == event_id).first()
+def add_guests_to_event(db: Session, event_id: int, guests: List[GuestSchema]):
+    db_event = db.query(Event).filter(Event.id == event_id).first()
     if not db_event:
         raise HTTPException(status_code=404, detail="Event not found")
 
     # Add each guest to the event
     for guest in guests:
-        db_guest = models.Guest(
+        db_guest = Guest(
             name=guest.name,
             tags=guest.tags,
             event_id=db_event.id,
