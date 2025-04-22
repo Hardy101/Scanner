@@ -1,17 +1,16 @@
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi.responses import JSONResponse
 from sqlalchemy.orm import Session
-from database import SessionLocal
-from models import User
-from schemas import PublicUser
-from security import (
+from ..database import SessionLocal
+from ..models import User
+from ..schemas import PublicUser, UserCreate, UserLogin
+from ..security import (
     hash_password,
     verify_password,
     create_access_token,
 )
-from variables import EXPIRY_DATE
+from ..variables import EXPIRY_DATE
 from operations.functions import fetch_current_user
-from schemas import UserCreate, UserLogin
 
 router = APIRouter(tags=["Auth"])
 

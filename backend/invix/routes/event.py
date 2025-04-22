@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from models import Event, Guest as GuestModel
-from schemas import (
+from ..models import Event, Guest as GuestModel
+from ..schemas import (
     PublicUser,
     EventUpdate,
     EventOut,
@@ -10,7 +10,7 @@ from schemas import (
     EventCreate,
     GuestResponse,
 )
-from database import get_db
+from ..database import get_db
 from operations.functions import (
     get_events as fetch_events,
     create_event as create_event_crud,
