@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, File, UploadFile
 from sqlalchemy.orm import Session
 from models import Event, Guest as GuestModel
 from schemas import (
@@ -18,6 +18,8 @@ from operations.functions import (
     fetch_current_user,
 )
 from typing import List
+import pandas as pd
+from io import BytesIO
 
 router = APIRouter(tags=["Events"])
 
@@ -54,7 +56,6 @@ def create_event(
     current_user: PublicUser = Depends(fetch_current_user),
 ):
     new_event = create_event_crud(db=db, event=event, user_id=current_user.id)
-    print(new_event)
     return new_event
 
 
@@ -78,12 +79,19 @@ def get_all_guests(db: Session = Depends(get_db)):
 
 
 # Adds guests to an event and returns the updated list of guests
-@router.post("/add-guest/{event_id}", response_model=List[Guest])
-def add_guests(event_id: int, guests: List[Guest], db: Session = Depends(get_db)):
-    add_guests_to_event(db=db, event_id=event_id, guests=guests)
-
-    all_guests = db.query(GuestModel).filter(GuestModel.event_id == event_id).all()
-    return all_guests
+@router.post("/add-guest/{event_id}", response_model=Guest)
+def add_guest(event_id: int, guest: Guest, db: Session = Depends(get_db)):
+    if not guest:
+        raise HTTPException(
+            status_code=400, detail="The list of guests cannot be empty"
+        )
+    # for guest in guest:
+    if not guest.name or not guest.tags:
+        raise HTTPException(
+            status_code=400, detail="Guest name and tags cannot be empty"
+        )
+    new_guest = add_guests_to_event(db=db, event_id=event_id, guest=guest)
+    return new_guest
 
 
 # Route to get guests by event ID
@@ -91,6 +99,39 @@ def add_guests(event_id: int, guests: List[Guest], db: Session = Depends(get_db)
 def get_guests_by_event(event_id: int, db: Session = Depends(get_db)):
     guests = db.query(GuestModel).filter(GuestModel.event_id == event_id).all()
     return guests
+
+
+# Route to add guests in bulk
+@router.post("/guests-bulk/{event_id}", response_model=List[Guest])
+async def add_bulk_guests(
+    event_id: int, file: UploadFile = File(...), db: Session = Depends(get_db)
+):
+    try:
+        contents = await file.read()
+        filename = file.filename.lower()
+
+        if filename.endswith(".csv"):
+            df = pd.read_csv(BytesIO(contents))
+        elif filename.endswith(".xlsx") or filename.endswith(".xls"):
+            df = pd.read_excel(BytesIO(contents))
+        else:
+            raise HTTPException(status_code=400, detail="Unsupported file type")
+
+        processed: List[Guest] = []
+        for _, row in df.iterrows():
+            name = row.get("name")
+            tags = row.get("tags", "")
+            guest_data = Guest(name=name, tags=tags)
+            add_guests_to_event(db=db, event_id=event_id, guest=guest_data)
+            # tags = [tag.strip() for tag in str(tags_str).split(",")] if tags_str else []
+            processed.append({"name": name, "tags": tags})
+        print(processed)
+
+        return processed
+
+    except Exception as e:
+        print(e)
+        raise HTTPException(status_code=500, detail=str(e))
 
 
 # Update an event by ID

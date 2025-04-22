@@ -13,7 +13,7 @@ import { formData } from "./home";
 import { url } from "../constants/variables";
 import { Guest } from "../constants/interfaces";
 import { useToastStore } from "../store/useToastStore";
-import { copyToClipboard, handleFileUpload } from "../utils/functions";
+import { copyToClipboard } from "../utils/functions";
 
 const EventDetails: React.FC = () => {
   const { id } = useParams();
@@ -27,6 +27,7 @@ const EventDetails: React.FC = () => {
   const [guest, setGuest] = useState<Guest>({
     name: "",
     tags: "",
+    errors: "",
   });
   const [guestList, setGuestList] = useState([{ id: "", name: "", tags: "" }]);
   const { setIsModalActive } = useModalState();
@@ -75,13 +76,9 @@ const EventDetails: React.FC = () => {
     e.preventDefault();
 
     try {
-      const response = await axios.post(
-        `${url}/event/add-guest/${id}`,
-        [guest],
-        {
-          withCredentials: true,
-        }
-      );
+      const response = await axios.post(`${url}/event/add-guest/${id}`, guest, {
+        withCredentials: true,
+      });
 
       if (response.status === 200) {
         setActiveStep("success");
@@ -93,7 +90,11 @@ const EventDetails: React.FC = () => {
       }
     } catch (err: any) {
       if (err.response) {
-        console.error(`Error: ${err.response.data}`);
+        console.error(`Error: ${JSON.stringify(err.response.data)}`);
+        setGuest((prev) => ({
+          ...prev,
+          errors: err.response.data.detail,
+        }));
       } else {
         console.error(`Error: ${err.message}`);
       }
@@ -159,6 +160,34 @@ const EventDetails: React.FC = () => {
     }
   };
 
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append("file", file);
+
+    try {
+      const response = await axios.post(
+        `${url}/event/guests-bulk/${id}`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      if (response.status == 200) {
+        fetchEventDetails();
+        setActiveStep("success");
+      }
+      console.log(response.status);
+    } catch (err) {
+      console.error("Upload failed:", err);
+    }
+  };
+
   // Load Event Details on initial laod
   useEffect(() => {
     fetchEventDetails();
@@ -185,10 +214,7 @@ const EventDetails: React.FC = () => {
                   key={id}
                   className="grid grid-cols-2 flex-col pb-2 cursor-pointer hover:bg-secondary"
                 >
-                  <span>
-                    {name}
-                    {id}
-                  </span>
+                  <span>{name}</span>
 
                   <button
                     onClick={() => handleDeleteGuest(id)}
@@ -280,7 +306,10 @@ const EventDetails: React.FC = () => {
             </p>
             {singleGuest && (
               <>
-                <div className="form-control grid gap-2 mt-4">
+                <div className="form-control grid gap-2 my-4">
+                  <p className="text-red font-poppins-bold">{guest.errors}</p>
+                </div>
+                <div className="form-control grid gap-2">
                   <label className="text-sm">Name of Guest</label>
                   <input
                     type="text"
@@ -293,14 +322,14 @@ const EventDetails: React.FC = () => {
                   />
                 </div>
                 <div className="form-control grid gap-2 mt-4">
-                  <label className="text-sm">Tag</label>
+                  <label className="text-sm">Tags</label>
                   <input
                     type="text"
                     name="tags"
                     value={guest.tags}
                     onChange={handleGuestFormChange}
                     placeholder="Enter Tag"
-                    className="bg-white border-2 border-gray-400 text-primary placeholder:text-primary px-2 py-2 text-xs rounded-sm"
+                    className="bg-white border-2 border-gray-400 text-primary placeholder:text-primary px-2 py-2 text-sm rounded-sm"
                     required
                   />
                 </div>
@@ -332,7 +361,7 @@ const EventDetails: React.FC = () => {
               {!singleGuest && (
                 <ActionButton
                   text="Upload guest list"
-                  icon="fa-solid fa-user-plus"
+                  icon="fa-solid fa-paper-plane"
                   classNames="w-full bg-primary text-white rounded-full"
                 />
               )}
