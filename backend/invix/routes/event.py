@@ -24,7 +24,7 @@ router = APIRouter(tags=["Events"])
 
 @router.get("/")
 def get_status():
-    return {"message": "Your URL is working! API is up and running."}
+    return {"message": "Your URL is working! Events API is up and running."}
 
 
 # Returns the list of all the events

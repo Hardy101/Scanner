@@ -23,6 +23,7 @@ app = FastAPI(lifespan=lifespan)
 app.title = "Invix API"
 app.description = "API for Invix, a guest management system."
 
+
 @app.exception_handler(RequestValidationError)
 async def validation_exception_handler(request: Request, exc: RequestValidationError):
     logging.error(f"Validation error: {exc}")
@@ -45,6 +46,11 @@ app.add_middleware(
 
 app.include_router(auth.router, prefix="/auth")
 app.include_router(event.router, prefix="/event")
+
+
+@app.get("/")
+def get_status():
+    return {"message": "Your URL is working! API is up and running 🚀"}
 
 
 @app.get("/users", response_model=List[PublicUser])
