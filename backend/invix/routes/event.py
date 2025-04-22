@@ -11,7 +11,7 @@ from ..schemas import (
     GuestResponse,
 )
 from ..database import get_db
-from operations.functions import (
+from ..operations.functions import (
     get_events as fetch_events,
     create_event as create_event_crud,
     add_guests_to_event,

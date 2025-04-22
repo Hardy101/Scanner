@@ -10,7 +10,7 @@ from ..security import (
     create_access_token,
 )
 from ..variables import EXPIRY_DATE
-from operations.functions import fetch_current_user
+from ..operations.functions import fetch_current_user
 
 router = APIRouter(tags=["Auth"])
 
