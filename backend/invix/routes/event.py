@@ -17,11 +17,15 @@ from operations.functions import (
     create_event as create_event_crud,
     add_guests_to_event,
     fetch_current_user,
+    generate_qr_code
 )
 from typing import List
 import pandas as pd
 from io import BytesIO
 import qrcode
+import uuid
+import os
+from pathlib import Path
 
 router = APIRouter(tags=["Events"])
 
@@ -83,6 +87,8 @@ def get_all_guests(db: Session = Depends(get_db)):
 # Adds guests to an event and returns the updated list of guests
 @router.post("/add-guest/{event_id}", response_model=Guest)
 def add_guest(event_id: int, guest: Guest, db: Session = Depends(get_db)):
+    
+
     if not guest:
         raise HTTPException(
             status_code=400, detail="The list of guests cannot be empty"
@@ -92,7 +98,17 @@ def add_guest(event_id: int, guest: Guest, db: Session = Depends(get_db)):
         raise HTTPException(
             status_code=400, detail="Guest name and tags cannot be empty"
         )
-    new_guest = add_guests_to_event(db=db, event_id=event_id, guest=guest)
+    
+    qr_token = str(uuid.uuid4())
+    base_dir = Path(__file__).resolve().parent.parent.parent  # Points to backend/
+    qr_dir = base_dir / "invix" / "qr_codes"
+    qr_dir.mkdir(parents=True, exist_ok=True)
+    qr_path = qr_dir / f"{qr_token}.png"
+    img = qrcode.make(qr_token)
+    img.save(qr_path)
+
+    new_guest = add_guests_to_event(db=db, event_id=event_id, guest=guest, uuid=qr_token)
+    # Generate QR code image from token
     return new_guest
 
 
@@ -122,12 +138,18 @@ async def add_bulk_guests(
         processed: List[Guest] = []
         for _, row in df.iterrows():
             name = row.get("name")
+            qr_token = str(uuid.uuid4())
             tags = row.get("tags", "")
             guest_data = Guest(name=name, tags=tags)
-            add_guests_to_event(db=db, event_id=event_id, guest=guest_data)
-            # tags = [tag.strip() for tag in str(tags_str).split(",")] if tags_str else []
+            add_guests_to_event(db=db, event_id=event_id, guest=guest_data, uuid=qr_token)
+            base_dir = Path(__file__).resolve().parent.parent.parent  # Points to backend/
+            qr_dir = base_dir / "invix" / "qr_codes" # Directory for QR codes
+            qr_dir.mkdir(parents=True, exist_ok=True) # Create the directory if it doesn't exist
+            qr_path = qr_dir / f"{qr_token}.png" # Path for the QR code image
+            img = qrcode.make(qr_token) # Generate QR code image from token
+            img.save(qr_path)
             processed.append({"name": name, "tags": tags})
-        print(processed)
+        # print(processed)
 
         return processed
 
@@ -173,18 +195,3 @@ def delete_guest(guest_id: int, db: Session = Depends(get_db)):
     db.delete(guest)
     db.commit()
     return {"message": "Guest deleted"}
-
-
-@router.get("/create-qr-code?{guest_name}")
-def create_qr_code(guest_name: str, db: Session = Depends(get_db)):
-    # qr_data = f"https://yourfrontend.com/event/{event_id}"
-
-    # Generate QR code image
-    qr = qrcode.make(qr_data)
-
-    # Save it to a buffer
-    buf = BytesIO()
-    qr.save(buf, format="PNG")
-    buf.seek(0)
-
-    return StreamingResponse(buf, media_type="image/png")

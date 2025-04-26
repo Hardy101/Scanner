@@ -1,6 +1,7 @@
 from sqlalchemy import Column, Integer, String, Date, ForeignKey, ARRAY
 from sqlalchemy.orm import relationship
 from database import Base
+from uuid import uuid4
 
 
 class User(Base):
@@ -35,6 +36,8 @@ class Guest(Base):
     name = Column(String, nullable=False)
     tags = Column(String, default="")
     event_id = Column(Integer, ForeignKey("events.id"))
+    qr_token = Column(String, unique=True, default=lambda: str(uuid4()))
+
     event = relationship("Event", back_populates="guests")
 
     def __repr__(self):
