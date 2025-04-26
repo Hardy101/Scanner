@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException, File, UploadFile
+from fastapi.responses import StreamingResponse
 from sqlalchemy.orm import Session
 from models import Event, Guest as GuestModel
 from schemas import (
@@ -20,6 +21,7 @@ from operations.functions import (
 from typing import List
 import pandas as pd
 from io import BytesIO
+import qrcode
 
 router = APIRouter(tags=["Events"])
 
@@ -171,3 +173,18 @@ def delete_guest(guest_id: int, db: Session = Depends(get_db)):
     db.delete(guest)
     db.commit()
     return {"message": "Guest deleted"}
+
+
+@router.get("/create-qr-code?{guest_name}")
+def create_qr_code(guest_name: str, db: Session = Depends(get_db)):
+    # qr_data = f"https://yourfrontend.com/event/{event_id}"
+
+    # Generate QR code image
+    qr = qrcode.make(qr_data)
+
+    # Save it to a buffer
+    buf = BytesIO()
+    qr.save(buf, format="PNG")
+    buf.seek(0)
+
+    return StreamingResponse(buf, media_type="image/png")

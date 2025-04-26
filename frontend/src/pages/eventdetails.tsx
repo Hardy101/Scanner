@@ -188,7 +188,7 @@ const EventDetails: React.FC = () => {
     }
   };
 
-  // Load Event Details on initial laod
+  // Load Event Details on initial load
   useEffect(() => {
     fetchEventDetails();
   }, []);
