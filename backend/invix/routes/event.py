@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException, File, UploadFile
-from fastapi.responses import StreamingResponse
+from fastapi.responses import StreamingResponse, FileResponse
 from sqlalchemy.orm import Session
 from models import Event, Guest as GuestModel
 from schemas import (
@@ -21,7 +21,8 @@ from operations.functions import (
 from typing import List
 import pandas as pd
 from io import BytesIO
-import qrcode
+import uuid
+import os
 
 router = APIRouter(tags=["Events"])
 
@@ -80,8 +81,8 @@ def get_all_guests(db: Session = Depends(get_db)):
     return guests
 
 
-# Adds guests to an event and returns the updated list of guests
-@router.post("/add-guest/{event_id}", response_model=Guest)
+# Adds guests to an event and returns the newly added guest
+@router.post("/add-guest/{event_id}", response_model=GuestResponse)
 def add_guest(event_id: int, guest: Guest, db: Session = Depends(get_db)):
     if not guest:
         raise HTTPException(
@@ -92,7 +93,9 @@ def add_guest(event_id: int, guest: Guest, db: Session = Depends(get_db)):
         raise HTTPException(
             status_code=400, detail="Guest name and tags cannot be empty"
         )
-    new_guest = add_guests_to_event(db=db, event_id=event_id, guest=guest)
+    new_guest = add_guests_to_event(
+        db=db, event_id=event_id, guest=guest, uuid=str(uuid.uuid4())
+    )
     return new_guest
 
 
@@ -175,16 +178,15 @@ def delete_guest(guest_id: int, db: Session = Depends(get_db)):
     return {"message": "Guest deleted"}
 
 
-@router.get("/create-qr-code")
-def create_qr_code(guest_name: str, db: Session = Depends(get_db)):
-    qr_data = f"http://localhost:5173/qrcode/{guest_name}"
+@router.get("/qrcode/{uuid}")
+def view_qrcode(uuid: str, db: Session = Depends(get_db)):
+    guest = db.query(GuestModel).filter(GuestModel.qr_token == uuid).first()
+    if not guest:
+        raise HTTPException(status_code=404, detail="Guest not found")
 
-    # Generate QR code image
-    qr = qrcode.make(qr_data)
+    file_path = guest.qr_path
 
-    # Save it to a buffer
-    buf = BytesIO()
-    qr.save(buf, format="PNG")
-    buf.seek(0)
+    if not os.path.exists(file_path):
+        raise HTTPException(status_code=404, detail="QR code file not found")
 
-    return StreamingResponse(buf, media_type="image/png")
+    return FileResponse(path=guest.qr_path, media_type="image/png")

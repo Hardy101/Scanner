@@ -41,6 +41,7 @@ class GuestResponse(BaseModel):
     id: int
     name: str
     tags: str
+    qr_token: str
 
     class Config:
         from_attributes = True

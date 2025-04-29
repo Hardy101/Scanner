@@ -35,8 +35,10 @@ class Guest(Base):
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, nullable=False)
     tags = Column(String, default="")
+    email = Column(String, default="")
     event_id = Column(Integer, ForeignKey("events.id"))
     qr_token = Column(String, unique=True, default=lambda: str(uuid4()))
+    qr_path = Column(String, default="null", unique=True)
 
     event = relationship("Event", back_populates="guests")
 

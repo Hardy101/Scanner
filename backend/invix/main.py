@@ -11,6 +11,7 @@ from database import get_db, init_db
 from sqlalchemy.orm import Session
 from typing import List
 import logging
+from fastapi.staticfiles import StaticFiles
 
 
 @asynccontextmanager
@@ -22,6 +23,7 @@ async def lifespan(app: FastAPI):
 app = FastAPI(lifespan=lifespan)
 app.title = "Invix API"
 app.description = "API for Invix, a guest management system."
+app.mount("/static", StaticFiles(directory="static"), name="static")
 
 
 @app.exception_handler(RequestValidationError)
@@ -32,7 +34,7 @@ async def validation_exception_handler(request: Request, exc: RequestValidationE
         content=jsonable_encoder({"detail": exc.errors(), "body": exc.body}),
     )
 
- 
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[

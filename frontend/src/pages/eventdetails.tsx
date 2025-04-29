@@ -11,7 +11,7 @@ import { useModalState } from "../store/useModalStore";
 import Overlay from "../components/overlay";
 import { formData } from "./home";
 import { url } from "../constants/variables";
-import { Guest } from "../constants/interfaces";
+import { Guest, GuestResponse } from "../constants/interfaces";
 import { useToastStore } from "../store/useToastStore";
 import { copyToClipboard } from "../utils/functions";
 
@@ -24,9 +24,16 @@ const EventDetails: React.FC = () => {
   const [isFormActive, setIsFormActive] = useState(false); // Track if form is active to show/hide action buttons
   const [isFormChanged, SetisFormChanged] = useState(false); // Track if form is changed to enable the update button
   const [singleGuest, setSingleGuest] = useState(true); // Track if single guest is selected
+  const [guestDetails, setGuestDetails] = useState<GuestResponse>({
+    id: 0,
+    name: "",
+    tags: "",
+    qr_token: "",
+  }); // Track if guest details are shown
   const [guest, setGuest] = useState<Guest>({
     name: "",
     tags: "",
+    email: "",
     errors: "",
   });
   const [guestList, setGuestList] = useState([{ id: "", name: "", tags: "" }]);
@@ -81,6 +88,7 @@ const EventDetails: React.FC = () => {
       });
 
       if (response.status === 200) {
+        setGuestDetails(response.data);
         setActiveStep("success");
         fetchEventDetails();
         setIsToastActive(true);
@@ -229,11 +237,18 @@ const EventDetails: React.FC = () => {
                 </li>
               ))}
             </ul>
-            <div className="flex gap-4 justify-end">
+            <div className="flex gap-4 justify-between mt-8">
               <ActionButton
                 onClick={() => setActiveStep("addGuest")}
+                icon="fa-solid fa-paper-plane"
+                text="Send invitations"
+                classNames="bg-primary text-white rounded-full"
+              />
+              <ActionButton
+                onClick={() => setActiveStep("addGuest")}
+                icon="fa-solid fa-user-plus"
                 text="Add Guest"
-                classNames="bg-primary text-white rounded-md"
+                classNames="bg-primary text-white rounded-full"
               />
             </div>
           </div>
@@ -310,26 +325,35 @@ const EventDetails: React.FC = () => {
                   <p className="text-red font-poppins-bold">{guest.errors}</p>
                 </div>
                 <div className="form-control grid gap-2">
-                  <label className="text-sm">Name of Guest</label>
                   <input
                     type="text"
                     name="name"
                     value={guest.name}
                     onChange={handleGuestFormChange}
-                    placeholder="Enter Name"
-                    className="bg-white border-2 border-gray-400 text-primary placeholder:text-primary px-2 py-2 text-sm rounded-md focus:border-primary focus:outline-none"
+                    placeholder="Enter guest name"
+                    className="bg-white border-b-2 border-gray-400 text-primary placeholder:text-primary px-2 py-2 text-sm rounded-md focus:border-primary focus:outline-none"
                     required
                   />
                 </div>
                 <div className="form-control grid gap-2 mt-4">
-                  <label className="text-sm">Tags</label>
                   <input
                     type="text"
                     name="tags"
                     value={guest.tags}
                     onChange={handleGuestFormChange}
-                    placeholder="Enter Tag"
-                    className="bg-white border-2 border-gray-400 text-primary placeholder:text-primary px-2 py-2 text-sm rounded-sm"
+                    placeholder="Enter tags"
+                    className="bg-white border-b-2 border-gray-400 text-primary placeholder:text-primary px-2 py-2 text-sm rounded-sm"
+                    required
+                  />
+                </div>
+                <div className="form-control grid gap-2 mt-4">
+                  <input
+                    type="email"
+                    name="email"
+                    value={guest.email}
+                    onChange={handleGuestFormChange}
+                    placeholder="Enter guest email"
+                    className="bg-white border-b-2 border-gray-400 text-primary placeholder:text-primary px-2 py-2 text-sm rounded-sm"
                     required
                   />
                 </div>
@@ -384,7 +408,7 @@ const EventDetails: React.FC = () => {
             </span>
             <span className="mt-8 block">{guest.name}</span>
             <img
-              src={icons.qrcode}
+              src={`${url}/event/qrcode/${guestDetails.qr_token}`}
               alt="QR code of profile created successfully"
               className="w-1/5 mx-auto"
               style={{
@@ -393,7 +417,7 @@ const EventDetails: React.FC = () => {
             />
             <p className="inline-flex items-center flex-wrap gap-2 mx-auto">
               <span ref={textRef} className="text-gray-1 underline">
-                @qrscanneer/{guest.name}
+                @qrscanneer/{guestDetails.name}
               </span>
               <button
                 onClick={() => {
@@ -411,7 +435,7 @@ const EventDetails: React.FC = () => {
               <ActionButton
                 onClick={() => {
                   setActiveStep("addGuest");
-                  setGuest({ name: "", tags: "" });
+                  setGuest({ name: "", tags: "", email: "", errors: "" });
                 }}
                 text="Add More Guests"
                 classNames="w-full bg-primary text-white rounded-full"
@@ -419,7 +443,7 @@ const EventDetails: React.FC = () => {
               <ActionButton
                 onClick={() => {
                   setActiveStep("guestList");
-                  setGuest({ name: "", tags: "" });
+                  setGuest({ name: "", tags: "", email: "", errors: "" });
                 }}
                 text="Cancel"
                 classNames="bg-white text-primary border-2 border-primary rounded-full"

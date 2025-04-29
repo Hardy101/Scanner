@@ -2,11 +2,13 @@ from fastapi import Depends, HTTPException, Request
 from sqlalchemy.orm import Session
 from models import Event, Guest
 from schemas import EventCreate, Guest as GuestSchema
-from models import User, Guest as GuestModel
+from models import User, Guest
 from database import SessionLocal
 from variables import ALGORITHM, SECRET_KEY
 from jose import JWTError, jwt
 import qrcode
+import os
+import uuid
 
 
 def get_db():
@@ -40,13 +42,14 @@ def add_guests_to_event(db: Session, event_id: int, uuid: str, guest: GuestSchem
     if not db_event:
         raise HTTPException(status_code=404, detail="Event not found")
 
-    # Add each guest to the event
-    print(guest)
+    filepath = generate_qr_code(uuid)
     db_guest = Guest(
         name=guest.name,
         tags=guest.tags,
+        email=guest.email,
         event_id=db_event.id,
-        qr_token=uuid
+        qr_token=uuid,
+        qr_path=filepath,
     )
     db.add(db_guest)
 
@@ -80,15 +83,26 @@ def add_bulk_guests_to_event(db: Session, event_id: int, guests: GuestSchema):
             raise HTTPException(
                 status_code=400, detail="Guest name and tags cannot be empty"
             )
-    add_guests_to_event(db=db, event_id=event_id, guests=guests)
+    add_guests_to_event(db=db, event_id=event_id, guests=guests, uuid=str(uuid.uuid4()))
     all_guests = db.query(Guest).filter(Guest.event_id == event_id).all()
     return all_guests
 
 
 def generate_qr_code(data: str):
-    qr = qrcode.QRCode(version=1, box_size=10, border=5)
+    qr = qrcode.QRCode(
+        version=1,
+        error_correction=qrcode.constants.ERROR_CORRECT_L,
+        box_size=10,
+        border=4,
+    )
     qr.add_data(data)
     qr.make(fit=True)
 
-    img = qr.make_image(fill="black", back_color="white")
-    img.save(f"static/qr_codes/{data}.png")
+    img = qr.make_image(fill_color="black", back_color="white")
+
+    save_dir = "static/qr_codes"
+    os.makedirs(save_dir, exist_ok=True)
+    file_path = os.path.join(save_dir, f"{data}.png")
+    img.save(file_path)
+
+    return file_path
