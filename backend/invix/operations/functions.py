@@ -2,10 +2,11 @@ from fastapi import Depends, HTTPException, Request
 from sqlalchemy.orm import Session
 from models import Event, Guest
 from schemas import EventCreate, Guest as GuestSchema
-from models import User
+from models import User, Guest as GuestModel
 from database import SessionLocal
 from variables import ALGORITHM, SECRET_KEY
 from jose import JWTError, jwt
+import qrcode
 
 
 def get_db():
@@ -34,7 +35,7 @@ def get_events(db: Session, skip: int = 0, limit: int = 10):
     return db.query(Event).offset(skip).limit(limit).all()
 
 
-def add_guests_to_event(db: Session, event_id: int, guest: GuestSchema):
+def add_guests_to_event(db: Session, event_id: int, uuid: str, guest: GuestSchema):
     db_event = db.query(Event).filter(Event.id == event_id).first()
     if not db_event:
         raise HTTPException(status_code=404, detail="Event not found")
@@ -45,6 +46,7 @@ def add_guests_to_event(db: Session, event_id: int, guest: GuestSchema):
         name=guest.name,
         tags=guest.tags,
         event_id=db_event.id,
+        qr_token=uuid
     )
     db.add(db_guest)
 
@@ -81,3 +83,12 @@ def add_bulk_guests_to_event(db: Session, event_id: int, guests: GuestSchema):
     add_guests_to_event(db=db, event_id=event_id, guests=guests)
     all_guests = db.query(Guest).filter(Guest.event_id == event_id).all()
     return all_guests
+
+
+def generate_qr_code(data: str):
+    qr = qrcode.QRCode(version=1, box_size=10, border=5)
+    qr.add_data(data)
+    qr.make(fit=True)
+
+    img = qr.make_image(fill="black", back_color="white")
+    img.save(f"static/qr_codes/{data}.png")
