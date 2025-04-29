@@ -79,5 +79,5 @@ def add_bulk_guests_to_event(db: Session, event_id: int, guests: GuestSchema):
                 status_code=400, detail="Guest name and tags cannot be empty"
             )
     add_guests_to_event(db=db, event_id=event_id, guests=guests)
-    all_guests = db.query(GuestModel).filter(GuestModel.event_id == event_id).all()
+    all_guests = db.query(Guest).filter(Guest.event_id == event_id).all()
     return all_guests

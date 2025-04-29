@@ -175,9 +175,9 @@ def delete_guest(guest_id: int, db: Session = Depends(get_db)):
     return {"message": "Guest deleted"}
 
 
-@router.get("/create-qr-code?{guest_name}")
+@router.get("/create-qr-code")
 def create_qr_code(guest_name: str, db: Session = Depends(get_db)):
-    # qr_data = f"https://yourfrontend.com/event/{event_id}"
+    qr_data = f"http://localhost:5173/qrcode/{guest_name}"
 
     # Generate QR code image
     qr = qrcode.make(qr_data)
