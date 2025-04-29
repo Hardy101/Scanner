@@ -95,10 +95,10 @@ const Login = () => {
       </p>
       <form
         onSubmit={handleSubmit}
-        className="flex flex-col gap-4 w-4/5 md:w-3/5 mt-8 mx-auto"
+        className="flex flex-col gap-4 w-4/5 md:w-2/5 mt-8 mx-auto"
       >
         {errors.general && (
-          <p className="error-msg flex items-center gap-2 bg-red-300 text-red-500 text-xs rounded-md p-2 ">
+          <p className="error-msg flex items-center gap-2 bg-red-300 text-primary text-xs rounded-md p-2 ">
             <i className="fa-solid fa-triangle-exclamation text-lg"></i>
             <span>{errors.general}</span>
           </p>

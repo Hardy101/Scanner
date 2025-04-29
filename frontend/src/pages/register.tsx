@@ -97,7 +97,7 @@ const Register = () => {
           Login
         </Link>
       </p>
-      <form
+      <form 
         onSubmit={handleSubmit}
         className="grid gap-4 w-4/5 md:w-2/5 mt-8 mx-auto"
       >
