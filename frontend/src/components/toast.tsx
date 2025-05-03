@@ -1,10 +1,11 @@
 import Portal from "./portal";
-import { useToastStore } from "../store/useToastStore";
+import { useToastStore, ToastType } from "../store/useToastStore";
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 
 const ToastNotification = () => {
-  const { isToastActive, setIsToastActive, text, subtext } = useToastStore();
+  const { isToastActive, setIsToastActive, text, subtext, type } =
+    useToastStore();
   const toastRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -24,17 +25,50 @@ const ToastNotification = () => {
     }
   }, [isToastActive]);
 
-  if (!isToastActive) return null; // Don't render if the toast is not active
-  // This component is only rendered when the toast is active
+  if (!isToastActive) return null;
+
+  const getIcon = (type: ToastType) => {
+    switch (type) {
+      case "success":
+        return "fa-check";
+      case "failure":
+        return "fa-xmark";
+    }
+  };
+
+  const getBorderColor = (type: ToastType) => {
+    switch (type) {
+      case "success":
+        return "border-primary text-primary";
+      case "failure":
+        return "border-red text-red";
+    }
+  };
+
+  const getTextColor = (type: ToastType) => {
+    switch (type) {
+      case "success":
+        return "text-primary";
+      case "failure":
+        return "text-red";
+    }
+  };
+
   return (
     <Portal>
       <div
         ref={toastRef}
         className="fixed top-8 left-0 w-full md:pr-10 bg-opacity-50 z-50"
       >
-        <div className="bg-white w-4/5 md:w-2/5 p-4 rounded shadow-lg flex items-center justify-between gap-4 text-primary mx-auto md:ml-auto">
-          <i className="fa-solid fa-check font-bold mt-1 p-1 rounded-full border-2 border-primary text-xs mb-auto"></i>
-          <p className="grow grid">
+        <div className="bg-white w-4/5 md:w-2/5 p-4 rounded shadow-lg flex items-center justify-between gap-4 mx-auto md:ml-auto">
+          <i
+            className={`fa-solid ${getIcon(
+              type
+            )} font-bold mt-1 p-1 rounded-full border-2 ${getBorderColor(
+              type
+            )} text-xs mb-auto`}
+          ></i>
+          <p className={`grow grid ${getTextColor(type)}`}>
             <span className="font-poppins-medium">{text}</span>
             <span className="font-poppins text-sm">{subtext}</span>
           </p>

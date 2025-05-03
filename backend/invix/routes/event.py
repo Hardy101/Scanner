@@ -26,7 +26,7 @@ from operations.functions import (
     fetch_current_user,
 )
 
-router = APIRouter(tags=["Events"])
+router = APIRouter(tags=["Events Management"])
 
 
 @router.get("/")
@@ -192,3 +192,22 @@ def view_qrcode(uuid: str, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="QR code file not found")
 
     return FileResponse(path=guest.qr_path, media_type="image/png")
+
+
+@router.get("/readqrcode/{uuid}")
+def view_qrcode(uuid: str, db: Session = Depends(get_db)):
+    try:
+        print(f"Looking up QR code for UUID: {uuid}")
+        guest = db.query(GuestModel).filter(GuestModel.qr_token == uuid).first()
+        print(f"Query result: {guest}")
+
+        if not guest:
+            print(f"No guest found for UUID: {uuid}")
+            raise HTTPException(status_code=404, detail="Guest not found")
+
+        print(f"Found guest: {guest.name}")
+        return {"name": guest.name}
+    except Exception as e:
+        print(f"Error occurred: {str(e)}")
+        print(f"Error type: {type(e)}")
+        raise HTTPException(status_code=404, detail="Guest not found")

@@ -14,7 +14,7 @@ from security import (
 from variables import EXPIRY_DATE
 from operations.functions import fetch_current_user
 
-router = APIRouter(tags=["Auth"])
+router = APIRouter(tags=["Authentication"])
 
 
 def get_db():
@@ -81,3 +81,4 @@ def logout():
 @router.get("/user", response_model=PublicUser)
 def get_user(user: User = Depends(get_current_user)):
     return PublicUser.model_validate(user)
+

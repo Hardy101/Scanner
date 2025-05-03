@@ -2,6 +2,8 @@ import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import jsQR from "jsqr";
 import { useToastStore } from "../store/useToastStore";
+import { url } from "../constants/variables";
+import axios from "axios";
 
 const Scan = () => {
   const videoRef = useRef<HTMLVideoElement | null>(null);
@@ -9,7 +11,27 @@ const Scan = () => {
   const [errors, setErrors] = useState("");
   const errorRef = useRef<HTMLDivElement | null>(null);
   const [scanned, setScanned] = useState(false);
-  const { setIsToastActive, setText, setSubText } = useToastStore();
+
+  const handleGuestValidation = async (uuid: string) => {
+    try {
+      const response = await axios.get(`${url}/event/readqrcode/${uuid}`);
+      console.log(response.data);
+      useToastStore.getState().setToastState({
+        isToastActive: true,
+        type: "success",
+        text: `Guest: "${response.data.name}" validated!`,
+        subtext: `The guest has been successfully validated.`,
+      });
+    } catch (error) {
+      console.error("Error validating guest", error);
+      useToastStore.getState().setToastState({
+        isToastActive: true,
+        type: "failure",
+        text: `Guest not found!`,
+        subtext: `The guest has not been validated.`,
+      });
+    }
+  };
 
   useEffect(() => {
     let interval: NodeJS.Timeout;
@@ -47,9 +69,7 @@ const Scan = () => {
       if (code) {
         console.log("QR Code Data:", code.data);
         setScanned(true);
-        setIsToastActive(true);
-        setText(`Guest ${code.data} validated!`);
-        setSubText(`The guest has been successfully validated.`);
+        handleGuestValidation(code.data);
         // 👉 You can now use code.data to make a backend call
         // Example: checkInGuest(code.data)
       }

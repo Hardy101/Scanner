@@ -1,7 +1,7 @@
 import { useNavigate, useParams } from "react-router";
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
-import { useToastStore, ToastData } from "../store/useToastStore";
+import { useToastStore } from "../store/useToastStore";
 
 import NavButton from "../components/navbutton";
 import ActionButton from "../components/actionbutton";
@@ -20,7 +20,6 @@ const EventDetails: React.FC = () => {
   const textRef = useRef<HTMLAnchorElement | null>(null);
   const navigate = useNavigate();
 
-  const { setIsToastActive, setText, setSubText }: ToastData = useToastStore();
   const [isFormActive, setIsFormActive] = useState(false); // Track if form is active to show/hide action buttons
   const [isFormChanged, SetisFormChanged] = useState(false); // Track if form is changed to enable the update button
   const [singleGuest, setSingleGuest] = useState(true); // Track if single guest is selected
@@ -92,9 +91,12 @@ const EventDetails: React.FC = () => {
         setGuestDetails(response.data);
         setActiveStep("success");
         fetchEventDetails();
-        setIsToastActive(true);
-        setText("Guest added successfully!");
-        setSubText("Navigate to guest list to view all guests");
+        useToastStore.getState().setToastState({
+          isToastActive: true,
+          type: "success",
+          text: "Guest added successfully!",
+          subtext: "Navigate to guest list to view all guests",
+        });
       } else {
         console.error("Error adding guest:", response.data);
       }
@@ -120,11 +122,13 @@ const EventDetails: React.FC = () => {
         }
       );
       if (response.status === 200) {
-        setIsToastActive(true);
-        setText("Guest deleted successfully!");
-        setSubText(
-          "The selected guest has been successfully deleted from the system."
-        );
+        useToastStore.getState().setToastState({
+          isToastActive: true,
+          type: "success",
+          text: "Guest deleted successfully!",
+          subtext:
+            "The selected guest has been successfully deleted from the system.",
+        });
         fetchEventDetails();
       } else {
         console.error("Error deleting guest:", response.data);
@@ -140,8 +144,12 @@ const EventDetails: React.FC = () => {
         withCredentials: true,
       });
       if (response.status === 200) {
-        setIsToastActive(true);
-        setText("Event deleted successfully!");
+        useToastStore.getState().setToastState({
+          isToastActive: true,
+          type: "success",
+          text: "Event deleted successfully!",
+          subtext: "Navigate to home to view all events",
+        });
         navigate("/home");
       } else {
         console.error("Error deleting event:", response.data);
@@ -487,14 +495,14 @@ const EventDetails: React.FC = () => {
         >
           <button
             onClick={handleDeleteEvent}
-            className="flex gap-2 items-center bg-white text-red py-2 px-4 rounded-md font-poppins-medium my-auto md:m-0"
+            className="flex gap-2 items-center justify-center bg-white text-red py-2 px-4 rounded-md font-poppins-medium my-auto md:m-0"
           >
             Delete event
             <i className="fa-solid fa-trash"></i>
           </button>
           <button
             onClick={() => setIsFormActive(false)}
-            className="flex gap-2 items-center bg-red text-white py-2 px-4 rounded-md font-poppins-medium my-auto md:m-0"
+            className="flex gap-2 items-center justify-center bg-red text-white py-2 px-4 rounded-md font-poppins-medium my-auto md:m-0"
           >
             Cancel changes
             <i className="fa-solid fa-xmark"></i>
@@ -503,7 +511,7 @@ const EventDetails: React.FC = () => {
             onClick={updateEventDetails}
             className={`${
               !isFormChanged ? "bg-gray-400" : "bg-white"
-            } col-span-2 flex gap-2 items-center justify-center md:ml-auto py-1 px-16 rounded-md text-primary font-poppins-medium`}
+            } col-span-2 flex gap-2 items-center justify-center py-1 px-16 rounded-md text-primary font-poppins-medium md:ml-auto`}
           >
             Update event
             <i className="fa-solid fa-pen-nib"></i>

@@ -26,4 +26,4 @@ dist-ssr
 react dependencies.txt
 *.venv
 *.pyc
-# *qr_codes
+*qr_codes
