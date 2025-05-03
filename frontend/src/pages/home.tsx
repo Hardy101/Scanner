@@ -37,6 +37,8 @@ const Home: React.FC = () => {
     expected_guests: 0,
   });
   const { events, isLoading, fetchEvents } = useEventStore();
+  const eventFormField =
+    "w-full bg-secondary text-primary placeholder:text-primary border border-shadow-2 p-4 text-sm rounded-2xl focus:outline-secondary-2";
 
   const refreshEvents = () => {
     fetchEvents();
@@ -44,7 +46,7 @@ const Home: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    
+
     try {
       const response = await axios.post(`${url}/event/add`, formData, {
         withCredentials: true,
@@ -118,10 +120,7 @@ const Home: React.FC = () => {
           <h3 className="font-poppins-bold text-lg text-primary">
             Create Event
           </h3>
-          <div className="form-control grid gap-2 mt-6">
-            <label htmlFor="name" className="font-poppins-bold text-primary">
-              Name of Event
-            </label>
+          <div className="form-control mt-6">
             <input
               type="text"
               name="name"
@@ -129,7 +128,7 @@ const Home: React.FC = () => {
               value={formData.name}
               onChange={handleChange}
               placeholder="Enter Name"
-              className="w-full bg-secondary text-primary placeholder:text-primary px-2 py-2 text-xs rounded-sm"
+              className={eventFormField}
             />
           </div>
           <div className="form-control grid gap-2 mt-4">
@@ -143,7 +142,7 @@ const Home: React.FC = () => {
               onChange={handleChange}
               value={formData.date}
               placeholder="Select Date"
-              className="w-full bg-secondary text-primary placeholder:text-primary px-2 py-2 text-xs rounded-sm"
+              className={eventFormField}
             />
           </div>
           <div className="form-control grid gap-2 mt-4">
@@ -160,7 +159,7 @@ const Home: React.FC = () => {
               onChange={handleChange}
               value={formData.location}
               placeholder="Select Venue"
-              className="w-full bg-secondary text-primary placeholder:text-primary px-2 py-2 text-xs rounded-sm"
+              className={eventFormField}
             />
           </div>
           <div className="form-control grid gap-2 mt-4">
@@ -174,12 +173,11 @@ const Home: React.FC = () => {
               min={1}
               onChange={handleChange}
               value={formData.expected_guests}
-              placeholder="Select number of guests"
-              className="w-full bg-secondary text-primary placeholder:text-primary px-2 py-2 text-xs rounded-sm"
+              className={eventFormField}
             />
           </div>
           <div className="form-control mt-8 flex gap-4">
-            <button className="w-full box-shadow-1 bg-primary text-white font-poppins-bold px-6 py-2 rounded-full text-sm mx-auto">
+            <button className="w-full box-shadow-1 bg-primary text-white font-poppins-medium p-4 rounded-3xl text-sm mx-auto">
               Create Event
             </button>
           </div>

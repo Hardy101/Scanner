@@ -46,7 +46,8 @@ const EventDetails: React.FC = () => {
     location: "",
     expected_guests: 0,
   });
-
+  const formFieldClass =
+    "border border-gray-400 text-primary placeholder:text-primary p-3 text-sm rounded-xl focus:border-primary focus:outline-none";
   const fetchEventDetails = async () => {
     try {
       const [eventRes, guestsRes] = await Promise.all([
@@ -206,15 +207,15 @@ const EventDetails: React.FC = () => {
       {/* Floating Elements */}
       {/* Guest List */}
       <Modal>
+        <button
+          onClick={() => setIsModalActive(false)}
+          className="absolute top-4 right-4 flex bg-primary text-secondary rounded-md text-3xl transition-all ease-in-out hover:bg-shadow"
+        >
+          <i className="lni lni-xmark"></i>
+        </button>
         {activeStep == "guestList" && (
           <div className="text-black">
-            <button
-              onClick={() => setIsModalActive(false)}
-              className="absolute top-4 right-4 flex bg-primary text-secondary rounded-md p-1 text-xl transition-all ease-in-out hover:bg-shadow"
-            >
-              <i className="lni lni-xmark"></i>
-            </button>
-            <h3 className="font-poppins-bold text-lg">Guest List</h3>
+            <h3 className="font-poppins-bold text-xl">Guest List</h3>
             <ul className="grid gap-2 divide-y divide-secondary-2 mt-6 text-xs max-h-72 overflow-y-auto">
               {guestList.map(({ id, name, tags }) => (
                 <li
@@ -253,6 +254,7 @@ const EventDetails: React.FC = () => {
             </div>
           </div>
         )}
+
         {activeStep == "guestDetails" && (
           <div className="text-black grid grid-cols-2">
             <div className="grid">
@@ -295,10 +297,11 @@ const EventDetails: React.FC = () => {
             </div>
           </div>
         )}
+
         {activeStep == "addGuest" && (
-          <form onSubmit={handleGuestSubmit} className="text-black">
+          <div className="text-black">
             <h3 className="font-poppins-bold text-xl">Add guest to list</h3>
-            <p className="relative md:w-1/3 mx-auto grid grid-cols-2 text-sm font-poppins-bold text-primary text-center bg-secondary rounded-2xl p-1 mt-2">
+            <p className="relative md:w-1/3 mx-auto grid grid-cols-2 text-sm font-poppins-medium text-primary text-center bg-secondary rounded-2xl p-1 mt-2">
               <span
                 className={`absolute top-1 left-1 w-[calc(50%-0.25rem)] h-[calc(100%-0.5rem)] bg-white rounded-2xl transition-transform duration-300 ease-in-out z-0 ${
                   singleGuest ? "translate-x-0" : "translate-x-full"
@@ -320,7 +323,7 @@ const EventDetails: React.FC = () => {
               </button>
             </p>
             {singleGuest && (
-              <>
+              <form onSubmit={handleGuestSubmit}>
                 <div className="form-control grid gap-2 my-4">
                   <p className="text-red font-poppins-bold">{guest.errors}</p>
                 </div>
@@ -331,7 +334,7 @@ const EventDetails: React.FC = () => {
                     value={guest.name}
                     onChange={handleGuestFormChange}
                     placeholder="Enter guest name"
-                    className="bg-white border-b-2 border-gray-400 text-primary placeholder:text-primary px-2 py-2 text-sm rounded-md focus:border-primary focus:outline-none"
+                    className={formFieldClass}
                     required
                   />
                 </div>
@@ -342,7 +345,7 @@ const EventDetails: React.FC = () => {
                     value={guest.tags}
                     onChange={handleGuestFormChange}
                     placeholder="Enter tags"
-                    className="bg-white border-b-2 border-gray-400 text-primary placeholder:text-primary px-2 py-2 text-sm rounded-sm"
+                    className={formFieldClass}
                     required
                   />
                 </div>
@@ -353,53 +356,63 @@ const EventDetails: React.FC = () => {
                     value={guest.email}
                     onChange={handleGuestFormChange}
                     placeholder="Enter guest email"
-                    className="bg-white border-b-2 border-gray-400 text-primary placeholder:text-primary px-2 py-2 text-sm rounded-sm"
+                    className={formFieldClass}
                     required
                   />
                 </div>
-              </>
+
+                <div className="form-control flex gap-4 mt-4">
+                  <ActionButton
+                    text="Add Guest"
+                    icon="fa-solid fa-user-plus"
+                    classNames="w-full bg-primary text-white rounded-full"
+                  />
+                  <ActionButton
+                    type="button"
+                    onClick={() => {
+                      setActiveStep("guestList");
+                    }}
+                    text="back"
+                    icon="fa-solid fa-arrow-left"
+                    classNames="bg-white text-primary border-2 border-primary rounded-full"
+                  />
+                </div>
+              </form>
             )}
 
             {!singleGuest && (
-              <>
+              <form onSubmit={handleGuestSubmit}>
                 <div className="form-control mt-4 flex flex-col gap-4">
-                  <label className="text-sm">Upload Guest List</label>
+                  <label className="text-sm font-poppins-medium">
+                    Upload Guest List
+                  </label>
                   <input
                     onChange={handleFileUpload}
                     type="file"
                     accept=".csv,.xls,.xlsx"
-                    className="flex items-center gap-2 box-shadow-1 font-poppins-medium px-4 py-2 text-sm"
+                    className={`${formFieldClass} bg-secondary cursor-pointer`}
                   />
                 </div>
-              </>
-            )}
+                <div className="form-control mt-8 flex gap-4">
+                  <ActionButton
+                    text="Upload guest list"
+                    icon="fa-solid fa-paper-plane"
+                    classNames="w-full bg-primary text-white rounded-full"
+                  />
 
-            <div className="form-control mt-8 flex gap-4">
-              {singleGuest && (
-                <ActionButton
-                  text="Add Guest"
-                  icon="fa-solid fa-user-plus"
-                  classNames="w-full bg-primary text-white rounded-full"
-                />
-              )}
-              {!singleGuest && (
-                <ActionButton
-                  text="Upload guest list"
-                  icon="fa-solid fa-paper-plane"
-                  classNames="w-full bg-primary text-white rounded-full"
-                />
-              )}
-              <ActionButton
-                type="button"
-                onClick={() => {
-                  setActiveStep("guestList");
-                }}
-                text="back"
-                icon="fa-solid fa-arrow-left"
-                classNames="bg-white text-primary border-2 border-primary rounded-full"
-              />
-            </div>
-          </form>
+                  <ActionButton
+                    type="button"
+                    onClick={() => {
+                      setActiveStep("guestList");
+                    }}
+                    text="back"
+                    icon="fa-solid fa-arrow-left"
+                    classNames="bg-white text-primary border-2 border-primary rounded-full"
+                  />
+                </div>
+              </form>
+            )}
+          </div>
         )}
         {activeStep == "success" && (
           <div className="text-center text-primary">
@@ -459,18 +472,18 @@ const EventDetails: React.FC = () => {
       {isFormActive ? (
         <p
           id="formActions"
-          className="animate__animated animate__fadeInUp absolute w-full left-0 bottom-0 flex justify-start gap-4 p-4 text-sm"
+          className="animate__animated animate__fadeInUp absolute w-full left-0 bottom-0 grid grid-cols-2 md:flex justify-start gap-4 p-4 text-sm"
         >
           <button
             onClick={handleDeleteEvent}
-            className="flex gap-2 items-center bg-white text-red py-1 px-4 rounded-md font-poppins-bold"
+            className="flex gap-2 items-center bg-white text-red py-2 px-4 rounded-md font-poppins-medium my-auto md:m-0"
           >
             Delete event
             <i className="fa-solid fa-trash"></i>
           </button>
           <button
             onClick={() => setIsFormActive(false)}
-            className="flex gap-2 items-center bg-red text-white py-1 px-4 rounded-md font-poppins-bold"
+            className="flex gap-2 items-center bg-red text-white py-2 px-4 rounded-md font-poppins-medium my-auto md:m-0"
           >
             Cancel changes
             <i className="fa-solid fa-xmark"></i>
@@ -479,7 +492,7 @@ const EventDetails: React.FC = () => {
             onClick={updateEventDetails}
             className={`${
               !isFormChanged ? "bg-gray-400" : "bg-white"
-            } flex gap-2 items-center ml-auto py-1 px-16 rounded-md text-primary font-poppins-bold`}
+            } col-span-2 flex gap-2 items-center justify-center md:ml-auto py-1 px-16 rounded-md text-primary font-poppins-medium`}
           >
             Update event
             <i className="fa-solid fa-pen-nib"></i>

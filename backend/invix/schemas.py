@@ -32,6 +32,7 @@ class PublicUser(BaseModel):
 class Guest(BaseModel):
     name: str
     tags: str
+    email: str = ""
 
     class Config:
         from_attributes = True
@@ -41,6 +42,7 @@ class GuestResponse(BaseModel):
     id: int
     name: str
     tags: str
+    email: str
     qr_token: str
 
     class Config:
