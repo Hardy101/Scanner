@@ -1,14 +1,16 @@
 from fastapi import Depends, HTTPException, Request
 from sqlalchemy.orm import Session
-from models import Event, Guest
-from schemas import EventCreate, Guest as GuestSchema
-from models import User, Guest
-from database import SessionLocal
-from variables import ALGORITHM, SECRET_KEY
 from jose import JWTError, jwt
 import qrcode
 import os
 import uuid
+
+# Local imports
+from ..models import Event, Guest
+from ..schemas import EventCreate, Guest as GuestSchema
+from ..models import User, Guest
+from ..database import SessionLocal
+from ..variables import ALGORITHM, SECRET_KEY
 
 
 def get_db():

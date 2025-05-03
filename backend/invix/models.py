@@ -1,8 +1,9 @@
 from sqlalchemy import Column, Integer, String, Date, ForeignKey, ARRAY
 from sqlalchemy.orm import relationship
-from database import Base
 from uuid import uuid4
 
+# Local imports
+from .database import Base
 
 class User(Base):
     __tablename__ = "users"

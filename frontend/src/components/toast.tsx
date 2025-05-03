@@ -4,7 +4,7 @@ import { useEffect, useRef } from "react";
 import gsap from "gsap";
 
 const ToastNotification = () => {
-  const { isToastActive, setIsToastActive, text } = useToastStore();
+  const { isToastActive, setIsToastActive, text, subtext } = useToastStore();
   const toastRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -30,14 +30,17 @@ const ToastNotification = () => {
     <Portal>
       <div
         ref={toastRef}
-        className="fixed top-8 left-0 w-full bg-opacity-50 z-50"
+        className="fixed top-8 left-0 w-full md:pr-10 bg-opacity-50 z-50"
       >
-        <div className="bg-secondary w-4/5 md:w-2/5 p-4 rounded shadow-lg flex justify-between gap-4 mx-auto font-poppins">
-          <span>{text}</span>
-
+        <div className="bg-white w-4/5 md:w-2/5 p-4 rounded shadow-lg flex items-center justify-between gap-4 text-primary mx-auto md:ml-auto">
+          <i className="fa-solid fa-check font-bold mt-1 p-1 rounded-full border-2 border-primary text-xs mb-auto"></i>
+          <p className="grow grid">
+            <span className="font-poppins-medium">{text}</span>
+            <span className="font-poppins text-sm">{subtext}</span>
+          </p>
           <button
             onClick={() => setIsToastActive(false)}
-            className="text-xs hover:text-red"
+            className="text-xs hover:text-red font-poppins-bold"
           >
             Close
           </button>

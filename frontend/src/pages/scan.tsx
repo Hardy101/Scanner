@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import jsQR from "jsqr";
+import { useToastStore } from "../store/useToastStore";
 
 const Scan = () => {
   const videoRef = useRef<HTMLVideoElement | null>(null);
@@ -8,6 +9,7 @@ const Scan = () => {
   const [errors, setErrors] = useState("");
   const errorRef = useRef<HTMLDivElement | null>(null);
   const [scanned, setScanned] = useState(false);
+  const { setIsToastActive, setText, setSubText } = useToastStore();
 
   useEffect(() => {
     let interval: NodeJS.Timeout;
@@ -45,6 +47,9 @@ const Scan = () => {
       if (code) {
         console.log("QR Code Data:", code.data);
         setScanned(true);
+        setIsToastActive(true);
+        setText(`Guest ${code.data} validated!`);
+        setSubText(`The guest has been successfully validated.`);
         // 👉 You can now use code.data to make a backend call
         // Example: checkInGuest(code.data)
       }
@@ -75,8 +80,8 @@ const Scan = () => {
   }, [errors, scanned]);
 
   return (
-    <div className="min-h-screen grid bg-primary text-white md:p-8">
-      <div className="relative h-full body bg-white">
+    <div className="relative min-h-screen grid bg-primary text-white">
+      <div className="relative h-full body">
         <p ref={errorRef} className="absolute w-full top-0 flex p-2">
           <span className="w-full text-center text-sm font-poppins bg-red px-2 py-1">
             {errors || "Scan a QR code to check in"}
@@ -88,8 +93,21 @@ const Scan = () => {
           autoPlay
           playsInline
         />
+        {/* Top bar */}
+        {/* Top bar */}
+        <div className="absolute top-0 left-0 w-full h-[calc(50%-250px)] bg-black/60 z-10"></div>
+
+        {/* Bottom bar */}
+        <div className="absolute bottom-0 left-0 w-full h-[calc(50%-250px)] bg-black/60 z-10"></div>
+
+        {/* Left bar */}
+        <div className="absolute top-[calc(50%-250px)] left-0 w-[calc(50%-250px)] h-[500px] bg-black/60 z-10"></div>
+
+        {/* Right bar */}
+        <div className="absolute top-[calc(50%-250px)] right-0 w-[calc(50%-250px)] h-[500px] bg-black/60 z-10"></div>
+
         <canvas ref={canvasRef} className="hidden" />
-        <button className="absolute bottom-5 left-1/2 -translate-x-1/2 bg-white border-4 border-primary rounded-full p-2">
+        <button className="absolute bottom-5 left-1/2 -translate-x-1/2 bg-white border-4 border-primary rounded-full p-2 z-20">
           <span className="block w-16 h-16 bg-primary rounded-full"></span>
         </button>
       </div>

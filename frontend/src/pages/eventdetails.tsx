@@ -1,6 +1,7 @@
 import { useNavigate, useParams } from "react-router";
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
+import { useToastStore, ToastData } from "../store/useToastStore";
 
 import NavButton from "../components/navbutton";
 import ActionButton from "../components/actionbutton";
@@ -12,15 +13,14 @@ import Overlay from "../components/overlay";
 import { formData } from "./home";
 import { url } from "../constants/variables";
 import { Guest, GuestResponse } from "../constants/interfaces";
-import { useToastStore } from "../store/useToastStore";
 import { copyToClipboard } from "../utils/functions";
 
 const EventDetails: React.FC = () => {
   const { id } = useParams();
-  const textRef = useRef<HTMLSpanElement | null>(null);
+  const textRef = useRef<HTMLAnchorElement | null>(null);
   const navigate = useNavigate();
 
-  const { setIsToastActive, setText } = useToastStore();
+  const { setIsToastActive, setText, setSubText }: ToastData = useToastStore();
   const [isFormActive, setIsFormActive] = useState(false); // Track if form is active to show/hide action buttons
   const [isFormChanged, SetisFormChanged] = useState(false); // Track if form is changed to enable the update button
   const [singleGuest, setSingleGuest] = useState(true); // Track if single guest is selected
@@ -94,6 +94,7 @@ const EventDetails: React.FC = () => {
         fetchEventDetails();
         setIsToastActive(true);
         setText("Guest added successfully!");
+        setSubText("Navigate to guest list to view all guests");
       } else {
         console.error("Error adding guest:", response.data);
       }
@@ -121,6 +122,9 @@ const EventDetails: React.FC = () => {
       if (response.status === 200) {
         setIsToastActive(true);
         setText("Guest deleted successfully!");
+        setSubText(
+          "The selected guest has been successfully deleted from the system."
+        );
         fetchEventDetails();
       } else {
         console.error("Error deleting guest:", response.data);
@@ -261,7 +265,7 @@ const EventDetails: React.FC = () => {
               <h3 className="font-poppins-bold text-lg">Scarlett Johansson</h3>
               <p className="inline-flex items-center justify-between gap-2 mx-auto text-xs">
                 <span className="text-gray-1 underline">
-                  @qrscanneer/scarlettjohanson
+                  {`${url}/event/qrcode/${guestDetails.qr_token}`}
                 </span>
                 <button
                   onClick={() => {
@@ -415,23 +419,30 @@ const EventDetails: React.FC = () => {
           </div>
         )}
         {activeStep == "success" && (
-          <div className="text-center text-primary">
+          <div className="text-center text-primary flex flex-col items-center gap-4">
             <span className="text-xl font-poppins-medium">
               Profile Created Successfully
             </span>
-            <span className="mt-8 block">{guest.name}</span>
+            <span className="mt-8 text-2xl font-poppins-bold">
+              {guest.name}
+            </span>
             <img
               src={`${url}/event/qrcode/${guestDetails.qr_token}`}
               alt="QR code of profile created successfully"
-              className="w-1/5 mx-auto"
+              className="w-2/3 md:w-1/5 mx-auto"
               style={{
                 pointerEvents: "none",
               }}
             />
-            <p className="inline-flex items-center flex-wrap gap-2 mx-auto">
-              <span ref={textRef} className="text-gray-1 underline">
-                @qrscanneer/{guestDetails.name}
-              </span>
+            <p className="w-full flex items-center flex-col md:flex-row gap-2 mx-auto">
+              <a
+                href={`${url}/event/qrcode/${guestDetails.qr_token}`}
+                target="_blank"
+                ref={textRef}
+                className="w-full text-gray-1 underline break-all"
+              >
+                {`${url}/event/qrcode/${guestDetails.qr_token}`}
+              </a>
               <button
                 onClick={() => {
                   copyToClipboard(textRef.current).then(() => {
@@ -439,7 +450,7 @@ const EventDetails: React.FC = () => {
                     setTimeout(() => setCopied(false), 2000);
                   });
                 }}
-                className="bg-primary text-white rounded-md px-2 py-1 text-sm"
+                className="w-3/5 bg-primary text-white rounded-md px-2 py-1 text-sm mx-auto md:mx-0 md:w-auto"
               >
                 {copied ? "copied!" : "copy"}
               </button>

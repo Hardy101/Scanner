@@ -1,7 +1,6 @@
 # File for FastAPI operations and database connection management.
-from pydantic import BaseModel
 from datetime import date
-from typing import List
+from pydantic import BaseModel
 
 
 # For Authentication and User Management

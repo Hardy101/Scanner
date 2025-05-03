@@ -1,8 +1,15 @@
 from fastapi import APIRouter, Depends, HTTPException, File, UploadFile
 from fastapi.responses import StreamingResponse, FileResponse
 from sqlalchemy.orm import Session
-from models import Event, Guest as GuestModel
-from schemas import (
+from typing import List
+import pandas as pd
+from io import BytesIO
+import uuid
+import os
+
+# Local imports
+from ..models import Event, Guest as GuestModel
+from ..schemas import (
     PublicUser,
     EventUpdate,
     EventOut,
@@ -11,18 +18,13 @@ from schemas import (
     EventCreate,
     GuestResponse,
 )
-from database import get_db
-from operations.functions import (
+from ..database import get_db
+from ..operations.functions import (
     get_events as fetch_events,
     create_event as create_event_crud,
     add_guests_to_event,
     fetch_current_user,
 )
-from typing import List
-import pandas as pd
-from io import BytesIO
-import uuid
-import os
 
 router = APIRouter(tags=["Events"])
 

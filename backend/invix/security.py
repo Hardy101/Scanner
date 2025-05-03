@@ -1,11 +1,14 @@
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
-from database import SessionLocal
-from models import User
-from variables import ALGORITHM, SECRET_KEY, EXPIRY_DATE
 from datetime import datetime, timedelta
 from jose import JWTError, jwt
 import bcrypt
+from sqlalchemy.orm import Session
+
+# Local imports
+from .database import SessionLocal
+from .models import User
+from .variables import ALGORITHM, SECRET_KEY, EXPIRY_DATE
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/login")
 
@@ -34,7 +37,7 @@ def get_db():
         db.close()
 
 
-def verify_token(token: str, db: SessionLocal = Depends(get_db)) -> User:
+def verify_token(token: str, db: Session = Depends(get_db)) -> User:
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Invalid authentication credentials",

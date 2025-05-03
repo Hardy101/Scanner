@@ -23,7 +23,7 @@ dist-ssr
 *.sln
 *.sw?
 
-react dependecies.txt
+react dependencies.txt
 *.venv
 *.pyc
-*qr_codes
+# *qr_codes

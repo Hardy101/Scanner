@@ -39,3 +39,11 @@
 .box-shadow-1 {
   box-shadow: 0 0.275em 0 #417576;
 }
+.overlay-hole {
+  background: black;
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  clip-path: path("M0,0 H100% V100% H0 Z M35%,35% H65% V65% H35% Z");
+}
+
