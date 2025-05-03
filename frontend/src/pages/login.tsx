@@ -15,8 +15,6 @@ const Login = () => {
   const navigate = useNavigate();
   const { login } = useAuth();
 
-  const { setIsToastActive, setText } = useToastStore();
-
   const [formData, setFormData] = useState<formData>({
     email: "",
     password: "",
@@ -67,8 +65,12 @@ const Login = () => {
         });
 
         login();
-        setIsToastActive(true);
-        setText("Login successful");
+        useToastStore.getState().setToastState({
+          isToastActive: true,
+          type: "success",
+          text: "Login successful",
+          subtext: "You have been successfully logged in to your account.",
+        });
         navigate("/home");
       } catch (err: any) {
         console.error("Login error", err);
