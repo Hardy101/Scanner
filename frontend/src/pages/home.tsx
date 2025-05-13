@@ -36,6 +36,7 @@ const Home: React.FC = () => {
     location: "",
     expected_guests: 0,
   });
+  const [formError, setFormError] = useState<string | null>(null);
   const { events, isLoading, fetchEvents } = useEventStore();
   const eventFormField =
     "w-full bg-secondary text-primary placeholder:text-primary border border-shadow-2 p-4 text-sm rounded-2xl focus:outline-secondary-2";
@@ -54,11 +55,10 @@ const Home: React.FC = () => {
           "Content-Type": "application/json",
         },
       });
-      // log("Response", response);
 
       if (response && response.status === 200) {
+        setFormError("")
         const eventId = response.data.id;
-        // console.log("Event created successfully", response.data);
         setFormData({
           name: "",
           date: "",
@@ -71,11 +71,9 @@ const Home: React.FC = () => {
         refreshEvents();
       }
     } catch (err: any) {
-      if (err.response) {
-        console.error(`Error: ${err.response.data}`);
-      } else {
-        console.error(`Error: ${err.message}`);
-      }
+      setFormError(
+        "There's an error with your form, please fill it properly or try again"
+      );
     }
   };
 
@@ -117,6 +115,12 @@ const Home: React.FC = () => {
           <i className="fa-solid fa-xmark"></i>
         </button>
         <form onSubmit={handleSubmit} className="text-black text-xs">
+          {formError && (
+            <p className="font-poppins-medium text-base text-red my-2">
+              {formError}
+            </p>
+          )}
+
           <h3 className="font-poppins-bold text-lg text-primary">
             Create Event
           </h3>

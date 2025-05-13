@@ -1,6 +1,7 @@
 # File for FastAPI operations and database connection management.
 from datetime import date
-from pydantic import BaseModel
+from pydantic import BaseModel, constr
+from typing import Annotated
 
 
 # For Authentication and User Management
@@ -49,9 +50,9 @@ class GuestResponse(BaseModel):
 
 
 class EventBase(BaseModel):
-    name: str
+    name: Annotated[str, constr(min_length=1)]
     date: date
-    location: str
+    location: Annotated[str, constr(min_length=1)]
     expected_guests: int
 
 

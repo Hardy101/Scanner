@@ -1,5 +1,5 @@
-from fastapi import APIRouter, Depends, HTTPException, File, UploadFile
-from fastapi.responses import StreamingResponse, FileResponse
+from fastapi import APIRouter, Depends, HTTPException, File, UploadFile, status
+from fastapi.responses import FileResponse
 from sqlalchemy.orm import Session
 from typing import List
 import pandas as pd
@@ -60,6 +60,9 @@ def create_event(
     db: Session = Depends(get_db),
     current_user: PublicUser = Depends(fetch_current_user),
 ):
+    if not event.name or not event.date or not event.location or not event.expected_guests:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Please fill the form completely")
+    
     new_event = create_event_crud(db=db, event=event, user_id=current_user.id)
     return new_event
 
