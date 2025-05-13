@@ -86,11 +86,6 @@ def get_all_guests(db: Session = Depends(get_db)):
 # Adds guests to an event and returns the newly added guest
 @router.post("/add-guest/{event_id}", response_model=GuestResponse)
 def add_guest(event_id: int, guest: Guest, db: Session = Depends(get_db)):
-    if not guest:
-        raise HTTPException(
-            status_code=400, detail="The list of guests cannot be empty"
-        )
-    # for guest in guest:
     if not guest.name or not guest.tags:
         raise HTTPException(
             status_code=400, detail="Guest name and tags cannot be empty"
