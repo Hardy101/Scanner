@@ -67,8 +67,7 @@ def create_event(
     return new_event
 
 
-# Returns the event with the given ID
-# If the event is not found, it raises a 404 error
+# Returns the event with the given ID and If the event is not found, it raises a 404 error
 @router.get("/get-event/{event_id}", response_model=EventOut)
 def get_event(event_id: int, db: Session = Depends(get_db)):
     event = db.query(Event).filter(Event.id == event_id).first()
@@ -89,7 +88,6 @@ def get_all_guests(db: Session = Depends(get_db)):
 # Adds guests to an event and returns the newly added guest
 @router.post("/add-guest/{event_id}", response_model=GuestResponse)
 def add_guest(event_id: int, guest: Guest, db: Session = Depends(get_db)):
-    # for guest in guest:
     if not guest.name or not guest.tags:
         raise HTTPException(
             status_code=400, detail="Guest name and tags cannot be empty"
