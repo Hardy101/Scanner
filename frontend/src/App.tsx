@@ -23,6 +23,7 @@ function App() {
             <Routes>
               <Route path="" element={<SplashScreen />} />
 
+
               <Route
                 path="/login"
                 element={
