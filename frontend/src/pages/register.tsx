@@ -84,7 +84,7 @@ const Register = () => {
     }
   };
   const formFieldClasses =
-    "block w-full bg-transparent text-secondary font-poppins placeholder:text-secondary text-xs px-4 py-3 rounded-md focus:border-transparent";
+    "block w-full bg-transparent text-secondary font-poppins placeholder:text-secondary text-sm px-4 py-3 rounded-2xl focus:border-transparent";
 
   return (
     <div className="relative min-h-screen bg-primary py-16 flex flex-col gap-4 text-white text-center">

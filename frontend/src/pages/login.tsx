@@ -84,7 +84,7 @@ const Login = () => {
     }
   };
   const formFieldClasses =
-    "bg-transparent text-secondary font-poppins placeholder:text-secondary border border-shadow text-xs px-4 py-3 rounded-md";
+    "bg-transparent text-secondary font-poppins placeholder:text-secondary text-sm border border-shadow px-4 py-3 rounded-2xl";
 
   return (
     <div className="min-h-screen bg-primary pt-16 flex flex-col gap-4 text-white text-center">
@@ -141,12 +141,7 @@ const Login = () => {
             </p>
           )}
         </div>
-        <div className="form-control text-left text-secondary">
-          <button type="button" className="flex gap-2 text-sm">
-            <input type="checkbox" name="remember" id="remember" />
-            <span>remember me on next login</span>
-          </button>
-        </div>
+        
         <button className="bg-white text-center text-primary text-sm box-shadow-1 font-poppins-bold rounded-full px-6 py-4 mt-4">
           <span>Login</span>
         </button>
