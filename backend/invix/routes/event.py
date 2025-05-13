@@ -128,9 +128,11 @@ async def add_bulk_guests(
         for _, row in df.iterrows():
             name = row.get("name")
             tags = row.get("tags", "")
-            guest_data = Guest(name=name, tags=tags)
-            add_guests_to_event(db=db, event_id=event_id, guest=guest_data)
-            # tags = [tag.strip() for tag in str(tags_str).split(",")] if tags_str else []
+            email = row.get("email", "")
+            guest_data = Guest(name=name, tags=tags, email=email)
+            add_guests_to_event(
+                db=db, event_id=event_id, guest=guest_data, uuid=str(uuid.uuid4())
+            )
             processed.append({"name": name, "tags": tags})
         print(processed)
 

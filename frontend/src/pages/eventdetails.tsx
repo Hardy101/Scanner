@@ -35,6 +35,7 @@ const EventDetails: React.FC = () => {
     email: "",
     errors: "",
   });
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [guestList, setGuestList] = useState([{ id: "", name: "", tags: "" }]);
   const { setIsModalActive } = useModalState();
   const [activeStep, setActiveStep] = useState("guestList");
@@ -181,13 +182,13 @@ const EventDetails: React.FC = () => {
     }
   };
 
-  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
+  const handleFileUpload = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const form = e.currentTarget;
+    const formData = new FormData(form);
+    const file = formData.get("file") as File;
 
     if (!file) return;
-
-    const formData = new FormData();
-    formData.append("file", file);
 
     try {
       const response = await axios.post(
@@ -202,11 +203,17 @@ const EventDetails: React.FC = () => {
       if (response.status == 200) {
         fetchEventDetails();
         setActiveStep("success");
+        setSelectedFile(null);
       }
       console.log(response.status);
     } catch (err) {
       console.error("Upload failed:", err);
     }
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0] || null;
+    setSelectedFile(file);
   };
 
   // Load Event Details on initial load
@@ -393,16 +400,24 @@ const EventDetails: React.FC = () => {
             )}
 
             {!singleGuest && (
-              <form onSubmit={handleGuestSubmit}>
+              <form onSubmit={handleFileUpload}>
                 <div className="form-control mt-4 flex flex-col gap-4">
                   <label className="text-sm font-poppins-medium">
                     Upload Guest List
                   </label>
+                  <label
+                    htmlFor="file"
+                    className={`${formFieldClass} bg-secondary cursor-pointer font-poppins-bold`}
+                  >
+                    {selectedFile ? selectedFile.name : "No file uploaded"}
+                  </label>
                   <input
-                    onChange={handleFileUpload}
                     type="file"
+                    name="file"
+                    id="file"
                     accept=".csv,.xls,.xlsx"
-                    className={`${formFieldClass} bg-secondary cursor-pointer`}
+                    className={`bg-secondary cursor-pointer hidden`}
+                    onChange={handleFileChange}
                   />
                 </div>
                 <div className="form-control mt-8 flex gap-4">
