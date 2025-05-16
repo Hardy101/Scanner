@@ -5,6 +5,7 @@ import axios from "axios";
 import { url } from "../constants/variables";
 import { useAuth } from "../context/AuthProvider";
 import { useToastStore } from "../store/useToastStore";
+import { icons } from "../constants/media";
 
 interface formData {
   email: string;
@@ -14,6 +15,11 @@ interface formData {
 const Login = () => {
   const navigate = useNavigate();
   const { login } = useAuth();
+  const [focusedFields, setFocusedFields] = useState({
+    name: false,
+    email: false,
+    password: false,
+  });
 
   const [formData, setFormData] = useState<formData>({
     email: "",
@@ -83,70 +89,118 @@ const Login = () => {
       }
     }
   };
+
   const formFieldClasses =
-    "bg-transparent text-secondary font-poppins placeholder:text-secondary text-sm border border-shadow px-4 py-3 rounded-2xl";
+    "block w-full bg-white font-ibmplex-bold placeholder:text-black placeholder:font-ibmplex text-sm p-5 focus:outline-primary";
 
   return (
-    <div className="min-h-screen bg-primary pt-16 flex flex-col gap-4 text-white text-center">
-      <h2 className="text-2xl font-poppins-bold">Welcome back</h2>
-      <p className="text-sm">
-        Do you not have an account yet?{" "}
-        <Link to={"/register"} className="text-secondary font-poppins-bold">
-          Register Here
-        </Link>
-      </p>
-      <form
-        onSubmit={handleSubmit}
-        className="flex flex-col gap-4 w-4/5 md:w-2/5 mt-8 mx-auto"
-      >
-        {errors.general && (
-          <p className="error-msg flex items-center gap-2 bg-red-300 text-primary text-xs rounded-md p-2 ">
-            <i className="fa-solid fa-triangle-exclamation text-lg"></i>
-            <span>{errors.general}</span>
-          </p>
-        )}
-        <div className="form-control grid gap-2">
-          <input
-            type="text"
-            name="email"
-            id="email"
-            placeholder="Enter email"
-            value={formData.email.trim()}
-            onChange={handleChange}
-            className={`${formFieldClasses} ${
-              errors.email ? "border-2 border-red" : "border border-shadow"
-            }`}
-          />
-          {errors.email && (
-            <p className="text-red-500 text-xs font-poppins-medium text-left">
-              {errors.email}
+    <section className="relative min-h-screen py-16 flex flex-col gap-4 text-center">
+      <img
+        src={icons.floatingqrcode}
+        alt="floating image of qrcode"
+        className="w-3/4 absolute right-0 top-0"
+      />
+      <div className="md:w-2/5 px-8 md:mx-auto mt-auto z-10">
+        <h1 className="relative flex gap-4 items-center">
+          <img src={icons.logo} alt="logo of invix" className="w-32" />
+          <span className="text-5xl font-dmserif">Welcome back</span>
+        </h1>
+        <form onSubmit={handleSubmit} className="grid gap-8 mt-12 mx-auto">
+          {errors.general && (
+            <p className="error-msg flex items-center gap-2 bg-red-300 text-red-500 text-xs rounded-md p-2 ">
+              <i className="fa-solid fa-triangle-exclamation text-lg"></i>
+              <span>{errors.general}</span>
             </p>
           )}
-        </div>
-        <div className="form-control grid gap-2">
-          <input
-            type="text"
-            name="password"
-            id="password"
-            placeholder="Enter password"
-            value={formData.password.trim()}
-            onChange={handleChange}
-            className={`${formFieldClasses} ${
-              errors.password ? "border-2 border-red" : "border border-shadow"
-            }`}
-          />
-          {errors.password && (
-            <p className="text-red-500 text-xs font-poppins-medium text-left">
-              {errors.password}
+
+          {/* === EMAIL FIELD === */}
+          <div className="relative form-control grid gap-2">
+            <p
+              style={{ pointerEvents: "none" }}
+              className={` absolute left-2 flex items-center font-ibmplex-bold gap-2 pr-2 text-[0.8rem] transition-all duration-200 ease-in-out bg-white ${
+                focusedFields.email || formData.email.trim()
+                  ? "-top-5 text-black"
+                  : "top-1/2 left-15 -translate-x-1/2 -translate-y-1/2 text-gray-1"
+              }`}
+            >
+              <span className="inline-flex text-white bg-black rounded-full p-[0.4rem]">
+                <i className="fa-solid fa-user text-[0.7rem]"></i>
+              </span>
+              <label htmlFor="email">Email</label>
             </p>
-          )}
-        </div>
-        
-        <button className="bg-white text-center text-primary text-sm box-shadow-1 font-poppins-bold rounded-full px-6 py-4 mt-4">
-          <span>Login</span>
-        </button>
-      </form>
-    </div>
+            <input
+              type="text"
+              name="email"
+              id="email"
+              value={formData.email.toLowerCase().trim()}
+              onChange={handleChange}
+              onFocus={() => setFocusedFields((f) => ({ ...f, email: true }))}
+              onBlur={() => setFocusedFields((f) => ({ ...f, email: false }))}
+              className={`${formFieldClasses} ${
+                errors.email ? "border-2 border-red" : "border border-shadow"
+              }`}
+            />
+            {errors.email && (
+              <p className="text-red-500 text-xs font-ibmplex-medium text-left">
+                {errors.email}
+              </p>
+            )}
+          </div>
+          {/* === END OF EMAIL FIELD === */}
+
+          {/* === PASSWORD FIELD === */}
+          <div className="relative form-control grid gap-2">
+            <p
+              style={{ pointerEvents: "none" }}
+              className={`absolute left-2 flex items-center font-ibmplex-bold gap-2 pr-2 text-[0.8rem] transition-all duration-200 ease-in-out bg-white ${
+                focusedFields.password || formData.password.trim()
+                  ? "-top-5 text-black"
+                  : "top-1/2 left-18 -translate-x-1/2 -translate-y-1/2 text-gray-1"
+              }`}
+            >
+              <span className="inline-flex text-white bg-black rounded-full p-[0.4rem]">
+                <i className="fa-solid fa-key text-[0.7rem]"></i>
+              </span>
+              <label htmlFor="password">Password</label>
+            </p>
+            <input
+              type="password"
+              name="password"
+              id="password"
+              value={formData.password.trim()}
+              onChange={handleChange}
+              onFocus={() =>
+                setFocusedFields((f) => ({ ...f, password: true }))
+              }
+              onBlur={() =>
+                setFocusedFields((f) => ({ ...f, password: false }))
+              }
+              className={`${formFieldClasses} ${
+                errors.password ? "border-2 border-red" : "border border-shadow"
+              }`}
+            />
+            {errors.password && (
+              <p className="text-red-500 text-xs font-ibmplex-medium text-left">
+                {errors.password}
+              </p>
+            )}
+          </div>
+          {/* === END OF PASSWORD FIELD === */}
+
+          <button className="flex items-center text-center font-ibmplex-bold mt-4">
+            <hr className="grow border border-gray-2" />
+            <span className="px-6">Login</span>
+            <span className="bg-primary py-6 px-6 rounded-r-full"></span>
+          </button>
+          <div className="font-ibmplex">
+            I Don't have an account. I want to{" "}
+            <Link to={"/register"} className="text-primary font-ibmplex-bold">
+              Create one
+            </Link>
+          </div>
+        </form>
+      </div>
+    </section>
   );
 };
 
