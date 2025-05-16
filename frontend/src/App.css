@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 @theme {
-  --color-primary: #6C38FF;
+  --color-primary: #6c38ff;
   --color-secondary: #d9e8f5;
   --color-secondary-2: #417576;
   --color-secondary-3: #225050;
@@ -12,6 +12,7 @@
   --color-shadow: #486c6f;
   --color-shadow-2: #719193;
   --color-shadow-3: #689a9f;
+  --color-green-1: #4caf50;
   --font-poppins: poppins;
   --font-poppins-medium: poppins-medium;
   --font-poppins-bold: poppins-bold;
@@ -58,6 +59,9 @@
 }
 .box-shadow-1 {
   box-shadow: 0 0.275em 0 #417576;
+}
+.bs-2 {
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
 }
 .overlay-hole {
   background: black;

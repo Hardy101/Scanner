@@ -14,7 +14,7 @@ import { useEventStore } from "../store/useEventsStore";
 import LoadingComponent from "../components/loading";
 import { formatDate } from "../utils/functions";
 import LgNavbar from "../components/lgNavbar";
-import { icons } from "../constants/media";
+import Navbar from "../components/navbar";
 
 export interface formData {
   name: string;
@@ -88,15 +88,9 @@ const Home: React.FC = () => {
   return (
     <div className="relative min-h-dvh p-4 md:p-8">
       {/* Floating Elements */}
+      <Navbar />
       <Overlay />
       <DropdownNav />
-      <button
-        onClick={() => navigate("/scan")}
-        className="absolute flex right-4 bottom-4 bg-white p-4 rounded-full box-shadow-1 text-primary text-2xl"
-      >
-        {/* <i className="lni lni-camera-1"></i> */}
-        <i className="fa-solid fa-camera"></i>
-      </button>
       <Modal>
         <button
           onClick={() => {
@@ -189,30 +183,27 @@ const Home: React.FC = () => {
       {/* End of floating Elements */}
 
       <div className="nav flex items-center justify-between text-sm">
-        {/* <p className="grid text-left">
-          <img src={icons.logo} alt="" className="w-16"/>
-        </p> */}
-        <button onClick={() => setIsDropdownActive(true)}>
-          <img src={icons.menu} alt="" className="w-9" />
+        <button className="bs-2 rounded-xl bg-white p-4">
+          <i className="fa-solid fa-plus text-3xl"></i>
         </button>
-
-        <button className="text-2xl md:hidden">
+        {/* Notifications button */}
+        <button className="text-3xl md:hidden">
           <i className="fa-regular fa-bell"></i>
         </button>
-
+        {/* Nav menu for lg screens */}
         <LgNavbar />
-        {/* <NavButton
-          text="Menu"
-          onClick={() => setIsDropdownActive(true)}
-          classNames="md:hidden"
-        /> */}
       </div>
       <div className="body mt-10 ">
-        <h2 className="text-2xl font-poppins-bold">Hi, {user?.name}</h2>
+        <div className="w-3/5 grid gap-y-8 bg-green-1 px-4 py-8 rounded-3xl text-white">
+          <p className="flex justify-between items-center">
+            <span className="rounded-full text-3xl font-ibmplex-bold px-4 py-1 text-green-1 bg-white">
+              1
+            </span>
+          </p>
+          <span className="text-2xl font-ibmplex-bold">Upcoming events</span>
+        </div>
 
-        <p className="text-sm text-secondary">
-          Welcome back, hope your doing well today?
-        </p>
+        <h2 className="text-3xl font-ibmplex-bold">Events this month</h2>
 
         {isLoading ? (
           <LoadingComponent />
