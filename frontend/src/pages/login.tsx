@@ -103,7 +103,7 @@ const Login = () => {
       <div className="md:w-2/5 px-8 md:mx-auto mt-auto z-10">
         <h1 className="relative flex gap-4 items-center">
           <img src={icons.logo} alt="logo of invix" className="w-32" />
-          <span className="text-5xl font-dmserif">Welcome back</span>
+          <span className="text-4xl md:text-5xl font-dmserif">Welcome back</span>
         </h1>
         <form onSubmit={handleSubmit} className="grid gap-8 mt-12 mx-auto">
           {errors.general && (
@@ -190,7 +190,9 @@ const Login = () => {
           <button className="flex items-center text-center font-ibmplex-bold mt-4">
             <hr className="grow border border-gray-2" />
             <span className="px-6">Login</span>
-            <span className="bg-primary py-6 px-6 rounded-r-full"></span>
+            <span className="relative bg-primary py-6 px-6 rounded-r-full">
+            <i className="fa-solid fa-arrow-right absolute text-2xl text-white left-0 top-1/2 -translate-y-1/2"></i>
+            </span>
           </button>
           <div className="font-ibmplex">
             I Don't have an account. I want to{" "}

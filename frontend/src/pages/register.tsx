@@ -94,7 +94,11 @@ const Register = () => {
 
   return (
     <section className="relative min-h-screen py-16 flex flex-col gap-4 text-center">
-      <img src={icons.floatingqrcode} alt="floating image of qrcode" className="w-3/4 absolute right-0 top-0"/>
+      <img
+        src={icons.floatingqrcode}
+        alt="floating image of qrcode"
+        className="w-3/4 absolute right-0 top-0"
+      />
       <div className="md:w-2/5 px-8 md:mx-auto mt-auto z-10">
         <h1 className="relative flex gap-4 items-center">
           <img src={icons.logo} alt="logo of invix" className="w-32" />
@@ -102,7 +106,7 @@ const Register = () => {
         </h1>
         <form onSubmit={handleSubmit} className="grid gap-8 mt-12 mx-auto">
           {errors.general && (
-            <p className="error-msg flex items-center gap-2 bg-red-300 text-red-500 text-xs rounded-md p-2 ">
+            <p className="error-msg flex items-center gap-2 text-red-500 text-sm rounded-md p-2 font-ibmplex-bold">
               <i className="fa-solid fa-triangle-exclamation text-lg"></i>
               <span>{errors.general}</span>
             </p>
@@ -216,11 +220,13 @@ const Register = () => {
             )}
           </div>
           {/* === END OF PASSWORD FIELD === */}
-          
+
           <button className="flex items-center text-center font-ibmplex-bold mt-4">
             <hr className="grow border border-gray-2" />
             <span className="px-6">Register</span>
-            <span className="bg-primary py-6 px-6 rounded-r-full"></span>
+            <span className="relative bg-primary py-6 px-6 rounded-r-full">
+              <i className="fa-solid fa-arrow-right absolute text-2xl text-white left-0 top-1/2 -translate-y-1/2"></i>
+            </span>
           </button>
           <div className="font-ibmplex">
             I already have an account.{" "}

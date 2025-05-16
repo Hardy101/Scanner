@@ -27,3 +27,4 @@ react dependencies.txt
 *.venv
 *.pyc
 *qr_codes
+*sw.js
