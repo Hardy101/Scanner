@@ -186,10 +186,12 @@ const Home: React.FC = () => {
         <button className="md:hidden bs-2 rounded-xl bg-white p-4">
           <i className="fa-solid fa-plus text-3xl"></i>
         </button>
+
         {/* Notifications button */}
         <button className="text-3xl md:hidden">
           <i className="fa-regular fa-bell"></i>
         </button>
+
         {/* Nav menu for lg screens */}
         <LgNavbar />
       </div>
@@ -220,7 +222,6 @@ const Home: React.FC = () => {
                     to={`/event/${event.id}`}
                     className="flex bg-secondary-2 border-2 border-primary py-2 px-3 rounded-full text-white text-3xl"
                   >
-                    {/* <i className="lni lni-arrow-angular-top-right"></i> */}
                     <i className="fa-solid fa-arrow-up-long rotate-45"></i>
                   </Link>
                 </button>
