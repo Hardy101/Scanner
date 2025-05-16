@@ -9,7 +9,7 @@ const LgNavbar = () => {
   const { setIsModalActive } = useModalState();
 
   return (
-    <ul className="hidden gap-2 items-center md:flex text-secondary">
+    <ul className="hidden gap-2 items-center md:flex text-black font-ibmplex-bold">
       <li>
         <Link to={"/profile"}>Profile</Link>
       </li>
@@ -21,7 +21,7 @@ const LgNavbar = () => {
           onClick={() => {
             setIsModalActive(true), setIsDropdownActive(false);
           }}
-          className="grow bg-shadow border border-shadow-2 rounded-full py-2 px-4 font-poppins-bold"
+          className="grow bg-shadow border border-shadow-2 rounded-full py-2 px-4 text-white"
         >
           Add Event
         </button>

@@ -183,7 +183,7 @@ const Home: React.FC = () => {
       {/* End of floating Elements */}
 
       <div className="nav flex items-center justify-between text-sm">
-        <button className="bs-2 rounded-xl bg-white p-4">
+        <button className="md:hidden bs-2 rounded-xl bg-white p-4">
           <i className="fa-solid fa-plus text-3xl"></i>
         </button>
         {/* Notifications button */}
