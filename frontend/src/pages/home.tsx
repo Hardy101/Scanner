@@ -1,8 +1,6 @@
 import { Link, useNavigate } from "react-router";
 
-import NavButton from "../components/navbutton";
 import DropdownNav from "../components/dropdownnav";
-import Hr from "../components/hr";
 
 import { useDropdownState } from "../store/useDropdownStore";
 import { useModalState } from "../store/useModalStore";
@@ -14,8 +12,9 @@ import { url } from "../constants/variables";
 import axios from "axios";
 import { useEventStore } from "../store/useEventsStore";
 import LoadingComponent from "../components/loading";
-import { formatDate, fancyDateToday } from "../utils/functions";
+import { formatDate } from "../utils/functions";
 import LgNavbar from "../components/lgNavbar";
+import { icons } from "../constants/media";
 
 export interface formData {
   name: string;
@@ -25,7 +24,7 @@ export interface formData {
 }
 
 const Home: React.FC = () => {
-  const { dayName, fullDate } = fancyDateToday(); // Get the current date and day name
+  // const { dayName, fullDate } = fancyDateToday(); // Get the current date and day name
   const navigate = useNavigate();
   const { user } = useAuth();
   const { setIsDropdownActive } = useDropdownState();
@@ -57,7 +56,7 @@ const Home: React.FC = () => {
       });
 
       if (response && response.status === 200) {
-        setFormError("")
+        setFormError("");
         const eventId = response.data.id;
         setFormData({
           name: "",
@@ -87,7 +86,7 @@ const Home: React.FC = () => {
   }, [fetchEvents]);
 
   return (
-    <div className="relative min-h-screen bg-primary text-white p-4 md:p-8">
+    <div className="relative min-h-dvh p-4 md:p-8">
       {/* Floating Elements */}
       <Overlay />
       <DropdownNav />
@@ -190,18 +189,24 @@ const Home: React.FC = () => {
       {/* End of floating Elements */}
 
       <div className="nav flex items-center justify-between text-sm">
-        <p className="grid text-left">
-          <span>{dayName}, </span>
-          <span>{fullDate}</span>
-        </p>
+        {/* <p className="grid text-left">
+          <img src={icons.logo} alt="" className="w-16"/>
+        </p> */}
+        <button onClick={() => setIsDropdownActive(true)}>
+          <img src={icons.menu} alt="" className="w-9" />
+        </button>
+
+        <button className="text-2xl md:hidden">
+          <i className="fa-regular fa-bell"></i>
+        </button>
+
         <LgNavbar />
-        <NavButton
+        {/* <NavButton
           text="Menu"
           onClick={() => setIsDropdownActive(true)}
           classNames="md:hidden"
-        />
+        /> */}
       </div>
-      <Hr />
       <div className="body mt-10 ">
         <h2 className="text-2xl font-poppins-bold">Hi, {user?.name}</h2>
 

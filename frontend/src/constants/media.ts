@@ -8,7 +8,8 @@ import qrcode from "../assets/qrcode.png";
 import profile from "../assets/profile-img.png";
 import success from "../assets/gif/success.gif";
 import loading from "../assets/gif/loading.gif";
-import floatingqrcode from "../assets/qrfloating.png"
+import floatingqrcode from "../assets/qrfloating.png";
+import menu from "../assets/menu.png";
 
 export const icons = {
   logo,
@@ -18,7 +19,8 @@ export const icons = {
   scan,
   edit,
   qrcode,
-  floatingqrcode
+  floatingqrcode,
+  menu,
 };
 
 export const gifs = {
