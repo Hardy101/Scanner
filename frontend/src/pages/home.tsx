@@ -104,7 +104,6 @@ const Home: React.FC = () => {
           }}
           className="absolute flex bg-primary text-secondary rounded-md p-1 text-xl right-4 top-4 hover:bg-secondary-2"
         >
-          {/* <i className="lni lni-xmark"></i> */}
           <i className="fa-solid fa-xmark"></i>
         </button>
         <form onSubmit={handleSubmit} className="text-black text-xs">
@@ -181,21 +180,10 @@ const Home: React.FC = () => {
         </form>
       </Modal>
       {/* End of floating Elements */}
-
-      <div className="nav flex items-center justify-between text-sm">
-        <button className="md:hidden bs-2 rounded-xl bg-white p-4">
-          <i className="fa-solid fa-plus text-3xl"></i>
-        </button>
-
-        {/* Notifications button */}
-        <button className="text-3xl md:hidden">
-          <i className="fa-regular fa-bell"></i>
-        </button>
-
-        {/* Nav menu for lg screens */}
-        <LgNavbar />
-      </div>
+      <TopNavigation />
+      
       <div className="body mt-10 ">
+        {/* Upcoming events div */}
         <div className="w-3/5 grid gap-y-8 bg-green-1 px-4 py-8 rounded-3xl text-white">
           <p className="flex justify-between items-center">
             <span className="rounded-full text-3xl font-ibmplex-bold px-4 py-1 text-green-1 bg-white">
@@ -205,10 +193,11 @@ const Home: React.FC = () => {
           <span className="text-2xl font-ibmplex-bold">Upcoming events</span>
         </div>
 
+
         <h2 className="text-3xl font-ibmplex-bold">Events this month</h2>
 
         {isLoading ? (
-          <LoadingComponent />
+          <LoadingComponent /> // Shows loading component while fetching data
         ) : (
           <ul
             id="events"
@@ -251,3 +240,21 @@ const Home: React.FC = () => {
 };
 
 export default Home;
+
+const TopNavigation = () => {
+  return (
+    <div className="nav flex items-center justify-between text-sm">
+      <button className="md:hidden bs-2 rounded-xl bg-white p-4">
+        <i className="fa-solid fa-plus text-3xl"></i>
+      </button>
+
+      {/* Notifications button */}
+      <button className="text-3xl md:hidden">
+        <i className="fa-regular fa-bell"></i>
+      </button>
+
+      {/* Nav menu for lg screens */}
+      <LgNavbar />
+    </div>
+  );
+};
