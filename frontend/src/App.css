@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 @theme {
-  --color-primary: #143f40;
+  --color-primary: #6C38FF;
   --color-secondary: #d9e8f5;
   --color-secondary-2: #417576;
   --color-secondary-3: #225050;
@@ -14,6 +14,10 @@
   --font-poppins: poppins;
   --font-poppins-medium: poppins-medium;
   --font-poppins-bold: poppins-bold;
+  --font-dmserif: dmserif;
+  --font-ibmplex: ibmplex;
+  --font-ibmplex-medium: ibmplex-medium;
+  --font-ibmplex-bold: ibmplex-bold;
 }
 
 @font-face {
@@ -28,7 +32,22 @@
   font-family: poppins-medium;
   src: url(assets/fonts/Poppins-Medium.ttf);
 }
-
+@font-face {
+  font-family: dmserif;
+  src: url(assets/fonts/DM_Serif_Text/DMSerifText-Regular.ttf);
+}
+@font-face {
+  font-family: ibmplex;
+  src: url(assets/fonts/IBM_Plex_Serif/IBMPlexSerif-Regular.ttf);
+}
+@font-face {
+  font-family: ibmplex-medium;
+  src: url(assets/fonts/IBM_Plex_Serif/IBMPlexSerif-Medium.ttf);
+}
+@font-face {
+  font-family: ibmplex-bold;
+  src: url(assets/fonts/IBM_Plex_Serif/IBMPlexSerif-Bold.ttf);
+}
 /* Vanilla */
 :root {
   --animate-duration: 600ms;
@@ -46,4 +65,3 @@
   z-index: 0;
   clip-path: path("M0,0 H100% V100% H0 Z M35%,35% H65% V65% H35% Z");
 }
-

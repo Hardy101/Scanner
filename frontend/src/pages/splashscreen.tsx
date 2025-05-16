@@ -1,31 +1,31 @@
 import { Link } from "react-router";
 
-import { icons } from "../constants/media";
-
 const SplashScreen = () => {
   return (
-    <div className="min-h-screen bg-primary flex flex-col gap-16 py-24">
-      <img
-        src={icons.logo}
-        alt="Logo"
-        className="w-1/6 mx-auto"
-        style={{
-          pointerEvents: "none",
-        }}
-      />
-      <div className="flex flex-col text-center text-sm font-bold gap-4">
+    <div className="min-h-dvh flex flex-col gap-y-8 py-24 text-center">
+      <div className="progress flex gap-2 mx-auto">
+        <span className="w-16 h-1 bg-black rounded-full"></span>
+        <span className="w-16 h-1 bg-gray-1 rounded-full"></span>
+        <span className="w-16 h-1 bg-gray-1 rounded-full"></span>
+      </div>
+      <h1 className="font-dmserif text-4xl px-4">Manage your guests and track every Check-in</h1>
+      <div className="flex flex-col justify-end text-center gap-4 font-ibmplex-medium grow">
         <Link
           to={"/register"}
-          className="w-4/5 md:w-2/5 bg-white text-primary box-shadow-1 rounded-full px-6 py-4 mx-auto"
+          className="w-4/5 md:w-2/5 bg-primary text-white rounded-2xl px-6 py-4 mx-auto"
         >
-          <span>Register</span>
+          <span>Create account</span>
         </Link>
         <Link
           to={"/login"}
-          className="w-4/5 md:w-2/5 bg-primary text-white border border-shadow box-shadow-1 rounded-full px-6 py-4 mx-auto"
+          className="w-4/5 md:w-2/5 bg-black text-white rounded-2xl px-6 py-4 mx-auto"
         >
-          <span>Login</span>
+          <span>Sign in</span>
         </Link>
+      </div>
+      <div className="agreement flex gap-8 font-ibmplex mx-auto font-bold">
+        <span>User terms</span>
+        <span>Privacy</span>
       </div>
     </div>
   );
