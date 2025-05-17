@@ -11,6 +11,8 @@ import loading from "../assets/gif/loading.gif";
 import floatingqrcode from "../assets/qrfloating.png";
 import menu from "../assets/menu.png";
 import bd from "../assets/bd.jpg";
+import conference from "../assets/conference.jpg";
+import meeting from "../assets/meeting.jpg";
 
 export const icons = {
   logo,
@@ -31,5 +33,8 @@ export const gifs = {
 
 export const img = {
   bd,
+  conference,
+  meeting
 };
+
 export { profile };
