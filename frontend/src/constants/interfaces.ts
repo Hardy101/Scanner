@@ -1,4 +1,4 @@
-export interface EventformData {
+export interface EventFormData {
   name: string;
   date: string;
   location: string;

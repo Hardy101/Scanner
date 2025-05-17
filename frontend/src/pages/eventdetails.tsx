@@ -10,9 +10,8 @@ import { icons } from "../constants/media";
 import Modal from "../components/modal";
 import { useModalState } from "../store/useModalStore";
 import Overlay from "../components/overlay";
-import { formData } from "./home";
 import { url } from "../constants/variables";
-import { Guest, GuestResponse } from "../constants/interfaces";
+import { Guest, GuestResponse, EventFormData } from "../constants/interfaces";
 import { copyToClipboard } from "../utils/functions";
 
 const EventDetails: React.FC = () => {
@@ -40,7 +39,7 @@ const EventDetails: React.FC = () => {
   const { setIsModalActive } = useModalState();
   const [activeStep, setActiveStep] = useState("guestList");
   const [copied, setCopied] = useState(false);
-  const [formData, setFormData] = useState<formData>({
+  const [formData, setFormData] = useState<EventFormData>({
     name: "",
     date: "",
     location: "",

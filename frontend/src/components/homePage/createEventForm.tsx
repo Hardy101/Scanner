@@ -7,14 +7,14 @@ import { CreateEventFormProps } from "../../constants/interfaces";
 import { useEventStore } from "../../store/useEventsStore";
 import { useModalState } from "../../store/useModalStore";
 import { url } from "../../constants/variables";
-import { EventformData } from "../../constants/interfaces";
+import { EventFormData } from "../../constants/interfaces";
 
 const CreateEventForm: React.FC<CreateEventFormProps> = ({
   isCreateEventActive,
   setIsCreateEventActive,
 }) => {
   const { fetchEvents } = useEventStore();
-  const [formData, setFormData] = useState<EventformData>({
+  const [formData, setFormData] = useState<EventFormData>({
     name: "",
     date: "",
     location: "",
