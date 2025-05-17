@@ -16,7 +16,7 @@ import ToastNotification from "./components/toast";
 function App() {
   return (
     <main>
-      <section className="min-h-screen overflow-clip font-ibmplex">
+      <section className="min-h-screen overflow-clip font-poppins">
         <ToastNotification />
         <AuthProvider>
           <BrowserRouter>

@@ -1,8 +1,8 @@
 import { useNavigate, useParams } from "react-router";
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
-import { useToastStore } from "../store/useToastStore";
 
+import { useToastStore } from "../store/useToastStore";
 import NavButton from "../components/navbutton";
 import ActionButton from "../components/actionbutton";
 import Hr from "../components/hr";
@@ -47,6 +47,7 @@ const EventDetails: React.FC = () => {
   });
   const formFieldClass =
     "border border-gray-400 text-primary placeholder:text-primary p-3 text-sm rounded-xl focus:border-primary focus:outline-none";
+
   const fetchEventDetails = async () => {
     try {
       const [eventRes, guestsRes] = await Promise.all([
@@ -221,7 +222,7 @@ const EventDetails: React.FC = () => {
   }, []);
 
   return (
-    <div className="relative min-h-screen bg-primary text-white p-4 md:p-8">
+    <div className="relative min-h-screen p-4 md:p-8">
       {/* Floating Elements */}
       {/* Guest List */}
       <Modal>
@@ -543,11 +544,15 @@ const EventDetails: React.FC = () => {
 
       {/* End of Floating Elements */}
 
-      <div className="nav flex items-center justify-between text-sm">
-        <p className="grid text-left">
-          <span>Event Details</span>
-        </p>
-        <NavButton onClick={() => navigate(-1)} text="Back" />
+      <div className="nav flex gap-8 items-center text-sm">
+        <button
+          onClick={() => navigate(-1)}
+          className="md:hidden bs-2 rounded-xl bg-white p-3 hover:bg-primary hover:text-white"
+        >
+          <i className="fa-solid fa-house text-xl"></i>
+        </button>
+
+        <span className="font-poppins-bold text-lg">Event Details</span>
       </div>
       <Hr />
 
@@ -559,15 +564,15 @@ const EventDetails: React.FC = () => {
           name="name"
           value={formData.name}
           onChange={handleEventFormChange}
-          className={`w-full border-l-4 text-lg pl-3 pr-4 py-1 outline-none ${
+          className={`w-full border-transparent rounded-md text-lg pl-3 pr-4 py-1 font-poppins-medium outline-none ${
             isFormActive
-              ? "bg-secondary text-primary border-secondary-2"
-              : "bg-transparent text-white"
+              ? "bg-primary/10 border-primary"
+              : "bg-transparent text-black"
           }`}
         />
 
         <ul className="mt-8 mb-8 grid gap-2">
-          <li className="text-secondary-2 flex items-center gap-2">
+          <li className="flex items-center gap-2">
             <i className="lni lni-alarm-1"></i>
             <input
               readOnly={!isFormActive}
@@ -578,12 +583,12 @@ const EventDetails: React.FC = () => {
               onChange={handleEventFormChange}
               className={`w-full outline-none ${
                 isFormActive
-                  ? "bg-secondary text-primary"
-                  : "bg-transparent text-white"
+                  ? "bg-primary/10 border-primary font-poppins-bold"
+                  : "bg-transparent text-black"
               }`}
             />
           </li>
-          <li className="text-secondary-2 flex items-center gap-2">
+          <li className="flex items-center gap-2">
             <i className="lni lni-location-arrow-right"></i>
             <input
               readOnly={!isFormActive}
@@ -593,8 +598,8 @@ const EventDetails: React.FC = () => {
               onChange={handleEventFormChange}
               className={`w-full outline-none ${
                 isFormActive
-                  ? "bg-secondary text-primary"
-                  : "bg-transparent text-white"
+                  ? "bg-primary/10 border-primary font-poppins-bold"
+                  : "bg-transparent text-black"
               }`}
             />
           </li>
@@ -602,7 +607,7 @@ const EventDetails: React.FC = () => {
         <Hr />
         <div id="expected_guests" className="mt-10">
           <h3 className="font-poppins-bold">Expected guests</h3>
-          <p className="text-sm text-secondary mt-2">
+          <p className="text-sm mt-2">
             {formData.expected_guests} guests
           </p>
 
