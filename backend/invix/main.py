@@ -8,6 +8,7 @@ from sqlalchemy.orm import Session
 from typing import List
 import logging
 from fastapi.staticfiles import StaticFiles
+import os
 
 # Local imports
 from .routes import auth, event
@@ -25,7 +26,15 @@ async def lifespan(app: FastAPI):
 app = FastAPI(lifespan=lifespan)
 app.title = "Invix API"
 app.description = "API for Invix, a guest management system."
-app.mount("static", StaticFiles(directory="static"), name="static")
+
+# Get the absolute path to the static directory
+static_dir = os.path.join(os.path.dirname(__file__), "static")
+if os.path.exists(static_dir):
+    app.mount("static", StaticFiles(directory=static_dir), name="static")
+else:
+    logging.warning(
+        f"Static directory not found at {static_dir}. Static files will not be served."
+    )
 
 
 @app.exception_handler(RequestValidationError)
