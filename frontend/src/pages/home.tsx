@@ -18,7 +18,7 @@ const Home: React.FC = () => {
   }, [fetchEvents]);
 
   return (
-    <div className="relative min-h-dvh p-4 md:p-8">
+    <div className="relative min-h-dvh p-4 md:px-8 md:pt-8 pb-32">
       {/* Floating Elements */}
       <CreateEventForm
         isCreateEventActive={isCreateEventActive}

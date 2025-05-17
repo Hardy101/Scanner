@@ -135,7 +135,7 @@ const CreateEventForm: React.FC<CreateEventFormProps> = ({
           >
             Date
           </label>
-          <input type="date" name="date" id="date" className={formFields} />
+          <input type="date" name="date" id="date" onChange={handleChange} value={formData.date} className={formFields} />
           <input type="time" name="time" id="time" className={formFields} />
         </div>
         {/* End of Date and time event form field */}
@@ -157,7 +157,7 @@ const CreateEventForm: React.FC<CreateEventFormProps> = ({
         </div>
         {/* Location of Event form field */}
 
-        {/* Name of Event form field */}
+        {/* Number of guests form field */}
         <div className="form-control grid gap-y-3">
           <label htmlFor="expected_guests" className={formLabelClass}>
             Expected number of guests
@@ -173,7 +173,8 @@ const CreateEventForm: React.FC<CreateEventFormProps> = ({
             placeholder="Min 1."
           />
         </div>
-        {/* Name of Event form field */}
+        {/* Number of guests form field */}
+
         {/* Upload Form field */}
         <div className="form-control grid gap-y-3">
           <div className="label">
