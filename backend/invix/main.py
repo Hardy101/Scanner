@@ -25,7 +25,7 @@ async def lifespan(app: FastAPI):
 app = FastAPI(lifespan=lifespan)
 app.title = "Invix API"
 app.description = "API for Invix, a guest management system."
-app.mount("/static", StaticFiles(directory="static"), name="static")
+app.mount("static", StaticFiles(directory="static"), name="static")
 
 
 @app.exception_handler(RequestValidationError)

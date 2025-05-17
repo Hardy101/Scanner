@@ -1,6 +1,11 @@
 import { Link } from "react-router";
 import { img } from "../constants/media";
 
+const carousel_imgs = [
+  { id: 0, src: img.bd },
+  { id: 1, src: img.conference },
+  { id: 2, src: img.meeting },
+];
 const SplashScreen = () => {
   return (
     <div className="min-h-dvh flex flex-col gap-y-8 py-24 text-center">
@@ -13,7 +18,11 @@ const SplashScreen = () => {
         Manage your guests and track every Check-in
       </h1>
       <div className="grow w-fit overflow-clip">
-        <img src={img.conference} alt="" className="w-4/5 mx-auto rounded-t-full" />
+        <img
+          src={img.conference}
+          alt=""
+          className="w-4/5 mx-auto rounded-t-full"
+        />
       </div>
       <div className="flex flex-col justify-end text-center gap-4 font-ibmplex-medium">
         <Link
