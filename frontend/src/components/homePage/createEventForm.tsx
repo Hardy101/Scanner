@@ -28,8 +28,8 @@ const CreateEventForm: React.FC<CreateEventFormProps> = ({
   const [formError, setFormError] = useState<string | null>(null);
   const { setIsModalActive } = useModalState();
   const formFields =
-    "px-2 py-4 border border-black rounded-md font-poppins-medium placeholder:font-poppins";
-  const formLabelClass = "font-poppins-bold text-xl";
+    "p-4 border border-black rounded-2xl font-poppins-medium placeholder:font-poppins";
+  const formLabelClass = "font-poppins-bold text-lg";
 
   const refreshEvents = () => {
     fetchEvents();
@@ -70,18 +70,18 @@ const CreateEventForm: React.FC<CreateEventFormProps> = ({
     <div
       className={`fixed w-full h-full top-0 ${
         isCreateEventActive ? "translate-y-0" : "translate-y-full"
-      } left-0 bg-white font-poppins p-4 overflow-y-auto z-20 transition-all ease-in-out duration-500`}
+      } left-0 bg-white font-poppins p-8 overflow-y-auto z-20 transition-all ease-in-out duration-500`}
     >
       <form className="grid gap-y-8" onSubmit={handleSubmit}>
         <div className="form-control flex items-center gap-8">
           <button
             onClick={() => setIsCreateEventActive(false)}
             type="button"
-            className="p-4 flex items-center rounded-full bs-2 text-xl"
+            className="p-3 flex items-center rounded-full bs-2 text-lg"
           >
             <i className="fa-solid fa-xmark"></i>
           </button>
-          <h2 className="text-3xl font-poppins-bold">Create Event</h2>
+          <h2 className="text-2xl font-poppins-bold">Create Event</h2>
         </div>
         <div className="form-control">
           {formError && (
@@ -97,11 +97,11 @@ const CreateEventForm: React.FC<CreateEventFormProps> = ({
           </span>
           <label
             htmlFor="file"
-            className="flex flex-col gap-2 items-center py-4 border-2 border-black border-dashed rounded-md"
+            className="flex flex-col gap-2 items-center py-4 border-2 border-black border-dashed rounded-2xl"
           >
             <i className="fa-solid fa-image text-5xl text-primary"></i>
             <span>Drag or drop files to upload</span>
-            <button className="px-4 py-2 rounded-md border font-poppins-bold text-primary">
+            <button className="px-4 py-2 rounded-md border font-poppins-medium text-primary">
               Select files
             </button>
           </label>
@@ -188,7 +188,7 @@ const CreateEventForm: React.FC<CreateEventFormProps> = ({
           </div>
           <label
             htmlFor="img"
-            className="flex flex-col gap-2 items-center py-4 border-2 border-black border-dashed rounded-md"
+            className="flex flex-col gap-2 items-center py-4 border-2 border-black border-dashed rounded-2xl"
           >
             <i className="fa-solid fa-file-excel text-5xl text-primary"></i>
             <span>Drag or drop files to upload</span>
@@ -214,13 +214,13 @@ const CreateEventForm: React.FC<CreateEventFormProps> = ({
               name="activity"
               id="activity"
               placeholder="activity"
-              className="px-2 py-4 border border-black rounded-md"
+              className={formFields}
             />
             <input
               type="number"
               name="h-time"
               id="h-time"
-              className="px-2 py-4 border border-black rounded-md"
+              className={formFields}
             />
           </div>
         </div>
