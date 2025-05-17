@@ -15,7 +15,7 @@ const EventList = () => {
       {events.map((event) => (
         <li
           key={event.id}
-          className="relative aspect-[1/1] flex flex-col rounded-3xl p-3 font-dmserif"
+          className="relative aspect-[3/2] flex flex-col rounded-3xl p-3 font-dmserif"
         >
           <button id="linkout" className="absolute -bottom-2 -right-2 z-3">
             <Link
