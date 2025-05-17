@@ -10,11 +10,11 @@ const TopNavigation: React.FC<CreateEventFormProps> = ({
         onClick={() => setIsCreateEventActive(true)}
         className="md:hidden bs-2 rounded-xl bg-white p-3"
       >
-        <i className="fa-solid fa-plus text-2xl"></i>
+        <i className="fa-solid fa-plus text-xl"></i>
       </button>
 
       {/* Notifications button */}
-      <button className="text-3xl md:hidden">
+      <button className="text-2xl md:hidden">
         <i className="fa-regular fa-bell"></i>
       </button>
 
