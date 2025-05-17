@@ -6,7 +6,7 @@ import { useToastStore } from "../store/useToastStore";
 import NavButton from "../components/navbutton";
 import ActionButton from "../components/actionbutton";
 import Hr from "../components/hr";
-import { icons } from "../constants/media";
+import { icons, img } from "../constants/media";
 import Modal from "../components/modal";
 import { useModalState } from "../store/useModalStore";
 import Overlay from "../components/overlay";
@@ -502,46 +502,6 @@ const EventDetails: React.FC = () => {
 
       <Overlay />
 
-      {/* Action buttons for editing event details */}
-      {isFormActive ? (
-        <p
-          id="formActions"
-          className="animate__animated animate__fadeInUp absolute w-full left-0 bottom-0 grid grid-cols-2 md:flex justify-start gap-4 p-4 text-sm"
-        >
-          <button
-            onClick={handleDeleteEvent}
-            className="flex gap-2 items-center justify-center bg-white text-red py-2 px-4 rounded-md font-poppins-medium my-auto md:m-0"
-          >
-            Delete event
-            <i className="fa-solid fa-trash"></i>
-          </button>
-          <button
-            onClick={() => setIsFormActive(false)}
-            className="flex gap-2 items-center justify-center bg-red text-white py-2 px-4 rounded-md font-poppins-medium my-auto md:m-0"
-          >
-            Cancel changes
-            <i className="fa-solid fa-xmark"></i>
-          </button>
-          <button
-            onClick={updateEventDetails}
-            className={`${
-              !isFormChanged ? "bg-gray-400" : "bg-white"
-            } col-span-2 flex gap-2 items-center justify-center py-1 px-16 rounded-md text-primary font-poppins-medium md:ml-auto`}
-          >
-            Update event
-            <i className="fa-solid fa-pen-nib"></i>
-          </button>
-        </p>
-      ) : (
-        // Edit Button
-        <button
-          onClick={() => setIsFormActive(true)}
-          className="absolute right-4 bottom-4 bg-white p-2 rounded-full box-shadow-1"
-        >
-          <img src={icons.edit} alt="Edit icon" className="w-6" />
-        </button>
-      )}
-
       {/* End of Floating Elements */}
 
       <div className="nav flex gap-8 items-center text-sm">
@@ -556,40 +516,29 @@ const EventDetails: React.FC = () => {
       </div>
       <Hr />
 
-      <div className="body mt-10">
-        <input
-          readOnly={!isFormActive}
-          type="text"
-          id="name"
-          name="name"
-          value={formData.name}
-          onChange={handleEventFormChange}
-          className={`w-full border-transparent rounded-md text-lg pl-3 pr-4 py-1 font-poppins-medium outline-none ${
-            isFormActive
-              ? "bg-primary/10 border-primary"
-              : "bg-transparent text-black"
-          }`}
-        />
-
-        <ul className="mt-8 mb-8 grid gap-2">
-          <li className="flex items-center gap-2">
-            <i className="lni lni-alarm-1"></i>
-            <input
-              readOnly={!isFormActive}
-              type="date"
-              id="date"
-              name="date"
-              value={formData.date}
-              onChange={handleEventFormChange}
-              className={`w-full outline-none ${
-                isFormActive
-                  ? "bg-primary/10 border-primary font-poppins-bold"
-                  : "bg-transparent text-black"
-              }`}
-            />
-          </li>
-          <li className="flex items-center gap-2">
-            <i className="lni lni-location-arrow-right"></i>
+      <div className="body mt-4 pb-12">
+        <div className="event-info rounded-xl overflow-clip">
+          <img src={img.bd} alt="image of an event" className="w-full" />
+        </div>
+        <h1 className="py-4">
+          <input
+            readOnly={!isFormActive}
+            type="text"
+            id="name"
+            name="name"
+            value={formData.name}
+            onChange={handleEventFormChange}
+            className={`w-full rounded-2xl text-xl font-poppins-bold outline-none ${
+              isFormActive
+                ? "border border-black rounded-2xl p-3"
+                : "bg-transparent text-black"
+            }`}
+          />
+          <span
+            className={`block font-poppins text-gray-1 ${
+              isFormActive ? "mt-2" : ""
+            }`}
+          >
             <input
               readOnly={!isFormActive}
               id="location"
@@ -598,41 +547,98 @@ const EventDetails: React.FC = () => {
               onChange={handleEventFormChange}
               className={`w-full outline-none ${
                 isFormActive
-                  ? "bg-primary/10 border-primary font-poppins-bold"
+                  ? "border border-black rounded-2xl p-3"
                   : "bg-transparent text-black"
               }`}
             />
-          </li>
-        </ul>
-        <Hr />
-        <div id="expected_guests" className="mt-10">
-          <h3 className="font-poppins-bold">Expected guests</h3>
-          <p className="text-sm mt-2">
-            {formData.expected_guests} guests
-          </p>
+          </span>
+        </h1>
+        <div className="grid grid-cols-2 gap-2">
+          <div className="flex gap-2 items-center">
+            <i className="lni lni-alarm-1"></i>
+            <input
+              readOnly={!isFormActive}
+              type="date"
+              id="date"
+              name="date"
+              value={formData.date}
+              onChange={handleEventFormChange}
+              className={`w-full p-2 outline-none ${
+                isFormActive
+                  ? "border rounded-2xl"
+                  : "bg-transparent text-black"
+              }`}
+            />
+          </div>
 
-          <ul
-            id="expected_guests"
-            className="mt-8 text-sm grid grid-cols-3 gap-4"
-          >
-            {guestList.map(({ name, tags }, idx) => (
-              <li
-                key={idx}
-                className="flex flex-col text-left bg-secondary-3 border border-shadow rounded-xl p-2"
-              >
-                <span>{name}</span>
-                <ul className="flex gap-1 text-secondary font-poppins-medium text-xs">
-                  {tags}
-                </ul>
-              </li>
-            ))}
-          </ul>
-          <NavButton
-            onClick={() => setIsModalActive(true)}
-            classNames="block mt-4 py-2 ml-auto"
-            text="See Guest List"
-          />
+          <div className="flex gap-2 items-center">
+            <i className="fa-solid fa-users"></i>
+            <input
+              readOnly={!isFormActive}
+              type="text"
+              id="expected_guests"
+              name="expected_guests"
+              value={formData.expected_guests}
+              onChange={handleEventFormChange}
+              className={`w-full p-2 outline-none ${
+                isFormActive
+                  ? "border rounded-2xl"
+                  : "bg-transparent text-black"
+              }`}
+            />
+          </div>
+
+          <div className="col-span-2 flex gap-2 items-center">
+            <i className="lni lni-location-arrow-right"></i>
+            <span>12:00 PM</span>
+          </div>
         </div>
+
+        <Hr />
+        <NavButton
+          onClick={() => setIsModalActive(true)}
+          classNames="w-full mt-4 py-2 ml-auto"
+          text="See Guest List"
+        />
+        {/* Action buttons for editing event details */}
+        {isFormActive ? (
+          <p
+            id="formActions"
+            className="animate__animated animate__fadeInUp grid grid-cols-2 md:flex justify-start gap-4 p-4 text-sm mt-8"
+          >
+            <button
+              onClick={handleDeleteEvent}
+              className="flex gap-2 items-center justify-center text-white bg-red p-2 rounded-md font-poppins-medium my-auto md:m-0"
+            >
+              Delete event
+              <i className="fa-solid fa-trash"></i>
+            </button>
+            <button
+              onClick={() => setIsFormActive(false)}
+              className="flex gap-2 items-center justify-center bg-gray-1/30 p-2 rounded-md font-poppins-medium my-auto md:m-0"
+            >
+              Cancel changes
+              <i className="fa-solid fa-xmark"></i>
+            </button>
+            <button
+              onClick={updateEventDetails}
+              className={`${
+                !isFormChanged ? "bg-gray-1/30" : "bg-primary text-white"
+              } col-span-2 flex gap-2 items-center justify-center py-2 rounded-md font-poppins-medium md:ml-auto`}
+            >
+              Update event
+              <i className="fa-solid fa-pen-nib"></i>
+            </button>
+          </p>
+        ) : (
+          // Edit Button
+          <button
+            onClick={() => setIsFormActive(true)}
+            className="absolute right-4 bottom-4 bg-white p-2 rounded-full box-shadow-1"
+          >
+            <img src={icons.edit} alt="Edit icon" className="w-6" />
+          </button>
+        )}
       </div>
     </div>
   );
