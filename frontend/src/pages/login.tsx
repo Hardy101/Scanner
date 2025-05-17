@@ -91,7 +91,7 @@ const Login = () => {
   };
 
   const formFieldClasses =
-    "block w-full bg-white font-ibmplex-bold placeholder:text-black placeholder:font-ibmplex text-sm p-5 focus:outline-primary";
+    "block w-full bg-white font-poppins-bold placeholder:text-black placeholder:font-poppins text-sm p-5 focus:outline-primary";
 
   return (
     <section className="relative min-h-screen py-16 flex flex-col gap-4 text-center">
@@ -117,7 +117,7 @@ const Login = () => {
           <div className="relative form-control grid gap-2">
             <p
               style={{ pointerEvents: "none" }}
-              className={` absolute left-2 flex items-center font-ibmplex-bold gap-2 pr-2 text-[0.8rem] transition-all duration-200 ease-in-out bg-white ${
+              className={` absolute left-2 flex items-center font-poppins-bold gap-2 pr-2 text-[0.8rem] transition-all duration-200 ease-in-out bg-white ${
                 focusedFields.email || formData.email.trim()
                   ? "-top-5 text-black"
                   : "top-1/2 left-15 -translate-x-1/2 -translate-y-1/2 text-gray-1"
@@ -141,7 +141,7 @@ const Login = () => {
               }`}
             />
             {errors.email && (
-              <p className="text-red-500 text-xs font-ibmplex-medium text-left">
+              <p className="text-red-500 text-xs font-poppins-medium text-left">
                 {errors.email}
               </p>
             )}
@@ -152,7 +152,7 @@ const Login = () => {
           <div className="relative form-control grid gap-2">
             <p
               style={{ pointerEvents: "none" }}
-              className={`absolute left-2 flex items-center font-ibmplex-bold gap-2 pr-2 text-[0.8rem] transition-all duration-200 ease-in-out bg-white ${
+              className={`absolute left-2 flex items-center font-poppins-bold gap-2 pr-2 text-[0.8rem] transition-all duration-200 ease-in-out bg-white ${
                 focusedFields.password || formData.password.trim()
                   ? "-top-5 text-black"
                   : "top-1/2 left-18 -translate-x-1/2 -translate-y-1/2 text-gray-1"
@@ -180,23 +180,23 @@ const Login = () => {
               }`}
             />
             {errors.password && (
-              <p className="text-red-500 text-xs font-ibmplex-medium text-left">
+              <p className="text-red-500 text-xs font-poppins-medium text-left">
                 {errors.password}
               </p>
             )}
           </div>
           {/* === END OF PASSWORD FIELD === */}
 
-          <button className="flex items-center text-center font-ibmplex-bold mt-4">
+          <button className="flex items-center text-center font-poppins-bold mt-4">
             <hr className="grow border border-gray-2" />
             <span className="px-6">Login</span>
             <span className="relative bg-primary py-6 px-6 rounded-r-full">
             <i className="fa-solid fa-arrow-right absolute text-2xl text-white left-0 top-1/2 -translate-y-1/2"></i>
             </span>
           </button>
-          <div className="font-ibmplex">
+          <div className="font-poppins">
             I Don't have an account. I want to{" "}
-            <Link to={"/register"} className="text-primary font-ibmplex-bold">
+            <Link to={"/register"} className="text-primary font-poppins-bold">
               Create one
             </Link>
           </div>
