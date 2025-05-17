@@ -181,7 +181,7 @@ const Home: React.FC = () => {
       </Modal>
       {/* End of floating Elements */}
       <TopNavigation />
-      
+
       <div className="body mt-10 ">
         {/* Upcoming events div */}
         <div className="w-3/5 grid gap-y-8 bg-green-1 px-4 py-8 rounded-3xl text-white">
@@ -241,6 +241,7 @@ const Home: React.FC = () => {
 
 export default Home;
 
+// Navigation menu
 const TopNavigation = () => {
   return (
     <div className="nav flex items-center justify-between text-sm">

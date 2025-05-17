@@ -2,7 +2,7 @@ import { Link } from "react-router";
 
 const Navbar: React.FC = () => {
   return (
-    <nav className="fixed w-full left-0 bottom-0 p-4 flex justify-center">
+    <nav className="fixed w-full left-0 bottom-0 p-4 flex justify-center md:hidden">
       <ul className="w-full bg-black rounded-2xl py-4 px-4 text-white flex items-center justify-between md:w-1/4">
         <li>
           <Link

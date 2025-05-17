@@ -3,20 +3,32 @@ import { Link } from "react-router";
 import { useDropdownState } from "../store/useDropdownStore";
 import { useModalState } from "../store/useModalStore";
 import LogoutButton from "../components/logOutbutton";
+import { icons } from "../constants/media";
 
 const LgNavbar = () => {
   const { setIsDropdownActive } = useDropdownState();
   const { setIsModalActive } = useModalState();
 
   return (
-    <ul className="hidden gap-2 items-center md:flex text-black font-ibmplex-bold">
+    <ul className="w-full hidden gap-6 items-center md:flex justify-between text-black font-ibmplex-bold">
+      <li>
+        <Link to={"#"}>
+          <img src={icons.logo} alt="logo of invix" className="w-16"/>
+        </Link>
+      </li>
+      <li className="ml-auto">
+        <Link to={"/home"}>Home</Link>
+      </li>
+      <li>
+        <Link to={"#"}>Analytics</Link>
+      </li>
       <li>
         <Link to={"/profile"}>Profile</Link>
       </li>
-      <li className="mr-10">
-        <Link to={""}>Analytics</Link>
-      </li>
       <li>
+        <Link to={""}>Settings</Link>
+      </li>
+      <li className="ml-auto">
         <button
           onClick={() => {
             setIsModalActive(true), setIsDropdownActive(false);
