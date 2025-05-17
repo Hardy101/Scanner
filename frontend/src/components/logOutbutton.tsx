@@ -23,7 +23,7 @@ const LogoutButton = () => {
 
   return (
     <button
-      className="flex items-center gap-2 bg-red text-white rounded-full py-2 px-4"
+      className="flex items-center gap-2 bg-[#FF6B6B] text-white rounded-full py-2 px-4"
       onClick={handleLogout}
     >
       Logout

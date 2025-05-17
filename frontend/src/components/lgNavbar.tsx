@@ -10,7 +10,7 @@ const LgNavbar = () => {
   const { setIsModalActive } = useModalState();
 
   return (
-    <ul className="w-full hidden gap-6 items-center md:flex justify-between text-black font-ibmplex-bold">
+    <ul className="w-full hidden gap-6 items-center md:flex justify-between text-black font-poppins-medium">
       <li>
         <Link to={"#"}>
           <img src={icons.logo} alt="logo of invix" className="w-16"/>
@@ -33,7 +33,7 @@ const LgNavbar = () => {
           onClick={() => {
             setIsModalActive(true), setIsDropdownActive(false);
           }}
-          className="grow bg-shadow border border-shadow-2 rounded-full py-2 px-4 text-white"
+          className="grow bg-primary border rounded-full py-2 px-4 text-white"
         >
           Add Event
         </button>
