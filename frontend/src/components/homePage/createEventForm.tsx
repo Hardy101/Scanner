@@ -70,18 +70,21 @@ const CreateEventForm: React.FC<CreateEventFormProps> = ({
     <div
       className={`fixed w-full h-full top-0 ${
         isCreateEventActive ? "translate-y-0" : "translate-y-full"
-      } left-0 bg-white font-poppins p-8 overflow-y-auto z-20 transition-all ease-in-out duration-500`}
+      } left-0 bg-white font-poppins overflow-y-auto z-20 transition-all ease-in-out duration-500`}
     >
-      <form className="grid gap-y-8" onSubmit={handleSubmit}>
-        <div className="form-control flex items-center gap-8">
-          <button
-            onClick={() => setIsCreateEventActive(false)}
-            type="button"
-            className="p-3 flex items-center rounded-full bs-2 text-lg"
-          >
-            <i className="fa-solid fa-xmark"></i>
-          </button>
-          <h2 className="text-2xl font-poppins-bold">Create Event</h2>
+      <div className="heading px-4 pt-4">
+        <button
+          onClick={() => setIsCreateEventActive(false)}
+          type="button"
+          className="p-3 flex items-center rounded-lg bs-2 text-2xl hover:bg-primary hover:text-white"
+        >
+          <i className="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <form className="grid gap-y-8 p-8" onSubmit={handleSubmit}>
+        <div className="heading flex items-center gap-4">
+          <h2 className="text-3xl font-poppins-bold">Create Event</h2>
         </div>
         {formError && (
           <div className="form-control">
@@ -226,7 +229,7 @@ const CreateEventForm: React.FC<CreateEventFormProps> = ({
         </div>
         {/* End of Highlights Form field */}
         <div className="form-control grid gap-y-3">
-          <button className="px-2 py-4 bg-primary font-poppins-bold text-lg text-white rounded-md">
+          <button className="px-2 py-4 bg-primary font-poppins-bold text-lg text-white rounded-3xl">
             Create Event
           </button>
         </div>
