@@ -83,11 +83,11 @@ const CreateEventForm: React.FC<CreateEventFormProps> = ({
           </button>
           <h2 className="text-2xl font-poppins-bold">Create Event</h2>
         </div>
-        <div className="form-control">
-          {formError && (
+        {formError && (
+          <div className="form-control">
             <p className="text-red font-poppins-bold text-xl">{formError}</p>
-          )}
-        </div>
+          </div>
+        )}
 
         {/* Upload Form field */}
         <div className="form-control grid gap-y-3">
