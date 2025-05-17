@@ -9,6 +9,7 @@ import Modal from "../components/modal";
 import { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthProvider";
 import { url } from "../constants/variables";
+import { img } from "../constants/media";
 import axios from "axios";
 import { useEventStore } from "../store/useEventsStore";
 import LoadingComponent from "../components/loading";
@@ -184,52 +185,50 @@ const Home: React.FC = () => {
 
       <div className="body mt-10 ">
         {/* Upcoming events div */}
-        <div className="w-3/5 grid gap-y-8 bg-green-1 px-4 py-8 rounded-3xl text-white">
-          <p className="flex justify-between items-center">
-            <span className="rounded-full text-3xl font-ibmplex-bold px-4 py-1 text-green-1 bg-white">
-              1
-            </span>
-          </p>
+        <div className="w-fit flex flex-col gap-y-8 bg-green-1 px-4 py-8 rounded-3xl text-white">
+          <span className="w-fit rounded-full text-3xl font-ibmplex-bold px-4 py-1 text-green-1 bg-white">
+            1
+          </span>
           <span className="text-2xl font-ibmplex-bold">Upcoming events</span>
         </div>
 
-
-        <h2 className="text-3xl font-ibmplex-bold">Events this month</h2>
+        <h2 className="text-3xl font-ibmplex-bold mt-8">Events this month</h2>
 
         {isLoading ? (
           <LoadingComponent /> // Shows loading component while fetching data
         ) : (
           <ul
             id="events"
-            className="mt-8 text-black grid md:grid-cols-3 items-start gap-8"
+            className="mt-8 text-black grid md:grid-cols-4 items-start gap-8"
           >
             {events.map((event) => (
-              <li key={event.id} className="relative bg-white rounded-xl p-4">
-                {/* Floating elements */}
-                <button id="linkout" className="absolute -bottom-2 -right-2">
+              <li
+                key={event.id}
+                className="relative aspect-[1/1] flex flex-col rounded-3xl p-3 font-dmserif"
+              >
+                <button
+                  id="linkout"
+                  className="absolute -bottom-2 -right-2 z-3"
+                >
                   <Link
                     to={`/event/${event.id}`}
-                    className="flex bg-secondary-2 border-2 border-primary py-2 px-3 rounded-full text-white text-3xl"
+                    className="flex bg-primary border-2 border-white py-2 px-3 rounded-full text-white text-4xl"
                   >
                     <i className="fa-solid fa-arrow-up-long rotate-45"></i>
                   </Link>
                 </button>
-                <div className="absolute right-2 top-2 grid bg-red-2 px-4 py-2 rounded-full text-white text-center text-xs">
-                  <span className="text-xl font-bold">
-                    {formatDate(event.date).day}
-                  </span>
-                  <span>{formatDate(event.date).month}</span>
+                <img
+                  src={img.bd}
+                  alt="image of a birthday"
+                  className="absolute top-0 left-0 w-full h-full rounded-3xl z-1"
+                />
+                <div className="overlay bg-black/30 absolute top-0 left-0 w-full h-full rounded-3xl z-2"></div>
+                <div className="txt mt-auto z-4">
+                  <h3 className="text-2xl text-white">{event.name}</h3>
+                  <p className="w-fit bg-white rounded-md px-2 py-1">
+                    {formatDate(event.date).month} {formatDate(event.date).day}
+                  </p>
                 </div>
-                {/* End of floating elements */}
-                <span className="inline-block max-w-4/5 border-l-4 border-black text-lg bg-secondary pl-3 pr-4 py-1 text-black my-auto">
-                  {event.name}
-                </span>
-                <ul className="text-xs text-gray-1 mt-5">
-                  <li className="grid">
-                    <span>{event.expected_guests} Guests</span>
-                    <span>{event.location}</span>
-                  </li>
-                </ul>
               </li>
             ))}
           </ul>

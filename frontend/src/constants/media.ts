@@ -10,6 +10,7 @@ import success from "../assets/gif/success.gif";
 import loading from "../assets/gif/loading.gif";
 import floatingqrcode from "../assets/qrfloating.png";
 import menu from "../assets/menu.png";
+import bd from "../assets/bd.jpg";
 
 export const icons = {
   logo,
@@ -28,4 +29,7 @@ export const gifs = {
   loading,
 };
 
+export const img = {
+  bd,
+};
 export { profile };

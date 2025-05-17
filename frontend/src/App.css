@@ -1,5 +1,17 @@
 @import "tailwindcss";
 
+@layer utilities {
+  .bg-bd {
+    background-image: url("assets/bd.jpg");
+  }
+  .bg-conference {
+    background-image: url("assets/conference.jpg");
+  }
+  .bg-meeting {
+    background-image: url("assets/meeting.jpg");
+  }
+}
+
 @theme {
   --color-primary: #6c38ff;
   --color-secondary: #d9e8f5;
