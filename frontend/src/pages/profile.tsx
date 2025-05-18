@@ -20,7 +20,7 @@ const Profile: React.FC = () => {
         <span className="font-ibmplex-bold text-xl">My profile</span>
       </div>
 
-      <div className="body mt-16">
+      <div className="body mt-10">
         <div className="profile-details">
           <div className="headInfo flex items-center flex-col gap-4 justify-between">
             <img
