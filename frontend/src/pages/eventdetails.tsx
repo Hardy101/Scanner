@@ -10,14 +10,21 @@ import Modal from "../components/modal";
 import { useModalState } from "../store/useModalStore";
 import Overlay from "../components/overlay";
 import { url } from "../constants/variables";
-import { EventFormData } from "../constants/interfaces";
+import { EventFormData, Guest } from "../constants/interfaces";
 import ModalAction from "../components/eventDetails/modalActions";
+import NavMenu from "../components/eventDetails/navMenu";
 
 const EventDetails: React.FC = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [isFormActive, setIsFormActive] = useState(false); // Track if form is active to show/hide action buttons
   const [isFormChanged, SetisFormChanged] = useState(false); // Track if form is changed to enable the update button
+  const [guest, setGuest] = useState<Guest>({
+    name: "",
+    tags: "",
+    email: "",
+    errors: "",
+  });
   const [guestList, setGuestList] = useState([{ id: "", name: "", tags: "" }]);
   const { setIsModalActive } = useModalState();
   const [formData, setFormData] = useState<EventFormData>({
@@ -112,24 +119,17 @@ const EventDetails: React.FC = () => {
         >
           <i className="lni lni-xmark"></i>
         </button>
-        <ModalAction />
-        {/* Modal Actions */}
+        <ModalAction
+          guest={guest}
+          setGuest={setGuest}
+          setFormData={setFormData}
+        />
       </Modal>
 
       <Overlay />
 
       {/* End of Floating Elements */}
-
-      <div className="nav flex gap-8 items-center text-sm">
-        <button
-          onClick={() => navigate(-1)}
-          className="md:hidden bs-2 rounded-xl bg-white p-3 hover:bg-primary hover:text-white"
-        >
-          <i className="fa-solid fa-house text-xl"></i>
-        </button>
-
-        <span className="font-poppins-bold text-lg">Event Details</span>
-      </div>
+      <NavMenu />
       <Hr />
 
       <div className="body mt-4 pb-12">
