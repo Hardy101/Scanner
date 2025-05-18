@@ -21,8 +21,6 @@ const EventDetails: React.FC = () => {
 
   return (
     <div className="relative min-h-screen p-4 md:p-8">
-      {/* Floating Elements */}
-
       {/* Guest List && Guest Add */}
       <Modal>
         <button
@@ -34,7 +32,6 @@ const EventDetails: React.FC = () => {
         <ModalActions formData={formData} setFormData={setFormData} />
       </Modal>
       <Overlay />
-      {/* End of Floating Elements */}
 
       <NavMenu />
       <Hr />
@@ -47,4 +44,3 @@ const EventDetails: React.FC = () => {
 };
 
 export default EventDetails;
-// setIsFormActive(true)}
