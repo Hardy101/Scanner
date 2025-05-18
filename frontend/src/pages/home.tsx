@@ -27,6 +27,7 @@ const Home: React.FC = () => {
       <Navbar />
       <Overlay />
       {/* End of floating Elements */}
+      
       <TopNavigation
         isCreateEventActive={isCreateEventActive}
         setIsCreateEventActive={setIsCreateEventActive}
