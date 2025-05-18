@@ -15,7 +15,7 @@ import { useToastStore } from "../../store/useToastStore";
 import { useGuestStore } from "../../store/useGuestStore";
 
 const formFieldClass =
-  "border border-gray-400 text-primary placeholder:text-primary p-3 text-sm rounded-xl focus:border-primary focus:outline-none";
+  "border border-gray-400 font-poppins-bold placeholder:font-poppins p-3 text-sm rounded-xl focus:border-primary focus:outline-none";
 
 const ModalAction: React.FC = () => {
   const { id } = useParams();
@@ -250,30 +250,30 @@ const ModalAction: React.FC = () => {
       {activeStep == "addGuest" && (
         <div className="text-black">
           <h3 className="font-poppins-bold text-xl">Add guest to list</h3>
-          <p className="relative md:w-1/3 mx-auto grid grid-cols-2 text-sm font-poppins-medium text-primary text-center bg-secondary rounded-2xl p-1 mt-2">
+          <p className="relative md:w-1/3 mx-auto grid grid-cols-2 text-sm font-poppins-medium text-center bg-primary/10 rounded-2xl p-1 mt-6">
             <span
-              className={`absolute top-1 left-1 w-[calc(50%-0.25rem)] h-[calc(100%-0.5rem)] bg-white rounded-2xl transition-transform duration-300 ease-in-out z-0 ${
+              className={`absolute top-1 left-1 w-[calc(50%-0.25rem)] h-[calc(100%-0.5rem)] bg-primary rounded-2xl transition-transform duration-300 ease-in-out z-0 ${
                 singleGuest ? "translate-x-0" : "translate-x-full"
               }`}
             ></span>
             <button
               onClick={() => setSingleGuest(true)}
               type="button"
-              className="py-2 z-10"
+              className={`py-2 z-10 ${singleGuest ? "text-white" : ""}`}
             >
               Single Guest
             </button>
             <button
               onClick={() => setSingleGuest(false)}
               type="button"
-              className="py-2 z-10"
+              className={`py-2 z-10 ${singleGuest ? "" : "text-white"}`}
             >
               Multiple Guests
             </button>
           </p>
           {singleGuest && (
-            <form onSubmit={handleGuestSubmit}>
-              <div className="form-control grid gap-2 my-4">
+            <form onSubmit={handleGuestSubmit} className="mt-6">
+              <div className="form-control grid gap-2">
                 <p className="text-red font-poppins-bold">{guest.errors}</p>
               </div>
               <div className="form-control grid gap-2">
@@ -310,7 +310,7 @@ const ModalAction: React.FC = () => {
                 />
               </div>
 
-              <div className="form-control flex gap-4 mt-4">
+              <div className="form-control flex gap-4 mt-10">
                 <ActionButton
                   text="Add Guest"
                   icon="fa-solid fa-user-plus"

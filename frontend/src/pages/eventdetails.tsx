@@ -18,7 +18,7 @@ const EventDetails: React.FC = () => {
       <Modal>
         <button
           onClick={() => setIsModalActive(false)}
-          className="absolute top-4 right-4 flex bg-primary text-secondary rounded-md text-3xl transition-all ease-in-out hover:bg-shadow"
+          className="absolute top-4 right-4 flex bg-black text-secondary rounded-md p-1 text-xl transition-all ease-in-out hover:scale-150"
         >
           <i className="lni lni-xmark"></i>
         </button>

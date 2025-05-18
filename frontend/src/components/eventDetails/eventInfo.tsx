@@ -217,7 +217,10 @@ const EventInfo = () => {
             text="Edit"
           />
           <NavButton
-            onClick={() => setIsModalActive(true)}
+            onClick={() => {
+              setIsModalActive(true);
+              window.scrollTo(0, 0);
+            }}
             classNames="grow bg-primary py-2 ml-auto"
             text="See Guest List"
           />

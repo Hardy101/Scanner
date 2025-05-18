@@ -15,7 +15,7 @@ const ActionButton: React.FC<ButtonProps> = ({
   return (
     <button
       {...props}
-      className={`${classNames} flex items-center gap-2 px-4 py-2 text-sm`}
+      className={`${classNames} flex items-center justify-center gap-2 px-4 py-2 text-sm`}
     >
       <i className={icon}></i>
       {text}
