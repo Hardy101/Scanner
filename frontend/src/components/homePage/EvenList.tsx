@@ -17,10 +17,10 @@ const EventList = () => {
           key={event.id}
           className="relative aspect-[3/2] flex flex-col rounded-3xl p-3 font-dmserif"
         >
-          <button id="linkout" className="absolute -bottom-2 -right-2 z-3">
+          <button id="linkout" className="absolute -bottom-2 -right-2 z-5">
             <Link
               to={`/event/${event.id}`}
-              className="flex bg-primary border-2 py-2 px-3 rounded-full text-white text-4xl"
+              className="flex bg-primary border-2 border-white py-2 px-3 rounded-full text-white text-4xl"
             >
               <i className="fa-solid fa-arrow-up-long rotate-45"></i>
             </Link>
