@@ -100,7 +100,7 @@ const Scan = () => {
   }, [errors, scanned]);
 
   return (
-    <div className="relative min-h-screen grid bg-primary text-white">
+    <div className="relative min-h-screen grid bg-black text-white">
       <div className="relative h-full body">
         <p ref={errorRef} className="absolute w-full top-0 flex p-2">
           <span className="w-full text-center text-sm font-poppins bg-red px-2 py-1">
