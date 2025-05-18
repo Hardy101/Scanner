@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 
 import {
@@ -6,18 +6,22 @@ import {
   GuestResponse,
   Guest,
 } from "../../constants/interfaces";
-import { copyToClipboard } from "../../utils/functions";
+import { copyToClipboard, fetchEventDetails } from "../../utils/functions";
 import ActionButton from "../actionbutton";
 import { icons } from "../../constants/media";
 import { url } from "../../constants/variables";
 import { useParams } from "react-router";
 import { useToastStore } from "../../store/useToastStore";
-import { useGuestStore } from "../../store/useGuestStore";
+
+interface EventInfoProps {
+  formData: EventFormData;
+  setFormData: React.Dispatch<React.SetStateAction<EventFormData>>;
+}
 
 const formFieldClass =
   "border border-gray-400 font-poppins-bold placeholder:font-poppins p-3 text-sm rounded-xl focus:border-primary focus:outline-none";
 
-const ModalAction: React.FC = () => {
+const ModalActions: React.FC<EventInfoProps> = ({ setFormData }) => {
   const { id } = useParams();
   const [guest, setGuest] = useState<Guest>({
     name: "",
@@ -27,12 +31,7 @@ const ModalAction: React.FC = () => {
   });
   const textRef = useRef<HTMLAnchorElement | null>(null);
   const [singleGuest, setSingleGuest] = useState(true); // Track if single guest is selected
-  const [formData, setFormData] = useState<EventFormData>({
-    name: "",
-    date: "",
-    location: "",
-    expected_guests: 0,
-  });
+
   const [guestDetails, setGuestDetails] = useState<GuestResponse>({
     id: 0,
     name: "",
@@ -43,25 +42,6 @@ const ModalAction: React.FC = () => {
   const [guestList, setGuestList] = useState([{ id: "", name: "", tags: "" }]);
   const [activeStep, setActiveStep] = useState("guestList");
   const [copied, setCopied] = useState(false);
-
-  const fetchEventDetails = async () => {
-    try {
-      const [eventRes, guestsRes] = await Promise.all([
-        axios.get(`${url}/event/get-event/${id}`, { withCredentials: true }),
-        axios.get(`${url}/event/guests/${id}`),
-      ]);
-      if (eventRes.status === 200) {
-        const { name, date, location, expected_guests } = eventRes.data;
-        setFormData({ name, date, location, expected_guests });
-      }
-
-      if (guestsRes.status === 200) {
-        setGuestList(guestsRes.data);
-      }
-    } catch (err: any) {
-      console.error(`Error: ${err}`);
-    }
-  };
 
   const handleFileUpload = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -81,8 +61,8 @@ const ModalAction: React.FC = () => {
           },
         }
       );
-      if (response.status == 200) {
-        fetchEventDetails();
+      if (response.status == 200 && id) {
+        fetchEventDetails(id, setFormData, setGuestList);
         setActiveStep("success");
         setSelectedFile(null);
       }
@@ -110,10 +90,10 @@ const ModalAction: React.FC = () => {
         withCredentials: true,
       });
 
-      if (response.status === 200) {
+      if (response.status === 200 && id) {
         setGuestDetails(response.data);
         setActiveStep("success");
-        fetchEventDetails();
+        fetchEventDetails(id, setFormData, setGuestList);
         useToastStore.getState().setToastState({
           isToastActive: true,
           type: "success",
@@ -144,7 +124,7 @@ const ModalAction: React.FC = () => {
           withCredentials: true,
         }
       );
-      if (response.status === 200) {
+      if (response.status === 200 && id) {
         useToastStore.getState().setToastState({
           isToastActive: true,
           type: "success",
@@ -152,7 +132,7 @@ const ModalAction: React.FC = () => {
           subtext:
             "The selected guest has been successfully deleted from the system.",
         });
-        fetchEventDetails();
+        fetchEventDetails(id, setFormData, setGuestList);
       } else {
         console.error("Error deleting guest:", response.data);
       }
@@ -160,6 +140,13 @@ const ModalAction: React.FC = () => {
       console.error(`Error: ${err}`);
     }
   };
+
+  // Load Event Details on initial load
+  useEffect(() => {
+    if (id) {
+      fetchEventDetails(id, setFormData, setGuestList);
+    }
+  }, [id]);
 
   return (
     <>
@@ -372,10 +359,7 @@ const ModalAction: React.FC = () => {
         </div>
       )}
       {activeStep == "success" && (
-        <div className="text-center text-primary flex flex-col items-center gap-4">
-          <span className="text-xl font-poppins-medium">
-            Profile Created Successfully
-          </span>
+        <div className="text-center flex flex-col gap-4">
           <span className="mt-8 text-2xl font-poppins-bold">{guest.name}</span>
           <img
             src={`${url}/event/qrcode/${guestDetails.qr_token}`}
@@ -413,15 +397,15 @@ const ModalAction: React.FC = () => {
                 setGuest({ name: "", tags: "", email: "", errors: "" });
               }}
               text="Add More Guests"
-              classNames="w-full bg-primary text-white rounded-full"
+              classNames="grow bg-primary text-white rounded-full"
             />
             <ActionButton
               onClick={() => {
                 setActiveStep("guestList");
                 setGuest({ name: "", tags: "", email: "", errors: "" });
               }}
-              text="Cancel"
-              classNames="bg-white text-primary border-2 border-primary rounded-full"
+              text="back"
+              classNames="text-white bg-red rounded-full"
             />
           </div>
         </div>
@@ -430,4 +414,4 @@ const ModalAction: React.FC = () => {
   );
 };
 
-export default ModalAction;
+export default ModalActions;

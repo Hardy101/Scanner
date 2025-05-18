@@ -1,3 +1,7 @@
+import axios from "axios";
+import { url } from "../constants/variables";
+import { EventFormData } from "../constants/interfaces";
+
 // converting date format to dd-MMM
 export const formatDate = (dateStr: string) => {
   const date = new Date(dateStr);
@@ -41,5 +45,28 @@ export const copyToClipboard = (target: HTMLElement | null): Promise<void> => {
   });
 };
 
-// Function to handle file upload
+// Function to fetch event deta
+export const fetchEventDetails = async (
+  id: string,
+  setFormData: React.Dispatch<React.SetStateAction<EventFormData>>,
+  setGuestList: React.Dispatch<
+    React.SetStateAction<Array<{ id: string; name: string; tags: string }>>
+  >
+) => {
+  try {
+    const [eventRes, guestsRes] = await Promise.all([
+      axios.get(`${url}/event/get-event/${id}`, { withCredentials: true }),
+      axios.get(`${url}/event/guests/${id}`),
+    ]);
+    if (eventRes.status === 200) {
+      const { name, date, location, expected_guests } = eventRes.data;
+      setFormData({ name, date, location, expected_guests });
+    }
 
+    if (guestsRes.status === 200) {
+      setGuestList(guestsRes.data);
+    }
+  } catch (err: any) {
+    console.error(`Error: ${err}`);
+  }
+};

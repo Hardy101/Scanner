@@ -3,12 +3,21 @@ import Hr from "../components/hr";
 import Modal from "../components/modal";
 import { useModalState } from "../store/useModalStore";
 import Overlay from "../components/overlay";
-import ModalAction from "../components/eventDetails/modalActions";
+import ModalActions from "../components/eventDetails/modalActions";
 import NavMenu from "../components/eventDetails/navMenu";
 import EventInfo from "../components/eventDetails/eventInfo";
+import { useState } from "react";
+import { EventFormData } from "../constants/interfaces";
 
 const EventDetails: React.FC = () => {
   const { setIsModalActive } = useModalState();
+  const [guestList, setGuestList] = useState([{ id: "", name: "", tags: "" }]);
+  const [formData, setFormData] = useState<EventFormData>({
+    name: "",
+    date: "",
+    location: "",
+    expected_guests: 0,
+  });
 
   return (
     <div className="relative min-h-screen p-4 md:p-8">
@@ -22,7 +31,7 @@ const EventDetails: React.FC = () => {
         >
           <i className="lni lni-xmark"></i>
         </button>
-        <ModalAction />
+        <ModalActions formData={formData} setFormData={setFormData} />
       </Modal>
       <Overlay />
       {/* End of Floating Elements */}
@@ -31,7 +40,7 @@ const EventDetails: React.FC = () => {
       <Hr />
 
       <div className="body mt-4 pb-12">
-        <EventInfo />
+        <EventInfo guestList={guestList} setGuestList={setGuestList} />
       </div>
     </div>
   );

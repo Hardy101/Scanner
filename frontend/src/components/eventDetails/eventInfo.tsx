@@ -10,8 +10,16 @@ import { useModalState } from "../../store/useModalStore";
 import axios from "axios";
 import { useToastStore } from "../../store/useToastStore";
 import { url } from "../../constants/variables";
+import { fetchEventDetails } from "../../utils/functions";
 
-const EventInfo = () => {
+interface EventInfoProps {
+  guestList: Array<{ id: string; name: string; tags: string }>;
+  setGuestList: React.Dispatch<
+    React.SetStateAction<Array<{ id: string; name: string; tags: string }>>
+  >;
+}
+
+const EventInfo: React.FC<EventInfoProps> = ({ setGuestList }) => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { setIsModalActive } = useModalState();
@@ -22,7 +30,7 @@ const EventInfo = () => {
     location: "",
     expected_guests: 0,
   });
-  const [guestList, setGuestList] = useState([{ id: "", name: "", tags: "" }]);
+
   const [isFormChanged, SetisFormChanged] = useState(false); // Track if form is changed to enable the update button
 
   // Change function for events details
@@ -75,29 +83,12 @@ const EventInfo = () => {
     }
   };
 
-  const fetchEventDetails = async () => {
-    try {
-      const [eventRes, guestsRes] = await Promise.all([
-        axios.get(`${url}/event/get-event/${id}`, { withCredentials: true }),
-        axios.get(`${url}/event/guests/${id}`),
-      ]);
-      if (eventRes.status === 200) {
-        const { name, date, location, expected_guests } = eventRes.data;
-        setFormData({ name, date, location, expected_guests });
-      }
-
-      if (guestsRes.status === 200) {
-        setGuestList(guestsRes.data);
-      }
-    } catch (err: any) {
-      console.error(`Error: ${err}`);
-    }
-  };
-
   // Load Event Details on initial load
   useEffect(() => {
-    fetchEventDetails();
-  }, []);
+    if (id) {
+      fetchEventDetails(id, setFormData, setGuestList);
+    }
+  }, [id]);
 
   return (
     <div className="body mt-4">
