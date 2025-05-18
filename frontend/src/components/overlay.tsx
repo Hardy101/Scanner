@@ -46,7 +46,7 @@ const Overlay = memo(() => {
   return (
     <div
       ref={overlayRef}
-      className="absolute bg-white w-full h-full top-0 z-3"
+      className="absolute bg-white w-full h-full top-0 left-0 z-3"
       style={{ pointerEvents: "none" }}
     ></div>
   );

@@ -177,10 +177,9 @@ const ModalAction: React.FC = () => {
 
                 <button
                   onClick={() => handleDeleteGuest(id)}
-                  className="flex items-center gap-2 ml-auto bg-red text-right text-white px-2 py-1 rounded-sm hover:bg-red-2"
+                  className="flex items-center gap-2 ml-auto bg-red text-right text-white px-2 py-2 rounded-sm hover:bg-red-2"
                 >
-                  <span>Delete</span>
-                  {/* <i className="fa-solid fa-trash"></i> */}
+                  <i className="fa-solid fa-trash"></i>
                 </button>
                 <span className="col-span-2 font-poppins-bold text-primary">
                   {tags}
@@ -198,7 +197,7 @@ const ModalAction: React.FC = () => {
             <ActionButton
               onClick={() => setActiveStep("addGuest")}
               icon="fa-solid fa-user-plus"
-              text="Add Guest"
+              text="Add guest"
               classNames="bg-primary text-white rounded-full"
             />
           </div>
