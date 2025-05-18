@@ -151,9 +151,9 @@ const ModalActions: React.FC<EventInfoProps> = ({ setFormData }) => {
   return (
     <>
       {activeStep == "guestList" && (
-        <div className="text-black">
+        <div className="text-black h-dvh flex flex-col">
           <h3 className="font-poppins-bold text-xl">Guest List</h3>
-          <ul className="grid gap-2 divide-y divide-secondary-2 mt-6 text-xs max-h-72 overflow-y-auto">
+          <ul className="grid gap-2 divide-y divide-secondary-2 mt-6 text-xs overflow-y-auto">
             {guestList.map(({ id, name, tags }) => (
               <li
                 // onClick={() => setActiveStep("guestDetails")}
@@ -174,7 +174,7 @@ const ModalActions: React.FC<EventInfoProps> = ({ setFormData }) => {
               </li>
             ))}
           </ul>
-          <div className="flex gap-4 justify-between mt-8">
+          <div className="flex gap-4 justify-between mt-auto">
             <ActionButton
               onClick={() => setActiveStep("addGuest")}
               icon="fa-solid fa-paper-plane"
