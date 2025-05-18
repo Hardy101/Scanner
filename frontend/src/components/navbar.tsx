@@ -28,7 +28,7 @@ const Navbar: React.FC = () => {
           </Link>
         </li>
         <li>
-          <Link to={"/"} className={`${navClass}`}>
+          <Link to={"/profile"} className={`${navClass}`}>
             <i className="fa-solid fa-user text-xl"></i>
             <span className="hidden">Profile</span>
           </Link>

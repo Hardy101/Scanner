@@ -3,7 +3,11 @@ import { useNavigate } from "react-router-dom";
 import { useEventStore } from "../store/useEventsStore";
 import { useDropdownState } from "../store/useDropdownStore";
 
-const LogoutButton = () => {
+interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  classNames?: string;
+}
+
+const LogoutButton: React.FC<ButtonProps> = ({ classNames, ...props }) => {
   const { logout } = useAuth();
   const { clearEvents } = useEventStore();
   const { setIsDropdownActive } = useDropdownState();
@@ -22,11 +26,8 @@ const LogoutButton = () => {
   };
 
   return (
-    <button
-      className="flex items-center gap-2 bg-[#FF6B6B] text-white rounded-full py-2 px-4"
-      onClick={handleLogout}
-    >
-      Logout
+    <button className={classNames || ""} onClick={handleLogout} {...props}>
+      Sign out
     </button>
   );
 };
