@@ -7,7 +7,7 @@ const NavButton: React.FC<ButtonProps> = ({ text, classNames, ...props }) => {
   return (
     <button
       {...props}
-      className={`${classNames} group relative bg-primary text-white text-sm font-poppins-bold rounded-xl px-3 py-4`}
+      className={`${classNames} group relative text-white text-sm font-poppins-bold rounded-xl px-3 py-3`}
     >
       <span className="relative z-2 group-hover:text-white">{text}</span>
     </button>

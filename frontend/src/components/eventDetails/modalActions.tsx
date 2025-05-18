@@ -1,26 +1,38 @@
 import { useRef, useState } from "react";
 import axios from "axios";
 
-import { GuestResponse, Guest } from "../../constants/interfaces";
+import {
+  EventFormData,
+  GuestResponse,
+  Guest,
+} from "../../constants/interfaces";
 import { copyToClipboard } from "../../utils/functions";
 import ActionButton from "../actionbutton";
 import { icons } from "../../constants/media";
 import { url } from "../../constants/variables";
 import { useParams } from "react-router";
 import { useToastStore } from "../../store/useToastStore";
-import { EventModalProps } from "../../constants/interfaces";
+import { useGuestStore } from "../../store/useGuestStore";
 
 const formFieldClass =
   "border border-gray-400 text-primary placeholder:text-primary p-3 text-sm rounded-xl focus:border-primary focus:outline-none";
 
-const ModalAction: React.FC<EventModalProps> = ({
-  guest,
-  setGuest,
-  setFormData,
-}) => {
+const ModalAction: React.FC = () => {
   const { id } = useParams();
+  const [guest, setGuest] = useState<Guest>({
+    name: "",
+    tags: "",
+    email: "",
+    errors: "",
+  });
   const textRef = useRef<HTMLAnchorElement | null>(null);
   const [singleGuest, setSingleGuest] = useState(true); // Track if single guest is selected
+  const [formData, setFormData] = useState<EventFormData>({
+    name: "",
+    date: "",
+    location: "",
+    expected_guests: 0,
+  });
   const [guestDetails, setGuestDetails] = useState<GuestResponse>({
     id: 0,
     name: "",
