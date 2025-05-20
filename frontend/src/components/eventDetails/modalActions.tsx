@@ -141,6 +141,10 @@ const ModalActions: React.FC<EventInfoProps> = ({ setFormData }) => {
     }
   };
 
+  const resetModal = () => {
+    setGuest({ name: "", tags: "", email: "", errors: "" });
+    setSelectedFile(null);
+  };
   // Load Event Details on initial load
   useEffect(() => {
     if (id) {
@@ -153,7 +157,7 @@ const ModalActions: React.FC<EventInfoProps> = ({ setFormData }) => {
       {activeStep == "guestList" && (
         <div className="text-black h-full flex flex-col">
           <h3 className="font-poppins-bold text-xl">Guest List</h3>
-          <ul className="grid gap-2 divide-y divide-secondary-2 mt-6 text-xs overflow-y-auto">
+          <ul className="grow grid gap-2 divide-y divide-secondary-2 mt-6 text-xs overflow-y-auto">
             {guestList.map(({ id, name, tags }) => (
               <li
                 // onClick={() => setActiveStep("guestDetails")}
@@ -174,7 +178,8 @@ const ModalActions: React.FC<EventInfoProps> = ({ setFormData }) => {
               </li>
             ))}
           </ul>
-          <div className="flex gap-4 justify-between mt-auto">
+
+          <div className="flex gap-4 justify-between">
             <ActionButton
               onClick={() => setActiveStep("addGuest")}
               icon="fa-solid fa-paper-plane"
@@ -244,14 +249,19 @@ const ModalActions: React.FC<EventInfoProps> = ({ setFormData }) => {
               }`}
             ></span>
             <button
-              onClick={() => setSingleGuest(true)}
+              onClick={() => {
+                setSingleGuest(true);
+              }}
               type="button"
               className={`py-2 z-10 ${singleGuest ? "text-white" : ""}`}
             >
               Single Guest
             </button>
             <button
-              onClick={() => setSingleGuest(false)}
+              onClick={() => {
+                setSingleGuest(false);
+                resetModal();
+              }}
               type="button"
               className={`py-2 z-10 ${singleGuest ? "" : "text-white"}`}
             >
@@ -307,6 +317,7 @@ const ModalActions: React.FC<EventInfoProps> = ({ setFormData }) => {
                   type="button"
                   onClick={() => {
                     setActiveStep("guestList");
+                    resetModal();
                   }}
                   text="back"
                   icon="fa-solid fa-arrow-left"
@@ -348,6 +359,8 @@ const ModalActions: React.FC<EventInfoProps> = ({ setFormData }) => {
                   type="button"
                   onClick={() => {
                     setActiveStep("guestList");
+                    setSingleGuest(true);
+                    resetModal();
                   }}
                   text="back"
                   icon="fa-solid fa-arrow-left"

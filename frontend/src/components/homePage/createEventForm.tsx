@@ -66,6 +66,10 @@ const CreateEventForm: React.FC<CreateEventFormProps> = ({
       );
     }
   };
+
+  const resetForm = () => {
+    setFormData({ name: "", expected_guests: 0, location: "", date: "" });
+  };
   return (
     <div
       className={`fixed w-full h-full top-0 ${
@@ -74,9 +78,12 @@ const CreateEventForm: React.FC<CreateEventFormProps> = ({
     >
       <div className="heading px-4 pt-4">
         <button
-          onClick={() => setIsCreateEventActive(false)}
+          onClick={() => {
+            setIsCreateEventActive(false);
+            resetForm();
+          }}
           type="button"
-          className="p-3 flex items-center rounded-lg bs-2 text-2xl hover:bg-primary hover:text-white"
+          className="px-3 py-2 flex items-center rounded-md bs-2 text-xl hover:bg-primary hover:text-white"
         >
           <i className="fa-solid fa-xmark"></i>
         </button>
@@ -219,13 +226,13 @@ const CreateEventForm: React.FC<CreateEventFormProps> = ({
             Highlights
             <span className="text-base font-poppins">(optional)</span>
           </label>
-          <div className="input flex gap-4">
+          <div className="input grid grid-cols-3 gap-4">
             <input
               type="text"
               name="activity"
               id="activity"
               placeholder="activity"
-              className={`grow ${formFields}`}
+              className={`col-span-2 ${formFields}`}
             />
             <input
               type="number"

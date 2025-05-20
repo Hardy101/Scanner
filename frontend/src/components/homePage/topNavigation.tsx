@@ -12,7 +12,7 @@ const TopNavigation: React.FC<CreateEventFormProps> = ({
     <div className="relative nav flex items-center justify-between text-sm">
       <button
         onClick={() => setIsCreateEventActive(true)}
-        className="md:hidden bs-2 rounded-xl bg-white p-3 hover:bg-primary hover:text-white"
+        className="md:hidden bs-2 rounded-md bg-white px-2 py-1 text-xl hover:bg-primary hover:text-white"
       >
         <i className="fa-solid fa-plus text-xl"></i>
       </button>
