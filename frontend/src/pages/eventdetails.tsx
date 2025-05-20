@@ -20,7 +20,7 @@ const EventDetails: React.FC = () => {
   });
 
   return (
-    <div className="relative min-h-screen p-4 md:p-8">
+    <div className="relative h-dvh p-4 md:p-8">
       {/* Guest List && Guest Add */}
       <Modal>
         <button

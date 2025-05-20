@@ -100,11 +100,11 @@ const CreateEventForm: React.FC<CreateEventFormProps> = ({
           </span>
           <label
             htmlFor="file"
-            className="flex flex-col gap-2 items-center py-4 border-2 border-black border-dashed rounded-2xl"
+            className="flex flex-col gap-2 items-center py-4 border-2 border-black border-dashed rounded-2xl cursor-pointer"
           >
             <i className="fa-solid fa-image text-5xl text-primary"></i>
             <span>Drag or drop files to upload</span>
-            <button className="px-4 py-2 rounded-md border font-poppins-medium text-primary">
+            <button className="px-4 py-2 rounded-md border font-poppins-bold text-primary hover:text-white hover:bg-primary">
               Select files
             </button>
           </label>
@@ -135,7 +135,14 @@ const CreateEventForm: React.FC<CreateEventFormProps> = ({
           >
             Date
           </label>
-          <input type="date" name="date" id="date" onChange={handleChange} value={formData.date} className={formFields} />
+          <input
+            type="date"
+            name="date"
+            id="date"
+            onChange={handleChange}
+            value={formData.date}
+            className={formFields}
+          />
           <input type="time" name="time" id="time" className={formFields} />
         </div>
         {/* End of Date and time event form field */}
@@ -196,7 +203,7 @@ const CreateEventForm: React.FC<CreateEventFormProps> = ({
           >
             <i className="fa-solid fa-file-excel text-5xl text-primary"></i>
             <span>Drag or drop files to upload</span>
-            <button className="px-4 py-2 rounded-md border font-poppins-bold text-primary">
+            <button className="px-4 py-2 rounded-md border font-poppins-bold text-primary hover:text-white hover:bg-primary">
               Select files
             </button>
           </label>
@@ -212,13 +219,13 @@ const CreateEventForm: React.FC<CreateEventFormProps> = ({
             Highlights
             <span className="text-base font-poppins">(optional)</span>
           </label>
-          <div className="input grid grid-cols-2 gap-4">
+          <div className="input flex gap-4">
             <input
               type="text"
               name="activity"
               id="activity"
               placeholder="activity"
-              className={formFields}
+              className={`grow ${formFields}`}
             />
             <input
               type="number"
@@ -227,6 +234,13 @@ const CreateEventForm: React.FC<CreateEventFormProps> = ({
               className={formFields}
             />
           </div>
+          <button
+            type="button"
+            className="ml-auto px-3 py-2 flex gap-2 items-center rounded-2xl bs-2 bg-primary text-white"
+          >
+            <i className="fa-solid fa-plus"></i>
+            <span>Add</span>
+          </button>
         </div>
         {/* End of Highlights Form field */}
         <div className="form-control grid gap-y-3">
