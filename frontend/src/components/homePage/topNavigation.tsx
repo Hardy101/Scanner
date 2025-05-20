@@ -16,7 +16,7 @@ const TopNavigation: React.FC<CreateEventFormProps> = ({
       >
         <i className="fa-solid fa-plus text-xl"></i>
       </button>
-      <button className="bg-gray-1/20 fixed top-0 left-1/2 p-2 flex rounded-b-full md:hidden">
+      <button className="bg-gray-1/20 fixed top-0 left-9/20 p-2 flex rounded-b-full md:hidden">
         <Link
           to={"/scan"}
           className="flex text-white p-3 text-2xl bg-primary rounded-full"
