@@ -28,6 +28,8 @@ const EventInfo: React.FC<EventInfoProps> = ({ setGuestList }) => {
     name: "",
     date: "",
     location: "",
+    time: "",
+    image_url: "",
     expected_guests: 0,
   });
 
@@ -164,7 +166,7 @@ const EventInfo: React.FC<EventInfoProps> = ({ setGuestList }) => {
 
         <div className="col-span-2 flex gap-2 items-center">
           <i className="lni lni-location-arrow-right"></i>
-          <span>12:00 PM</span>
+          <span>{formData.time}</span>
         </div>
       </div>
 

@@ -1,15 +1,18 @@
-from fastapi import APIRouter, Depends, HTTPException, File, UploadFile, status
+from fastapi import APIRouter, Depends, HTTPException, File, UploadFile, status, Form
 from fastapi.responses import FileResponse
 from sqlalchemy.orm import Session
-from typing import List
+from typing import List, Optional
 import pandas as pd
 from io import BytesIO
 import uuid
 import os
+import logging
+import shutil
+from datetime import datetime
 
 # Local imports
-from ..models import Event, Guest as GuestModel
-from ..schemas import (
+from models import Event, Guest as GuestModel
+from schemas import (
     PublicUser,
     EventUpdate,
     EventOut,
@@ -18,8 +21,8 @@ from ..schemas import (
     EventCreate,
     GuestResponse,
 )
-from ..database import get_db
-from ..operations.functions import (
+from database import get_db
+from operations.functions import (
     get_events as fetch_events,
     create_event as create_event_crud,
     add_guests_to_event,
@@ -55,16 +58,93 @@ def get_user_events(
 
 # Returns a newly-created event
 @router.post("/add", response_model=EventOut)
-def create_event(
-    event: EventCreate,
+async def create_event(
+    name: str = Form(...),
+    date: str = Form(...),
+    time: Optional[str] = Form(None),
+    location: str = Form(...),
+    expected_guests: int = Form(...),
+    image: Optional[UploadFile] = File(None),
+    guest_list: Optional[str] = Form(None),
     db: Session = Depends(get_db),
     current_user: PublicUser = Depends(fetch_current_user),
 ):
-    if not event.name or not event.date or not event.location or not event.expected_guests:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Please fill the form completely")
-    
-    new_event = create_event_crud(db=db, event=event, user_id=current_user.id)
-    return new_event
+    if not name or not date or not location or not expected_guests:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="There is an issue with your form, please check again and fill it correctly",
+        )
+
+    # Parse date string to datetime
+    try:
+        # Handle both ISO format and simple date format
+        if "T" in date:
+            parsed_date = datetime.fromisoformat(date.replace("Z", "+00:00"))
+        else:
+            # If it's just a date, set time to midnight
+            parsed_date = datetime.strptime(date, "%Y-%m-%d")
+    except ValueError:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Invalid date format. Please use YYYY-MM-DD or ISO format (YYYY-MM-DDTHH:MM:SS)",
+        )
+
+    # Handle image upload
+    image_url = "default_event.jpg"
+    if image and image.filename:
+        try:
+            # Create uploads directory if it doesn't exist
+            upload_dir = "uploads/events"
+            os.makedirs(upload_dir, exist_ok=True)
+
+            # Generate unique filename
+            file_extension = os.path.splitext(image.filename)[1]
+            unique_filename = f"{uuid.uuid4()}{file_extension}"
+            file_path = os.path.join(upload_dir, unique_filename)
+
+            # Save the file
+            with open(file_path, "wb") as buffer:
+                shutil.copyfileobj(image.file, buffer)
+
+            image_url = file_path
+        except Exception as e:
+            logging.error(f"Error saving image: {str(e)}")
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail="Error saving image",
+            )
+
+    # Parse guest list if provided
+    parsed_guest_list = []
+    if guest_list and guest_list.strip():
+        try:
+            parsed_guest_list = guest_list.split(",")
+            parsed_guest_list = [
+                guest.strip() for guest in parsed_guest_list if guest.strip()
+            ]
+        except Exception as e:
+            logging.error(f"Error parsing guest list: {str(e)}")
+
+    # Create event data
+    event_data = EventCreate(
+        name=name,
+        date=parsed_date,
+        time=time,
+        location=location,
+        expected_guests=expected_guests,
+        image_url=image_url,
+        guest_list=parsed_guest_list,
+    )
+
+    try:
+        new_event = create_event_crud(db=db, event=event_data, user_id=current_user.id)
+        return new_event
+    except Exception as e:
+        logging.error(f"Error creating event: {str(e)}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Error creating event",
+        )
 
 
 # Returns the event with the given ID and If the event is not found, it raises a 404 error
@@ -162,9 +242,26 @@ def delete_event(event_id: int, db: Session = Depends(get_db)):
     if not event:
         raise HTTPException(status_code=404, detail="Event not found")
 
+    # Get all guests associated with this event
+    guests = db.query(GuestModel).filter(GuestModel.event_id == event_id).all()
+
+    # Delete QR code files for all guests
+    for guest in guests:
+        if guest.qr_path and os.path.exists(guest.qr_path):
+            try:
+                os.remove(guest.qr_path)
+            except Exception as e:
+                logging.error(
+                    f"Error deleting QR code file for guest {guest.id}: {str(e)}"
+                )
+
+    # Delete all guests associated with this event
+    db.query(GuestModel).filter(GuestModel.event_id == event_id).delete()
+
+    # Delete the event
     db.delete(event)
     db.commit()
-    return {"message": "Event deleted"}
+    return {"message": "Event and all associated guests deleted"}
 
 
 # Delete a guest by ID
@@ -173,6 +270,13 @@ def delete_guest(guest_id: int, db: Session = Depends(get_db)):
     guest = db.query(GuestModel).filter(GuestModel.id == guest_id).first()
     if not guest:
         raise HTTPException(status_code=404, detail="Guest not found")
+
+    # Delete the QR code file if it exists
+    if guest.qr_path and os.path.exists(guest.qr_path):
+        try:
+            os.remove(guest.qr_path)
+        except Exception as e:
+            logging.error(f"Error deleting QR code file: {str(e)}")
 
     db.delete(guest)
     db.commit()

@@ -1,6 +1,8 @@
 export interface EventFormData {
   name: string;
   date: string;
+  time: string;
+  image_url: string;
   location: string;
   expected_guests: number;
 }

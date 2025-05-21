@@ -17,13 +17,12 @@ const CreateEventForm: React.FC<CreateEventFormProps> = ({
   const [formData, setFormData] = useState<EventFormData>({
     name: "",
     date: "",
+    time: "",
     location: "",
+    image_url: "",
     expected_guests: 0,
   });
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-  };
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const navigate = useNavigate();
   const [formError, setFormError] = useState<string | null>(null);
   const { setIsModalActive } = useModalState();
@@ -35,41 +34,72 @@ const CreateEventForm: React.FC<CreateEventFormProps> = ({
     fetchEvents();
   };
 
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      setSelectedFile(e.target.files[0]);
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
     try {
-      const response = await axios.post(`${url}/event/add`, formData, {
+      const formDataToSend = new FormData();
+      formDataToSend.append("name", formData.name);
+      formDataToSend.append("date", formData.date);
+      formDataToSend.append("time", formData.time);
+      formDataToSend.append("location", formData.location);
+      formDataToSend.append(
+        "expected_guests",
+        formData.expected_guests.toString()
+      );
+
+      if (selectedFile) {
+        formDataToSend.append("image", selectedFile);
+      }
+
+      const response = await axios.post(`${url}/event/add`, formDataToSend, {
         withCredentials: true,
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type": "multipart/form-data",
         },
       });
 
       if (response && response.status === 200) {
-        setFormError("");
         const eventId = response.data.id;
-        setFormData({
-          name: "",
-          date: "",
-          location: "",
-          expected_guests: 0,
-        });
+        resetForm();
+        setSelectedFile(null);
         setIsModalActive(false);
-        // Redirect to the event details page after creating the event
         navigate(`/event/${eventId}`);
         refreshEvents();
       }
     } catch (err: any) {
+      console.error(err.response.data);
       setFormError(
-        "There's an error with your form, please fill it properly or try again"
+        err.response.data.detail ||
+          err.response.data.message ||
+          "An error occurred"
       );
     }
   };
 
   const resetForm = () => {
-    setFormData({ name: "", expected_guests: 0, location: "", date: "" });
+    setFormData({
+      name: "",
+      date: "",
+      time: "",
+      location: "",
+      image_url: "",
+      expected_guests: 0,
+    });
+    setSelectedFile(null);
+    setFormError("");
   };
+
   return (
     <div
       className={`fixed w-full h-full top-0 ${
@@ -109,13 +139,31 @@ const CreateEventForm: React.FC<CreateEventFormProps> = ({
             htmlFor="file"
             className="flex flex-col gap-2 items-center py-4 border-2 border-black border-dashed rounded-2xl cursor-pointer"
           >
-            <i className="fa-solid fa-image text-5xl text-primary"></i>
-            <span>Drag or drop files to upload</span>
-            <button className="px-4 py-2 rounded-md border font-poppins-bold text-primary hover:text-white hover:bg-primary">
-              Select files
-            </button>
+            {selectedFile ? (
+              <span className="text-sm font-poppins-bold text-gray-600">
+                {selectedFile.name}
+              </span>
+            ) : (
+              <>
+                <i className="fa-solid fa-image text-5xl text-primary"></i>
+                <span>Drag or drop image to upload</span>
+                <button
+                  type="button"
+                  className="px-4 py-2 rounded-md border font-poppins-bold text-primary hover:text-white hover:bg-primary"
+                >
+                  Select files
+                </button>
+              </>
+            )}
           </label>
-          <input type="file" name="file" id="file" hidden />
+          <input
+            type="file"
+            name="file"
+            id="file"
+            onChange={handleFileChange}
+            accept="image/*"
+            hidden
+          />
         </div>
         {/* End of Upload Form field */}
         {/* Name of Event form field */}
@@ -150,7 +198,14 @@ const CreateEventForm: React.FC<CreateEventFormProps> = ({
             value={formData.date}
             className={formFields}
           />
-          <input type="time" name="time" id="time" className={formFields} />
+          <input
+            type="time"
+            name="time"
+            id="time"
+            onChange={handleChange}
+            value={formData.time}
+            className={formFields}
+          />
         </div>
         {/* End of Date and time event form field */}
 
@@ -210,7 +265,10 @@ const CreateEventForm: React.FC<CreateEventFormProps> = ({
           >
             <i className="fa-solid fa-file-excel text-5xl text-primary"></i>
             <span>Drag or drop files to upload</span>
-            <button className="px-4 py-2 rounded-md border font-poppins-bold text-primary hover:text-white hover:bg-primary">
+            <button
+              type="button"
+              className="px-4 py-2 rounded-md border font-poppins-bold text-primary hover:text-white hover:bg-primary"
+            >
               Select files
             </button>
           </label>

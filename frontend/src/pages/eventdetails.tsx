@@ -17,6 +17,8 @@ const EventDetails: React.FC = () => {
     date: "",
     location: "",
     expected_guests: 0,
+    time: "",
+    image_url: "",
   });
 
   return (

@@ -11,10 +11,10 @@ from fastapi.staticfiles import StaticFiles
 import os
 
 # Local imports
-from .routes import auth, event
-from .models import User as UserModel
-from .schemas import PublicUser
-from .database import get_db, init_db
+from routes import auth, event
+from models import User as UserModel
+from schemas import PublicUser
+from database import get_db, init_db
 
 
 @asynccontextmanager
@@ -30,7 +30,8 @@ app.description = "API for Invix, a guest management system."
 # Get the absolute path to the static directory
 static_dir = os.path.join(os.path.dirname(__file__), "static")
 if os.path.exists(static_dir):
-    app.mount("static", StaticFiles(directory=static_dir), name="static")
+    # app.mount("/static", StaticFiles(directory=static_dir), name="static") ##production
+    app.mount("/static", StaticFiles(directory=static_dir), name="static")
 else:
     logging.warning(
         f"Static directory not found at {static_dir}. Static files will not be served."
@@ -57,8 +58,9 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.include_router(auth.router, prefix="/auth")
-app.include_router(event.router, prefix="/event")
+# Include routers with explicit prefixes
+app.include_router(auth.router, prefix="/auth", tags=["Authentication"])
+app.include_router(event.router, prefix="/event", tags=["Events"])
 
 
 @app.get("/")
