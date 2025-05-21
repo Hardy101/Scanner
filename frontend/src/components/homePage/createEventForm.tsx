@@ -36,8 +36,6 @@ const CreateEventForm: React.FC<CreateEventFormProps> = ({
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(formData);
-
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
