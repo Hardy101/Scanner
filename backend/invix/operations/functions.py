@@ -28,6 +28,8 @@ def create_event(db: Session, event: EventCreate, user_id: int):
         location=event.location,
         expected_guests=event.expected_guests,
         created_by=user_id,
+        time=event.time,
+        image_url=event.image_url,
     )
     db.add(db_event)
     db.commit()

@@ -1,11 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 
-import {
-  EventFormData,
-  GuestResponse,
-  Guest,
-} from "../../constants/interfaces";
+import { GuestResponse, Guest } from "../../constants/interfaces";
 import { copyToClipboard, fetchEventDetails } from "../../utils/functions";
 import ActionButton from "../actionbutton";
 import { icons } from "../../constants/media";
@@ -13,15 +9,10 @@ import { url } from "../../constants/variables";
 import { useParams } from "react-router";
 import { useToastStore } from "../../store/useToastStore";
 
-interface EventInfoProps {
-  formData: EventFormData;
-  setFormData: React.Dispatch<React.SetStateAction<EventFormData>>;
-}
-
 const formFieldClass =
   "border border-gray-400 font-poppins-bold placeholder:font-poppins p-3 text-sm rounded-xl focus:border-primary focus:outline-none";
 
-const ModalActions: React.FC<EventInfoProps> = ({ setFormData }) => {
+const ModalActions: React.FC = () => {
   const { id } = useParams();
   const [guest, setGuest] = useState<Guest>({
     name: "",
@@ -62,7 +53,7 @@ const ModalActions: React.FC<EventInfoProps> = ({ setFormData }) => {
         }
       );
       if (response.status == 200 && id) {
-        fetchEventDetails(id, setFormData, setGuestList);
+        fetchEventDetails(id, setGuestList);
         setActiveStep("success");
         setSelectedFile(null);
       }
@@ -93,7 +84,7 @@ const ModalActions: React.FC<EventInfoProps> = ({ setFormData }) => {
       if (response.status === 200 && id) {
         setGuestDetails(response.data);
         setActiveStep("success");
-        fetchEventDetails(id, setFormData, setGuestList);
+        fetchEventDetails(id, setGuestList);
         useToastStore.getState().setToastState({
           isToastActive: true,
           type: "success",
@@ -132,7 +123,7 @@ const ModalActions: React.FC<EventInfoProps> = ({ setFormData }) => {
           subtext:
             "The selected guest has been successfully deleted from the system.",
         });
-        fetchEventDetails(id, setFormData, setGuestList);
+        fetchEventDetails(id, setGuestList);
       } else {
         console.error("Error deleting guest:", response.data);
       }
@@ -148,7 +139,7 @@ const ModalActions: React.FC<EventInfoProps> = ({ setFormData }) => {
   // Load Event Details on initial load
   useEffect(() => {
     if (id) {
-      fetchEventDetails(id, setFormData, setGuestList);
+      fetchEventDetails(id, setGuestList);
     }
   }, [id]);
 
@@ -371,6 +362,7 @@ const ModalActions: React.FC<EventInfoProps> = ({ setFormData }) => {
           )}
         </div>
       )}
+
       {activeStep == "success" && (
         <div className="text-center flex flex-col gap-4">
           <span className="mt-8 text-2xl font-poppins-bold">{guest.name}</span>

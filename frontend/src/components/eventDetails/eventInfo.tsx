@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 
 // Local imports
-import { img } from "../../constants/media";
 import { EventFormData } from "../../constants/interfaces";
 import Hr from "../hr";
 import NavButton from "../navbutton";
@@ -29,7 +28,6 @@ const EventInfo: React.FC<EventInfoProps> = ({ setGuestList }) => {
     date: "",
     location: "",
     time: "",
-    image_url: "",
     expected_guests: 0,
   });
 
@@ -88,14 +86,18 @@ const EventInfo: React.FC<EventInfoProps> = ({ setGuestList }) => {
   // Load Event Details on initial load
   useEffect(() => {
     if (id) {
-      fetchEventDetails(id, setFormData, setGuestList);
+      fetchEventDetails(id, setGuestList, setFormData);
     }
   }, [id]);
 
   return (
     <div className="body mt-4">
       <div className="event-info rounded-xl overflow-clip">
-        <img src={img.bd} alt="image of an event" className="w-full" />
+        <img
+          src={`${url}/event/event-image/${id}`}
+          alt="image of an event"
+          className="w-full"
+        />
       </div>
 
       <h1 className="py-4">

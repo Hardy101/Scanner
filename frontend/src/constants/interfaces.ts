@@ -1,10 +1,11 @@
 export interface EventFormData {
   name: string;
   date: string;
-  time: string;
-  image_url: string;
   location: string;
   expected_guests: number;
+  time?: string;
+  image?: File;
+  guest_list?: File;
 }
 
 export interface Guest {

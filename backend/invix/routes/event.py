@@ -65,7 +65,7 @@ async def create_event(
     location: str = Form(...),
     expected_guests: int = Form(...),
     image: Optional[UploadFile] = File(None),
-    guest_list: Optional[str] = Form(None),
+    guest_list: Optional[UploadFile] = File(None),
     db: Session = Depends(get_db),
     current_user: PublicUser = Depends(fetch_current_user),
 ):
@@ -75,57 +75,35 @@ async def create_event(
             detail="There is an issue with your form, please check again and fill it correctly",
         )
 
-    # Parse date string to datetime
+    # Parse date string
     try:
-        # Handle both ISO format and simple date format
-        if "T" in date:
-            parsed_date = datetime.fromisoformat(date.replace("Z", "+00:00"))
-        else:
-            # If it's just a date, set time to midnight
-            parsed_date = datetime.strptime(date, "%Y-%m-%d")
+        parsed_date = (
+            datetime.fromisoformat(date.replace("Z", "+00:00"))
+            if "T" in date
+            else datetime.strptime(date, "%Y-%m-%d")
+        )
     except ValueError:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Invalid date format. Please use YYYY-MM-DD or ISO format (YYYY-MM-DDTHH:MM:SS)",
+            detail="Invalid date format. Use YYYY-MM-DD or ISO format.",
         )
 
     # Handle image upload
     image_url = "default_event.jpg"
     if image and image.filename:
         try:
-            # Create uploads directory if it doesn't exist
-            upload_dir = "uploads/events"
+            upload_dir = "static/events"
             os.makedirs(upload_dir, exist_ok=True)
-
-            # Generate unique filename
-            file_extension = os.path.splitext(image.filename)[1]
-            unique_filename = f"{uuid.uuid4()}{file_extension}"
-            file_path = os.path.join(upload_dir, unique_filename)
-
-            # Save the file
-            with open(file_path, "wb") as buffer:
+            ext = os.path.splitext(image.filename)[1]
+            unique_name = f"{uuid.uuid4()}{ext}"
+            path = os.path.join(upload_dir, unique_name)
+            with open(path, "wb") as buffer:
                 shutil.copyfileobj(image.file, buffer)
-
-            image_url = file_path
+            image_url = unique_name
         except Exception as e:
-            logging.error(f"Error saving image: {str(e)}")
-            raise HTTPException(
-                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-                detail="Error saving image",
-            )
-
-    # Parse guest list if provided
-    parsed_guest_list = []
-    if guest_list and guest_list.strip():
-        try:
-            parsed_guest_list = guest_list.split(",")
-            parsed_guest_list = [
-                guest.strip() for guest in parsed_guest_list if guest.strip()
-            ]
-        except Exception as e:
-            logging.error(f"Error parsing guest list: {str(e)}")
-
-    # Create event data
+            logging.error(f"Image save failed: {str(e)}")
+            raise HTTPException(status_code=500, detail="Failed to save image")
+    # Create the event object
     event_data = EventCreate(
         name=name,
         date=parsed_date,
@@ -133,18 +111,46 @@ async def create_event(
         location=location,
         expected_guests=expected_guests,
         image_url=image_url,
-        guest_list=parsed_guest_list,
     )
 
     try:
         new_event = create_event_crud(db=db, event=event_data, user_id=current_user.id)
+        # Handle guest list file after event creation
+        if guest_list and guest_list.filename:
+            try:
+                contents = await guest_list.read()
+                filename = guest_list.filename.lower()
+                if filename.endswith(".csv"):
+                    df = pd.read_csv(BytesIO(contents))
+                elif filename.endswith((".xlsx", ".xls")):
+                    df = pd.read_excel(BytesIO(contents))
+                else:
+                    raise HTTPException(
+                        status_code=400, detail="Unsupported guest list file type"
+                    )
+
+                for _, row in df.iterrows():
+                    name = row.get("name")
+                    email = row.get("email", "")
+                    tags = row.get("tags", "")
+                    guest_data = Guest(name=name, tags=tags, email=email)
+                    add_guests_to_event(
+                        db=db,
+                        event_id=new_event.id,
+                        guest=guest_data,
+                        uuid=str(uuid.uuid4()),
+                    )
+
+            except Exception as e:
+                logging.error(f"Error parsing guest list file: {str(e)}")
+                raise HTTPException(
+                    status_code=500, detail="Failed to process guest list file"
+                )
+
         return new_event
     except Exception as e:
-        logging.error(f"Error creating event: {str(e)}")
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="Error creating event",
-        )
+        logging.error(f"Event creation failed: {str(e)}")
+        raise HTTPException(status_code=500, detail="Event creation failed")
 
 
 # Returns the event with the given ID and If the event is not found, it raises a 404 error
@@ -154,6 +160,19 @@ def get_event(event_id: int, db: Session = Depends(get_db)):
     if not event:
         raise HTTPException(status_code=404, detail="Event not found")
     return event
+
+
+@router.get("/event-image/{event_id}")
+def get_event_image(event_id: int, db: Session = Depends(get_db)):
+    event = db.query(Event).filter(Event.id == event_id).first()
+    if not event:
+        raise HTTPException(status_code=404, detail="Event not found")
+
+    image_path = os.path.join("static/events", event.image_url)
+    if not os.path.exists(image_path):
+        raise HTTPException(status_code=404, detail="Image file not found")
+
+    return FileResponse(path=image_path, media_type="image/jpeg")
 
 
 # Route to get all guests
@@ -210,8 +229,6 @@ async def add_bulk_guests(
             add_guests_to_event(
                 db=db, event_id=event_id, guest=guest_data, uuid=str(uuid.uuid4())
             )
-            processed.append({"name": name, "tags": tags})
-        print(processed)
 
         return processed
 

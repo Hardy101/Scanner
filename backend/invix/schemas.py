@@ -1,7 +1,7 @@
 # File for FastAPI operations and database connection management.
 from datetime import date
 from pydantic import BaseModel
-from typing import Optional, List, Nonep
+from typing import Optional, List
 
 
 # For Authentication and User Management
@@ -52,11 +52,8 @@ class GuestResponse(BaseModel):
 class EventBase(BaseModel):
     name: str
     date: date
-    time: Optional[str] = None
     location: str
     expected_guests: int
-    image_url: Optional[str] = "default_event.jpg"
-    guest_list: Optional[List[str]] = []
 
 
 # Model for Event Response (for viewing)
@@ -74,13 +71,11 @@ class EventUpdate(EventBase):
     location: Optional[str] = None
     expected_guests: Optional[int] = None
     image_url: Optional[str] = None
-    guest_list: Optional[List[str]] = []
 
 
 class EventCreate(EventBase):
     time: Optional[str] = None
     image_url: Optional[str] = "default_event.jpg"
-    guest_list: Optional[List[str]] = []
 
     class Config:
         from_attributes = True

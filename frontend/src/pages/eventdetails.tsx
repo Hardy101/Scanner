@@ -7,19 +7,11 @@ import ModalActions from "../components/eventDetails/modalActions";
 import NavMenu from "../components/eventDetails/navMenu";
 import EventInfo from "../components/eventDetails/eventInfo";
 import { useState } from "react";
-import { EventFormData } from "../constants/interfaces";
 
 const EventDetails: React.FC = () => {
   const { setIsModalActive } = useModalState();
   const [guestList, setGuestList] = useState([{ id: "", name: "", tags: "" }]);
-  const [formData, setFormData] = useState<EventFormData>({
-    name: "",
-    date: "",
-    location: "",
-    expected_guests: 0,
-    time: "",
-    image_url: "",
-  });
+  
 
   return (
     <div className="relative h-dvh p-4 md:p-8">
@@ -31,7 +23,7 @@ const EventDetails: React.FC = () => {
         >
           <i className="lni lni-xmark"></i>
         </button>
-        <ModalActions formData={formData} setFormData={setFormData} />
+        <ModalActions />
       </Modal>
       <Overlay />
 

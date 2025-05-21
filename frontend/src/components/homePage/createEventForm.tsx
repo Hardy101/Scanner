@@ -17,12 +17,13 @@ const CreateEventForm: React.FC<CreateEventFormProps> = ({
   const [formData, setFormData] = useState<EventFormData>({
     name: "",
     date: "",
-    time: "",
     location: "",
-    image_url: "",
     expected_guests: 0,
   });
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [files, setFiles] = useState<{
+    image?: File;
+    guest_list?: File;
+  }>({});
   const navigate = useNavigate();
   const [formError, setFormError] = useState<string | null>(null);
   const { setIsModalActive } = useModalState();
@@ -35,34 +36,40 @@ const CreateEventForm: React.FC<CreateEventFormProps> = ({
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    console.log(formData);
+
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      setSelectedFile(e.target.files[0]);
-    }
+    const { name, files: selectedFiles } = e.target;
+    const file = selectedFiles?.[0];
+    if (!file) return;
+    console.log(files);
+
+    setFiles((prev) => ({ ...prev, [name]: file }));
+    setFormData((prev) => ({ ...prev, [name]: file }));
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    const form = new FormData();
+    form.append("name", formData.name);
+    form.append("date", formData.date);
+    form.append("location", formData.location);
+    form.append("expected_guests", formData.expected_guests.toString());
+
+    if (formData.time) form.append("time", formData.time);
+    if (formData.image) form.append("image", formData.image);
+    if (formData.guest_list) form.append("guest_list", formData.guest_list);
+
     try {
-      const formDataToSend = new FormData();
-      formDataToSend.append("name", formData.name);
-      formDataToSend.append("date", formData.date);
-      formDataToSend.append("time", formData.time);
-      formDataToSend.append("location", formData.location);
-      formDataToSend.append(
-        "expected_guests",
-        formData.expected_guests.toString()
-      );
-
-      if (selectedFile) {
-        formDataToSend.append("image", selectedFile);
-      }
-
-      const response = await axios.post(`${url}/event/add`, formDataToSend, {
+      const response = await axios.post(`${url}/event/add`, form, {
         withCredentials: true,
         headers: {
           "Content-Type": "multipart/form-data",
@@ -72,13 +79,12 @@ const CreateEventForm: React.FC<CreateEventFormProps> = ({
       if (response && response.status === 200) {
         const eventId = response.data.id;
         resetForm();
-        setSelectedFile(null);
         setIsModalActive(false);
         navigate(`/event/${eventId}`);
         refreshEvents();
       }
     } catch (err: any) {
-      console.error(err.response.data);
+      console.error(err?.response?.data);
       setFormError(
         err.response.data.detail ||
           err.response.data.message ||
@@ -91,12 +97,12 @@ const CreateEventForm: React.FC<CreateEventFormProps> = ({
     setFormData({
       name: "",
       date: "",
-      time: "",
       location: "",
-      image_url: "",
       expected_guests: 0,
+      time: "",
+      image: undefined,
+      guest_list: undefined,
     });
-    setSelectedFile(null);
     setFormError("");
   };
 
@@ -136,12 +142,12 @@ const CreateEventForm: React.FC<CreateEventFormProps> = ({
             <span className="text-base font-poppins">(optional)</span>
           </span>
           <label
-            htmlFor="file"
+            htmlFor="image"
             className="flex flex-col gap-2 items-center py-4 border-2 border-black border-dashed rounded-2xl cursor-pointer"
           >
-            {selectedFile ? (
+            {files.image ? (
               <span className="text-sm font-poppins-bold text-gray-600">
-                {selectedFile.name}
+                {files.image.name}
               </span>
             ) : (
               <>
@@ -158,10 +164,10 @@ const CreateEventForm: React.FC<CreateEventFormProps> = ({
           </label>
           <input
             type="file"
-            name="file"
-            id="file"
-            onChange={handleFileChange}
+            name="image"
+            id="image"
             accept="image/*"
+            onChange={handleFileChange}
             hidden
           />
         </div>
@@ -260,19 +266,34 @@ const CreateEventForm: React.FC<CreateEventFormProps> = ({
             </p>
           </div>
           <label
-            htmlFor="img"
+            htmlFor="guest_list"
             className="flex flex-col gap-2 items-center py-4 border-2 border-black border-dashed rounded-2xl"
           >
-            <i className="fa-solid fa-file-excel text-5xl text-primary"></i>
-            <span>Drag or drop files to upload</span>
-            <button
-              type="button"
-              className="px-4 py-2 rounded-md border font-poppins-bold text-primary hover:text-white hover:bg-primary"
-            >
-              Select files
-            </button>
+            {files.guest_list ? (
+              <span className="text-sm font-poppins-bold text-gray-600">
+                {files.guest_list.name}
+              </span>
+            ) : (
+              <>
+                <i className="fa-solid fa-file-excel text-5xl text-primary"></i>
+                <span>Drag or drop files to upload</span>
+                <button
+                  type="button"
+                  className="px-4 py-2 rounded-md border font-poppins-bold text-primary hover:text-white hover:bg-primary"
+                >
+                  Select files
+                </button>
+              </>
+            )}
           </label>
-          <input type="file" name="img" id="img" hidden />
+          <input
+            type="file"
+            name="guest_list"
+            id="guest_list"
+            accept=".csv,.xlsx,.xls"
+            onChange={handleFileChange}
+            hidden
+          />
         </div>
         {/* End of Upload Form field */}
         {/* Highlights Form field */}
