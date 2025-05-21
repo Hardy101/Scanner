@@ -3,16 +3,26 @@ from fastapi.responses import JSONResponse
 from sqlalchemy.orm import Session
 
 # Local imports
-from database import SessionLocal
-from models import User
-from schemas import PublicUser, UserCreate, UserLogin
-from security import (
+# from database import SessionLocal
+# from models import User
+# from schemas import PublicUser, UserCreate, UserLogin
+# from security import (
+#     hash_password,
+#     verify_password,
+#     create_access_token,
+# )
+# from variables import EXPIRY_DATE
+# from operations.functions import fetch_current_user
+from ..database import SessionLocal
+from ..models import User
+from ..schemas import PublicUser, UserCreate, UserLogin
+from ..security import (
     hash_password,
     verify_password,
     create_access_token,
 )
-from variables import EXPIRY_DATE
-from operations.functions import fetch_current_user
+from ..variables import EXPIRY_DATE
+from ..operations.functions import fetch_current_user
 
 router = APIRouter(tags=["Authentication"])
 
