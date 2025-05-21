@@ -8,11 +8,11 @@ const Profile: React.FC = () => {
   const navigate = useNavigate();
   // const { user } = useAuth();
   return (
-    <div className="relative min-h-screen p-4 md:p-8">
+    <div className="relative h-dvh p-4 md:p-8">
       <div className="nav flex gap-8 items-center text-sm">
         <button
           onClick={() => navigate(-1)}
-          className="bs-2 rounded-xl bg-white p-3 hover:bg-primary hover:text-white"
+          className="bs-2 rounded-xl bg-white text-primary p-3 hover:bg-primary hover:text-white"
         >
           <i className="fa-solid fa-house text-xl"></i>
         </button>
