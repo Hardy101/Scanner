@@ -259,6 +259,15 @@ def delete_event(event_id: int, db: Session = Depends(get_db)):
     if not event:
         raise HTTPException(status_code=404, detail="Event not found")
 
+    # Delete event image if it exists
+    if event.image_url and event.image_url != "default_event.jpg":
+        image_path = os.path.join("static/events", event.image_url)
+        if os.path.exists(image_path):
+            try:
+                os.remove(image_path)
+            except Exception as e:
+                logging.error(f"Error deleting event image: {str(e)}")
+
     # Get all guests associated with this event
     guests = db.query(GuestModel).filter(GuestModel.event_id == event_id).all()
 
