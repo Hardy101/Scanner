@@ -96,7 +96,7 @@ const EventInfo: React.FC<EventInfoProps> = ({ setGuestList }) => {
         <img
           src={`${url}/event/event-image/${id}`}
           alt="image of an event"
-          className="w-full"
+          className="w-full md:w-1/5"
         />
       </div>
 
@@ -137,7 +137,7 @@ const EventInfo: React.FC<EventInfoProps> = ({ setGuestList }) => {
 
       <div className="grid grid-cols-2 gap-2">
         <div className="flex gap-2 items-center">
-          <i className="lni lni-alarm-1"></i>
+          <i className="fa-solid fa-calendar-week"></i>
           <input
             readOnly={!isFormActive}
             type="date"
@@ -167,7 +167,7 @@ const EventInfo: React.FC<EventInfoProps> = ({ setGuestList }) => {
         </div>
 
         <div className="col-span-2 flex gap-2 items-center">
-          <i className="lni lni-location-arrow-right"></i>
+        <i className="fa-solid fa-clock"></i>
           <span>{formData.time}</span>
         </div>
       </div>
@@ -198,7 +198,7 @@ const EventInfo: React.FC<EventInfoProps> = ({ setGuestList }) => {
             onClick={updateEventDetails}
             className={`${
               !isFormChanged ? "bg-gray-1/30" : "bg-primary text-white"
-            } col-span-2 flex gap-2 items-center justify-center py-2 rounded-md font-poppins-medium md:ml-auto`}
+            } col-span-2 flex gap-2 items-center justify-center p-2 rounded-md font-poppins-medium md:ml-auto`}
           >
             Update event
             <i className="fa-solid fa-pen-nib"></i>

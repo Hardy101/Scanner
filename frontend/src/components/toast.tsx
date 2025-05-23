@@ -39,7 +39,7 @@ const ToastNotification = () => {
   const getBorderColor = (type: ToastType) => {
     switch (type) {
       case "success":
-        return "border-primary text-primary";
+        return "border-green text-green-500";
       case "failure":
         return "border-red text-red";
     }
@@ -48,7 +48,7 @@ const ToastNotification = () => {
   const getTextColor = (type: ToastType) => {
     switch (type) {
       case "success":
-        return "text-primary";
+        return "text-green";
       case "failure":
         return "text-red";
     }
@@ -68,8 +68,10 @@ const ToastNotification = () => {
               type
             )} text-xs mb-auto`}
           ></i>
-          <p className={`grow grid ${getTextColor(type)}`}>
-            <span className="font-poppins-medium">{text}</span>
+          <p className="grow grid">
+            <span className={`font-poppins-medium ${getTextColor(type)}`}>
+              {text}
+            </span>
             <span className="font-poppins text-sm">{subtext}</span>
           </p>
           <button

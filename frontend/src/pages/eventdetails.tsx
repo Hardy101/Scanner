@@ -11,7 +11,6 @@ import { useState } from "react";
 const EventDetails: React.FC = () => {
   const { setIsModalActive } = useModalState();
   const [guestList, setGuestList] = useState([{ id: "", name: "", tags: "" }]);
-  
 
   return (
     <div className="relative h-dvh p-4 md:p-8">
@@ -19,9 +18,9 @@ const EventDetails: React.FC = () => {
       <Modal>
         <button
           onClick={() => setIsModalActive(false)}
-          className="absolute top-4 right-4 flex bg-black text-secondary rounded-md p-1 text-xl transition-all ease-in-out hover:scale-150"
+          className="absolute top-4 right-4 flex bg-black text-white rounded-md py-1 px-2 text-xl transition-all ease-in-out hover:scale-150"
         >
-          <i className="lni lni-xmark"></i>
+          <i className="fa-solid fa-xmark"></i>
         </button>
         <ModalActions />
       </Modal>
