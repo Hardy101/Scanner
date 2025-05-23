@@ -6,7 +6,6 @@ import scan from "../assets/scan.png";
 import edit from "../assets/edit.png";
 import qrcode from "../assets/qrcode.png";
 import profile from "../assets/profile-img.png";
-import success from "../assets/gif/success.gif";
 import loading from "../assets/gif/loading.gif";
 import floatingqrcode from "../assets/qrfloating.png";
 import menu from "../assets/menu.png";
@@ -27,14 +26,13 @@ export const icons = {
 };
 
 export const gifs = {
-  success,
   loading,
 };
 
 export const img = {
   bd,
   conference,
-  meeting
+  meeting,
 };
 
 export { profile };

@@ -90,7 +90,9 @@ const Register = () => {
     }
   };
   const formFieldClasses =
-    "block w-full bg-white font-poppins-bold placeholder:text-black placeholder:font-poppins text-sm p-5 focus:outline-primary";
+    "block w-full bg-white font-poppins-medium placeholder:text-black placeholder:font-poppins text-sm p-5 focus:outline-primary";
+  const FloatingInputSpanClass =
+    "absolute left-2 flex items-center font-poppins-bold gap-2 pr-2 text-[0.8rem] transition-all duration-200 ease-in-out bg-white";
 
   return (
     <section className="relative min-h-screen py-16 flex flex-col gap-4 text-center">
@@ -115,7 +117,7 @@ const Register = () => {
           <div className="relative form-control grid gap-2">
             <p
               style={{ pointerEvents: "none" }}
-              className={`absolute left-2 flex items-center gap-2 pr-2 text-[0.8rem] transition-all duration-200 ease-in-out bg-white ${
+              className={`${FloatingInputSpanClass} ${
                 focusedFields.name || formData.name.trim()
                   ? "-top-5 text-black"
                   : "top-1/2 left-15 -translate-x-1/2 -translate-y-1/2 text-gray-1"
@@ -151,7 +153,7 @@ const Register = () => {
           <div className="relative form-control grid gap-2">
             <p
               style={{ pointerEvents: "none" }}
-              className={` absolute left-2 flex items-center gap-2 pr-2 text-[0.8rem] transition-all duration-200 ease-in-out bg-white ${
+              className={`${FloatingInputSpanClass} ${
                 focusedFields.email || formData.email.trim()
                   ? "-top-5 text-black"
                   : "top-1/2 left-15 -translate-x-1/2 -translate-y-1/2 text-gray-1"
@@ -186,7 +188,7 @@ const Register = () => {
           <div className="relative form-control grid gap-2">
             <p
               style={{ pointerEvents: "none" }}
-              className={`absolute left-2 flex items-center gap-2 pr-2 text-[0.8rem] transition-all duration-200 ease-in-out bg-white ${
+              className={`${FloatingInputSpanClass} ${
                 focusedFields.password || formData.password.trim()
                   ? "-top-5 text-black"
                   : "top-1/2 left-18 -translate-x-1/2 -translate-y-1/2 text-gray-1"
