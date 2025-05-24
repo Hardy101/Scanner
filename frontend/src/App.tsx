@@ -12,6 +12,7 @@ import PrivateRoute from "./components/PrivateRoute";
 import PublicRoute from "./components/PublicRoute";
 import { AuthProvider } from "./context/AuthProvider";
 import ToastNotification from "./components/toast";
+import Analytics from "./pages/analytics";
 
 function App() {
   return (
@@ -46,6 +47,7 @@ function App() {
                 <Route path="/event/:id" element={<EventDetails />} />
                 <Route path="/scan" element={<Scan />} />
                 <Route path="/profile" element={<Profile />} />
+                <Route path="/analytics" element={<Analytics />} />
               </Route>
             </Routes>
           </BrowserRouter>

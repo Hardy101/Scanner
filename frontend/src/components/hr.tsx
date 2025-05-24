@@ -1,5 +1,5 @@
 const Hr:React.FC = () => {
-    return <hr className="w-full mt-4 border border-shadow" />
+    return <hr className="w-full border border-gray-300" />
 }
 
 export default Hr

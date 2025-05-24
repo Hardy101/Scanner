@@ -14,7 +14,7 @@ const Profile: React.FC = () => {
           onClick={() => navigate(-1)}
           className="bs-2 rounded-xl bg-white text-primary p-3 hover:bg-primary hover:text-white"
         >
-          <i className="fa-solid fa-house text-xl"></i>
+          <i className="fa-solid fa-left-long text-xl"></i>
         </button>
 
         <span className="font-ibmplex-bold text-xl">My profile</span>

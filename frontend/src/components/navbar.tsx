@@ -13,7 +13,7 @@ const Navbar: React.FC = () => {
           </Link>
         </li>
         <li>
-          <Link to={"/"} className={`${navClass}`}>
+          <Link to={"/analytics"} className={`${navClass}`}>
             <i className="fa-solid fa-chart-pie"></i>
             <span className="hidden text-sm">Analytics</span>
           </Link>

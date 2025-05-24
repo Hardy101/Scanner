@@ -35,7 +35,7 @@ const TopNavigation: React.FC<CreateEventFormProps> = ({
       {/* Nav menu for lg screens */}
       <ul className="w-full hidden gap-6 items-center md:flex justify-between text-gray-1">
         <li>
-          <Link to={"#"}>
+          <Link to={"/home"}>
             <img src={icons.logo} alt="logo of invix" className="w-16" />
           </Link>
         </li>
@@ -43,7 +43,7 @@ const TopNavigation: React.FC<CreateEventFormProps> = ({
           <Link to={"/home"}>Home</Link>
         </li>
         <li className="text-black">
-          <Link to={"#"}>Analytics</Link>
+          <Link to={"/analytics"}>Analytics</Link>
         </li>
         <li className="text-black">
           <Link to={"#"}>Help</Link>
