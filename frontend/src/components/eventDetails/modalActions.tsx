@@ -10,7 +10,7 @@ import { useParams } from "react-router";
 import { useToastStore } from "../../store/useToastStore";
 
 const formFieldClass =
-  "border border-gray-400 font-poppins-bold placeholder:font-poppins p-3 text-sm rounded-xl focus:border-primary focus:outline-none";
+  "border border-gray-400 placeholder:font-poppins p-3 text-sm rounded-xl focus:border-primary focus:outline-none";
 
 const ModalActions: React.FC = () => {
   const { id } = useParams();
@@ -22,15 +22,14 @@ const ModalActions: React.FC = () => {
   });
   const textRef = useRef<HTMLAnchorElement | null>(null);
   const [singleGuest, setSingleGuest] = useState(true); // Track if single guest is selected
-
   const [guestDetails, setGuestDetails] = useState<GuestResponse>({
     id: 0,
     name: "",
     tags: "",
     qr_token: "",
-  }); // Track if guest details are shown
+  });
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [guestList, setGuestList] = useState([{ id: "", name: "", tags: "" }]);
+  const [guestList, setGuestList] = useState([{ id: "", name: "", tags: "" }]); // Updates guest list
   const [activeStep, setActiveStep] = useState("guestList");
   const [copied, setCopied] = useState(false);
 
@@ -54,7 +53,7 @@ const ModalActions: React.FC = () => {
       );
       if (response.status == 200 && id) {
         fetchEventDetails(id, setGuestList);
-        setActiveStep("success");
+        setActiveStep("guestList");
         setSelectedFile(null);
       }
       console.log(response.status);
@@ -326,7 +325,7 @@ const ModalActions: React.FC = () => {
                 </label>
                 <label
                   htmlFor="file"
-                  className={`${formFieldClass} bg-secondary cursor-pointer font-poppins-bold`}
+                  className={`${formFieldClass} bg-secondary cursor-pointer`}
                 >
                   {selectedFile ? selectedFile.name : "No file uploaded"}
                 </label>

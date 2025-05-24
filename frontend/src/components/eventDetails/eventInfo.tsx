@@ -213,7 +213,7 @@ const EventInfo: React.FC<EventInfoProps> = ({ setGuestList }) => {
           <button
             onClick={updateEventDetails}
             className={`${
-              !isFormChanged ? "bg-gray-1/30" : "bg-primary text-white"
+              !isFormChanged ? "bg-gray-1/30 cursor-not-allowed" : "bg-primary text-white"
             } col-span-2 flex gap-2 items-center justify-center p-2 rounded-md font-poppins-medium md:ml-auto`}
           >
             Update event
