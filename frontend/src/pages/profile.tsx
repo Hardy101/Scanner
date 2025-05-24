@@ -56,7 +56,7 @@ const Profile: React.FC = () => {
         id="acctActions"
         className="absolute w-full left-0 bottom-0 gap-4 p-4 text-sm"
       >
-        <LogoutButton className="w-full bg-red py-3 px-16 rounded-md text-white font-poppins-bold" />
+        <LogoutButton className="flex w-fit mx-auto bg-red py-3 px-16 rounded-md text-white font-poppins-bold" />
       </p>
     </div>
   );
