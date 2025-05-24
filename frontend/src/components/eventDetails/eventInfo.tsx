@@ -74,6 +74,12 @@ const EventInfo: React.FC<EventInfoProps> = ({ setGuestList }) => {
         );
         if (response.status === 200) {
           setIsFormActive(false);
+          useToastStore.getState().setToastState({
+            isToastActive: true,
+            type: "success",
+            text: "Event updated successfully!",
+            subtext: "You have successfully updated the event details",
+          });
         } else {
           console.error("Error updating event:", response.data);
         }
@@ -167,8 +173,18 @@ const EventInfo: React.FC<EventInfoProps> = ({ setGuestList }) => {
         </div>
 
         <div className="col-span-2 flex gap-2 items-center">
-        <i className="fa-solid fa-clock"></i>
-          <span>{formData.time}</span>
+          <i className="fa-solid fa-clock"></i>
+          <input
+            readOnly={!isFormActive}
+            type="time"
+            id="time"
+            name="time"
+            value={formData.time}
+            onChange={handleEventFormChange}
+            className={`w-full p-2 outline-none ${
+              isFormActive ? "border rounded-2xl" : "bg-transparent text-black"
+            }`}
+          />
         </div>
       </div>
 
